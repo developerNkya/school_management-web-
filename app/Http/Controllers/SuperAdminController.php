@@ -10,4 +10,9 @@ class SuperAdminController extends Controller
     {
         return view('super_admin.index');
     }
+
+    public function addSchool(Request $request)
+    {
+        // return view('super_admin.index');
+    }
 }

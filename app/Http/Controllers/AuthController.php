@@ -40,7 +40,6 @@ class AuthController extends Controller
         switch ($verifier->role_id) {
             case 1:
                 return redirect('super_admin/');
-                // return view('super_admin.index');
                 break;
 
             default:
