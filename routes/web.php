@@ -16,6 +16,7 @@ Route::name('super_admin')->prefix('super_admin')->group(function() {
     Route::get('/',  [SuperAdminController::class, 'index']);
     Route::post('/add-school',  [SuperAdminController::class, 'addSchool']);
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage']);
+    Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
 
 
 });

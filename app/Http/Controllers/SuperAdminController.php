@@ -48,6 +48,7 @@ class SuperAdminController extends Controller
         $user->phone = $request->owner_phone_no;
         $user->location = $request->school_location;
         $user->password = $request->new_password;
+        $user->role_id = 2;
         $user->save();
 
         $owner_id = $user->id;
@@ -69,5 +70,10 @@ class SuperAdminController extends Controller
     public function schoolPage(Request $request)
     {
         return view('super_admin.school_page');
+    }
+
+    public function rolesPage(Request $request)
+    {
+        return view('super_admin.roles_page');
     }
 }
