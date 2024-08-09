@@ -36,10 +36,10 @@
           </div>
           <div>
             <a class="navbar-brand brand-logo" href="/index.html">
-              <img src="assets/images/logo.svg" alt="logo" />
+              <img src="/assets/images/logo.svg" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="/index.html">
-              <img src="assets/images/logo-mini.svg" alt="logo" />
+              <img src="/assets/images/logo-mini.svg" alt="logo" />
             </a>
           </div>
         </div>
@@ -54,10 +54,10 @@
 
             <li class="nav-item dropdown d-none d-lg-block user-dropdown">
               <a class="nav-link" id="UserDropdown" href="/#" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="img-xs rounded-circle" src="assets/images/faces/face8.jpg" alt="Profile image"> </a>
+                <img class="img-xs rounded-circle" src="/assets/images/faces/face8.jpg" alt="Profile image"> </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                 <div class="dropdown-header text-center">
-                  <img class="img-md rounded-circle" src="assets/images/faces/face8.jpg" alt="Profile image">
+                  <img class="img-md rounded-circle" src="/assets/images/faces/face8.jpg" alt="Profile image">
                   <p class="mb-1 mt-3 fw-semibold">Allen Moreno</p>
                   <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
                 </div>
@@ -94,7 +94,7 @@
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link"  href="{{ url('super_admin/schools') }}">All Schools</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/{{'super_admin/schools'}}">All Schools</a></li>
                   {{-- <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a></li> --}}
                 </ul>
@@ -120,14 +120,6 @@
                       <div class="row">
                         <div class="col-sm-3">
                           <div class="statistics-details d-flex align-items-center justify-content-between">
-                            <div>
-                              <p class="statistics-title">Total Schools</p>
-                              <h3 class="rate-percentage">32.53%</h3>
-                            </div>
-                            <div>
-                              <p class="statistics-title">Total Students</p>
-                              <h3 class="rate-percentage">7,682</h3>
-                            </div>
                             {{-- <div>
                               <p class="statistics-title">Newly Schoo</p>
                               <h3 class="rate-percentage">68.8</h3>
@@ -159,35 +151,56 @@
                             <div class="card">
                               <div class="card-body">
                                 <h4 class="card-title">Add New School</h4>
-                                <form class="forms-sample material-form bordered">
+                                <form class="forms-sample material-form bordered" method="POST" action="{{ url('/super_admin/add-school') }}">
+                                  @csrf
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">School Name</label><i class="bar"></i>
+                                      <input type="text" required="required" name="school_name" id="school_name"/>
+                                      <label for="school_name" class="control-label">School Name</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Location</label><i class="bar"></i>
+                                      <input type="text" required="required" name="school_location" id="school_location"/>
+                                      <label for="school_location" class="control-label">Location</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Owner</label><i class="bar"></i>
+                                      <input type="text" required="required" name="owner_name" id="owner_name"/>
+                                      <label for="owner_name" class="control-label">Owner Name</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Owner Contacts</label><i class="bar"></i>
+                                      <input type="text" required="required" name="owner_phone_no" id="owner_phone_no"/>
+                                      <label for="owner_phone_no" class="control-label">Owner Phone No</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">New Password</label><i class="bar"></i>
+                                      <input type="email" required="required" name="owner_email" id="owner_email"/>
+                                      <label for="owner_email" class="control-label">Owner Email</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
                                   <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Repeat Password</label><i class="bar"></i>
+                                      <input type="password" required="required" name="new_password" id="new_password"/>
+                                      <label for="new_password" class="control-label">New Password</label>
+                                      <i class="bar"></i>
                                   </div>
+                              
+                                  <div class="form-group">
+                                      <input type="password" required="required" name="repeat_password" id="repeat_password"/>
+                                      <label for="repeat_password" class="control-label">Repeat Password</label>
+                                      <i class="bar"></i>
+                                  </div>
+                              
                                   <div class="button-container">
-                                    <button type="button" class="button btn btn-primary"><span>Submit</span></button>
+                                      <button type="submit" class="button btn btn-primary"><span>Submit</span></button>
                                   </div>
-                                </form>
+                              </form>
+                              
                               </div>
                             </div>
                           </div>
@@ -217,24 +230,24 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/chart.umd.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="/assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/template.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/todolist.js"></script>
+    <script src="/assets/js/off-canvas.js"></script>
+    <script src="/assets/js/template.js"></script>
+    <script src="/assets/js/settings.js"></script>
+    <script src="/assets/js/hoverable-collapse.js"></script>
+    <script src="/assets/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
-    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
-    <script src="assets/js/dashboard.js"></script>
-    <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
+    <script src="/assets/js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/assets/js/dashboard.js"></script>
+    <!-- <script src="/assets/js/Chart.roundedBarCharts.js"></script> -->
     <!-- End custom js for this page-->
   </body>
 </html>

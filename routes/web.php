@@ -12,8 +12,11 @@ Route::post('/user-login',  [AuthController::class, 'userLogin']);
 
 
 //for super admins
-Route::name('super_admin.')->prefix('super_admin')->group(function() {
+Route::name('super_admin')->prefix('super_admin')->group(function() {
     Route::get('/',  [SuperAdminController::class, 'index']);
     Route::post('/add-school',  [SuperAdminController::class, 'addSchool']);
+    Route::get('/schools',  [SuperAdminController::class, 'schoolPage']);
+
 
 });
+
