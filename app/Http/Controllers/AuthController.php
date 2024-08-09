@@ -42,6 +42,10 @@ class AuthController extends Controller
                 return redirect('super_admin/');
                 break;
 
+            case 2:
+                return redirect('school_admin/');
+                break;
+
             default:
                 # code...
                 break;
