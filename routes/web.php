@@ -23,11 +23,9 @@ Route::name('super_admin')->prefix('super_admin')->group(function() {
 
 Route::name('school_admin')->prefix('school_admin')->group(function() {
     Route::get('/',  [SchoolAdminController::class, 'index']);
-     Route::get('/classes',  [SchoolAdminController::class, 'classPage']);
-     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
-    // Route::post('/add-school',  [SuperAdminController::class, 'addSchool']);
-   
-    // Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
 
+    Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
 });
+
+Route::get('school_admin/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
 
