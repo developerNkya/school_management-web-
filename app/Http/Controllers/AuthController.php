@@ -29,6 +29,11 @@ class AuthController extends Controller
             ->first();
 
 
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => $verifier
+            // ]);
+
         if (!$verifier) {
             return response()->json([
                 'success' => false,

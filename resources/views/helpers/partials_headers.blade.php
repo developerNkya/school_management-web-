@@ -36,10 +36,10 @@
           </div>
           <div>
             <a class="navbar-brand brand-logo" href="/index.html">
-              <img src="assets/images/logo.svg" alt="logo" />
+              <img src="/assets/images/logo.svg" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="/index.html">
-              <img src="assets/images/logo-mini.svg" alt="logo" />
+              <img src="/assets/images/logo-mini.svg" alt="logo" />
             </a>
           </div>
         </div>
@@ -54,10 +54,10 @@
 
             <li class="nav-item dropdown d-none d-lg-block user-dropdown">
               <a class="nav-link" id="UserDropdown" href="/#" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="img-xs rounded-circle" src="assets/images/faces/face8.jpg" alt="Profile image"> </a>
+                <img class="img-xs rounded-circle" src="/assets/images/faces/face8.jpg" alt="Profile image"> </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                 <div class="dropdown-header text-center">
-                  <img class="img-md rounded-circle" src="assets/images/faces/face8.jpg" alt="Profile image">
+                  <img class="img-md rounded-circle" src="/assets/images/faces/face8.jpg" alt="Profile image">
                   <p class="mb-1 mt-3 fw-semibold">Allen Moreno</p>
                   <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
                 </div>
@@ -80,7 +80,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="{{ url('school_admin/') }}">
+              <a class="nav-link" href="/{{'super_admin'}}">
                 <i class="mdi mdi-grid-large menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
@@ -89,27 +89,14 @@
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="/#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <i class="menu-icon mdi mdi-floor-plan"></i>
-                <span class="menu-title">Classes</span>
+                <span class="menu-title">Schools</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link"  href="{{ url('school_admin/classes') }}">All Classes</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/{{'super_admin/schools'}}">All Schools</a></li>
                   {{-- <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a></li> --}}
-                </ul>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                <i class="menu-icon mdi mdi-chart-line"></i>
-                <span class="menu-title">Students</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="charts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{'school_admin/students'}}">All Students</a></li>
                 </ul>
               </div>
             </li>

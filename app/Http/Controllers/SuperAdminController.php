@@ -29,19 +29,14 @@ class SuperAdminController extends Controller
         $validator = validator::make($request->all(), $rules);
         $error = $validator->errors()->first();
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $error
-            ]);
+            return redirect()->route('add_school_page')->withErrors(['error' => $error]);
         }
 
         if ($request->new_password != $request->repeat_password) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Passwords should be same'
-            ]);
+            return redirect()->route('add_school_page')->withErrors(['error' => 'Passwords should be same']);
         }
 
+        try{
         $user = new User();
         $user->name = $request->owner_name;
         $user->email = $request->owner_email;
@@ -59,12 +54,17 @@ class SuperAdminController extends Controller
         $school->owner_id = $owner_id;
         $school->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'School added Successfully!'
-        ]);
+        $school_id = $school->id;
+        User::where('id',$owner_id)
+                ->update([
+                    'school_id' => $school_id
+                ]);
+                    
+        return redirect()->route('add_school_page')->with('message', 'School added successfully!');
 
-
+    } catch (\Exception $e) {
+        return redirect()->route('add_school_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+    }
     }
 
     public function schoolPage(Request $request)
