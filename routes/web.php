@@ -27,5 +27,5 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/students',  [SchoolAdminController::class, 'studentsPage'])->name('add_student_page');
-    Route::post('/add-student',  [SchoolAdminController::class, 'addStudent']);
+    Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');
 })->middleware('auth');;
