@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->name('user_login');;
 
 Route::post('/user-login',  [AuthController::class, 'userLogin']);
 
@@ -18,7 +18,6 @@ Route::group(['prefix' => 'super_admin'], function () {
     Route::post('/add-school',  [SuperAdminController::class, 'addSchool']);
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
-
 });
 
 
@@ -29,4 +28,4 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/students',  [SchoolAdminController::class, 'studentsPage'])->name('add_student_page');
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent']);
-});
+})->middleware('auth');;

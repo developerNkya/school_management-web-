@@ -42,7 +42,7 @@ class SuperAdminController extends Controller
         $user->email = $request->owner_email;
         $user->phone = $request->owner_phone_no;
         $user->location = $request->school_location;
-        $user->password = $request->new_password;
+        $user->password = bcrypt($request->new_password);
         $user->role_id = 2;
         $user->save();
 

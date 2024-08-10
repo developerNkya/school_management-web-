@@ -34,7 +34,7 @@
                 </div>
                 <h4>Hello! let's get started</h4>
                 <h6 class="fw-light">Sign in to continue.</h6>
-
+                @include('helpers.message_handler')
 
                 <form class="pt-3" method="POST" action="/user-login">
                   <div class="form-group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SchoolAdminController extends Controller
 {
@@ -14,7 +15,7 @@ class SchoolAdminController extends Controller
 
     public function classPage(Request $request)
     {
-        $classes = SchoolClass::get();
+        $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
         return view('school_admin.class_page',['classes'=>$classes]);
     }
 
@@ -41,6 +42,7 @@ class SchoolAdminController extends Controller
 
         $class = new SchoolClass();
         $class->name = $request->class_name;
+        $class->school_id = Auth::user()->school_id;
         $class->save();
 
         return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
