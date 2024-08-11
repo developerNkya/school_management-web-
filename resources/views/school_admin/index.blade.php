@@ -24,73 +24,10 @@
                               <p class="statistics-title">Total Students</p>
                               <h3 class="rate-percentage">7,682</h3>
                             </div>
-                            {{-- <div>
-                              <p class="statistics-title">Newly Schoo</p>
-                              <h3 class="rate-percentage">68.8</h3>
-                              <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
-                            </div> --}}
-                            {{-- <div class="d-none d-md-block">
-                              <p class="statistics-title">Avg. Time on Site</p>
-                              <h3 class="rate-percentage">2m:35s</h3>
-                              <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
-                            </div> --}}
-                            {{-- <div class="d-none d-md-block">
-                              <p class="statistics-title">New Sessions</p>
-                              <h3 class="rate-percentage">68.8</h3>
-                              <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
-                            </div>
-                            <div class="d-none d-md-block">
-                              <p class="statistics-title">Avg. Time on Site</p>
-                              <h3 class="rate-percentage">2m:35s</h3>
-                              <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
-                            </div> --}}
                           </div>
                         </div>
                       </div>
 
-
-
-                      <div class="row">
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                              <div class="card-body">
-                                <h4 class="card-title">Add New School</h4>
-                                <form class="forms-sample material-form bordered">
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">School Name</label><i class="bar"></i>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Location</label><i class="bar"></i>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Owner</label><i class="bar"></i>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Owner Contacts</label><i class="bar"></i>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">New Password</label><i class="bar"></i>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="text" required="required" />
-                                    <label for="input" class="control-label">Repeat Password</label><i class="bar"></i>
-                                  </div>
-                                  <div class="button-container">
-                                    <button type="button" class="button btn btn-primary"><span>Submit</span></button>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-
-
-                     
-                      </div>
                     </div>
                   </div>
                 </div>
