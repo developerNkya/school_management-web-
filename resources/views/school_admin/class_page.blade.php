@@ -97,7 +97,7 @@
     <!-- partial -->
 </div>
 
-
+@include('school_admin.partial_footers')
 <script>
     function showModal() {
         document.getElementById('form-modal').style.display = 'block';
@@ -132,4 +132,4 @@
     button.parentElement.remove();
   }
 </script>
-@include('school_admin.partial_footers')
+
