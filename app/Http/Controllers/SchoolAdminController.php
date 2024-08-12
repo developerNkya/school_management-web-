@@ -25,34 +25,35 @@ class SchoolAdminController extends Controller
     {
         $student_info = StudentInfo::where('school_id',Auth::user()->school_id)
                         ->get();
-        return view('school_admin.students_page',['students'=>$student_info]);
+        $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
+        return view('school_admin.students_page',['students'=>$student_info,'classes'=>$classes]);
     }
 
-    
     public function addClass(Request $request) {
-
-        try{
-        $rules = [
-            'class_name' => 'required',
-        ];
-
-        $validator = validator::make($request->all(), $rules);
-        $error = $validator->errors()->first();
-        if ($validator->fails()) {
-            return redirect()->route('add_class_page')->withErrors(['error' => $error]);
+        try {
+            $rules = [
+                'class_name' => 'required',
+                'sections.*' => 'nullable|string',
+            ];
+    
+            $validator = validator::make($request->all(), $rules);
+            $error = $validator->errors()->first();
+            if ($validator->fails()) {
+                return redirect()->route('add_class_page')->withErrors(['error' => $error]);
+            }
+    
+            $class = new SchoolClass();
+            $class->name = $request->class_name;
+            $class->school_id = Auth::user()->school_id;
+            $class->sections = json_encode($request->sections);
+            $class->save();
+    
+            return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
-
-
-        $class = new SchoolClass();
-        $class->name = $request->class_name;
-        $class->school_id = Auth::user()->school_id;
-        $class->save();
-
-        return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
-    } catch (\Exception $e) {
-        return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
     }
-}
+    
 
 public function addStudent(Request $request)
 {

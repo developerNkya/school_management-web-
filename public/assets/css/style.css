@@ -30468,3 +30468,21 @@ input:focus {
 .progress {
   margin-bottom: 20px;
 }
+
+
+/* add button */
+.addBtn {
+  height: 40px;
+  width: 100px;
+  margin-left: 10px;
+  margin-top: 3px;
+
+}
+
+/* submit containers */
+.submit-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}

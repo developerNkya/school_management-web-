@@ -117,8 +117,8 @@
                     <div class="form-group">
                         <label for="class">Class</label>
                         <select name="class_id" class="form-control" id="class" required>
-                            @foreach($students as $student)
-                                <option value="{{ $student->id }}">{{ $student->name }}</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->name }}</option>
                             @endforeach
                         </select>
                     </div>
