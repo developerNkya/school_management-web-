@@ -11,6 +11,8 @@ Route::get('/', function () {
 
 Route::post('/user-login',  [AuthController::class, 'userLogin']);
 
+Route::get('/initial-user',  [AuthController::class, 'initialUser']);
+
 
 //for super admins
 Route::group(['prefix' => 'super_admin'], function () {

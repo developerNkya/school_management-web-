@@ -40,5 +40,22 @@ class AuthController extends Controller
             return redirect()->route('user_login')->withErrors(['error' => 'Sorry...Incorrect Email or Password!']);
         }
     }
+
+
+    public function  initialUser(Request $request)
+    {
+
+        $user = new User();
+        $user->name = 'admin';
+        $user->email = 'admin@admin.com';
+        $user->phone = '+255 620 416 606';
+        $user->location = 'Dar es salaam';
+        $user->password = bcrypt('admin');
+        $user->role_id = 1;
+        $user->save();
+
+        return json_encode('success!');
+
+    }
     
 }
