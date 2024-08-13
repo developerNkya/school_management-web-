@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\SchoolClass;
+use App\Models\Section;
 use App\Models\StudentInfo;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -24,8 +25,8 @@ class SchoolAdminController extends Controller
 
     public function teachersPage(Request $request)
     {
-        $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
-        return view('school_admin.teachers_page',['classes'=>$classes]);
+        $teachers = Teacher::where('school_id',Auth::user()->school_id)->get();
+        return view('school_admin.teachers_page',['teachers'=>$teachers]);
     }
 
     public function studentsPage(Request $request)
@@ -35,31 +36,46 @@ class SchoolAdminController extends Controller
         $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
         return view('school_admin.students_page',['students'=>$student_info,'classes'=>$classes]);
     }
-
     public function addClass(Request $request) {
         try {
             $rules = [
-                'class_name' => 'required',
-                'sections.*' => 'nullable|string',
-                'subjects.*' => 'nullable|string',
+                'class_name' => 'required|string|max:255',
+                'sections.*' => 'nullable|string|max:255',
+                'subjects.*' => 'nullable|string|max:255',
             ];
     
-            $validator = validator::make($request->all(), $rules);
-            $error = $validator->errors()->first();
+            $validator = \Validator::make($request->all(), $rules);
+    
             if ($validator->fails()) {
-                return redirect()->route('add_class_page')->withErrors(['error' => $error]);
+                return redirect()->route('add_class_page')->withErrors($validator)->withInput();
             }
     
+            // Create a new class record
             $class = new SchoolClass();
-            $class->name = $request->class_name;
+            $class->name = $request->input('class_name');
             $class->school_id = Auth::user()->school_id;
-            $class->sections = json_encode($request->sections);
-            $class->subjects = json_encode($request->subjects);  // Save subjects as JSON
+            $class->subjects = json_encode($request->input('subjects'));
             $class->save();
+    
+            // Retrieve the class ID
+            $class_id = $class->id;
+    
+            // Create sections
+            $allSections = $request->input('sections', []);
+    
+            foreach ($allSections as $sectionName) {
+                if ($sectionName) { // Only create sections with non-empty names
+                    $section = new Section();
+                    $section->name = $sectionName;
+                    $section->class_id = $class_id;
+                    $section->school_id = Auth::user()->school_id;
+                    $section->save();
+                }
+            }
     
             return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+            return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }
     }
     
@@ -78,7 +94,7 @@ public function addStudent(Request $request)
         'city' => 'required|string|max:255',
         'passport_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'class_id' => 'required|exists:classes,id',
-        'section_id' => 'required',
+        'section' => 'required',
         'parent_first_name' => 'required|string|max:255',
         'parent_last_name' => 'required|string|max:255',
         'parent_phone' => 'required|string|max:255',
@@ -123,7 +139,7 @@ public function addStudent(Request $request)
     }
 
     $studentInfo->class_id = $request->class_id;
-    $studentInfo->section = $request->section_id;
+    $studentInfo->section = $request->section;
     $studentInfo->parent_first_name = $request->parent_first_name;
     $studentInfo->parent_last_name = $request->parent_last_name;
     $studentInfo->parent_phone = $request->parent_phone;
@@ -138,9 +154,10 @@ public function addStudent(Request $request)
 
 public function getStreams($classId)
 {
-    $class = SchoolClass::find($classId);
-    if ($class) {
-        return response()->json(['streams' => json_decode($class->sections)]);
+    $sections = Section::where('class_id',$classId)
+                ->get();
+    if ($sections) {
+        return response()->json(['streams' => json_decode($sections)]);
     }
     return response()->json(['streams' => []]);
 }

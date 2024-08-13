@@ -116,20 +116,29 @@
                     <p class="text-center mb-4">Step 2: Student Data</p>
                     <div class="form-group">
                         <label for="class">Class</label>
-                        <select name="class_id" class="form-control" id="class" required>
-                            @foreach($classes as $class)
+                        <select name="class_id" class="form-control" id="classSelect" required onchange="updateStreams()">
+                            <option value="">Select a class</option>
+                            @foreach ($classes as $class)
                                 <option value="{{ $class->id }}">{{ $class->name }}</option>
                             @endforeach
                         </select>
+                        {{-- <select name="class_id" class="form-control" id="class" required>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                            @endforeach
+                        </select> --}}
                     </div>
         
                     <div class="form-group">
-                        <label for="section">Section</label>
-                        <select name="section_id" class="form-control" id="section" required>
+                        <label for="section">Stream</label>
+                        <select name="section" class="form-control" id="streamSelect" required onchange="updateSubjects()">
+                            <option value="">Select a stream</option>
+                        </select>
+                        {{-- <select name="section_id" class="form-control" id="section" required>
                             @foreach($students as $section)
                                 <option value="{{ $section->id }}">{{ $section->name }}</option>
                             @endforeach
-                        </select>
+                        </select> --}}
                     </div>
         
                     <div class="form-group">
@@ -248,6 +257,61 @@
             document.querySelector(".progress-bar").setAttribute("aria-valuenow", 0);
             document.getElementById("prevBtn").style.display = "none";
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Fetch streams and subjects based on selected class
+        function updateStreams() {
+            const classId = document.getElementById('classSelect').value;
+            const streamSelect = document.getElementById('streamSelect');
+            const subjectSelect = document.getElementById('subjectSelect');
+
+            if (classId) {
+                console.log('class id',classId);
+                
+                fetch(`/school_admin/get-streams/${classId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('the response',data);
+                        
+                        streamSelect.innerHTML = '<option value="">Select a stream</option>';
+                        data.streams.forEach(stream => {
+                            streamSelect.innerHTML +=
+                            `<option value="${stream.id}" name="section_id">${stream.name}</option>`;
+                        });
+
+                        // Clear subjects when class or stream changes
+                        // subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+                    });
+            } else {
+                streamSelect.innerHTML = '<option value="">Select a stream</option>';
+                subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+            }
+        }
+
+        function updateSubjects() {
+            const classId = document.getElementById('classSelect').value;
+            const stream = document.getElementById('streamSelect').value;
+            const subjectSelect = document.getElementById('subjectSelect');
+
+            // if (classId && stream) {
+            //     fetch(`/school_admin/get-subjects/${classId}/${stream}`)
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+            //             data.subjects.forEach(subject => {
+            //                 subjectSelect.innerHTML +=
+            //                     `<option value="${subject}">${subject}</option>`;
+            //             });
+            //         });
+            // } else {
+            //     subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+            // }
+        }
+
+        // Expose functions to global scope
+        window.updateStreams = updateStreams;
+        window.updateSubjects = updateSubjects;
+    });
    
 </script>
 @include('school_admin.partial_footers')

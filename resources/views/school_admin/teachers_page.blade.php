@@ -17,19 +17,19 @@
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th> Class Name </th>
+                                        <th>  Namess </th>
                                         <th> Total Students </th>
                                         <th> Total Teachers </th>
                                         <th> Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classes as $class)
+                                    @foreach ($teachers as $teacher)
                                         <tr>
                                             <td>1</td>
-                                            <td>{{ $class->name }}</td>
-                                            <td>{{ $class->name }}</td>
-                                            <td>{{ $class->name }}</td>
+                                            <td>{{ $teacher->first_name.' '.$teacher->second_name.' '.$teacher->last_name }}</td>
+                                            <td>{{$teacher->phone_number }}</td>
+                                            <td>{{ $teacher->email }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>
                                         </tr>
                                     @endforeach
