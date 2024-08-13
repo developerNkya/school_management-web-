@@ -30,10 +30,13 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/teachers',  [SchoolAdminController::class, 'teachersPage'])->name('all_teachers_page');
     Route::get('/students',  [SchoolAdminController::class, 'studentsPage'])->name('add_student_page');
+    Route::get('/examinations',  [SchoolAdminController::class, 'examinationsPage'])->name('all_exam_page');
+    Route::get('/all-subjects',  [SchoolAdminController::class, 'subjectsPage'])->name('all_subjects_page');
+    Route::post('/add-subject', [SchoolAdminController::class, 'addSubject']);
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');
     Route::get('/get-streams/{classId}', [SchoolAdminController::class, 'getStreams']);
     Route::get('/get-subjects/{classId}/{stream}', [SchoolAdminController::class, 'getSubjects']);
-Route::post('/add-teacher', [SchoolAdminController::class, 'addTeacher']);
+    Route::post('/add-teacher', [SchoolAdminController::class, 'addTeacher']);
 
 
 })->middleware('auth');

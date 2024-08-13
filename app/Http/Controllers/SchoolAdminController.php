@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -43,6 +44,18 @@ class SchoolAdminController extends Controller
     {
         $teachers = Teacher::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.teachers_page', ['teachers' => $teachers]);
+    }
+
+    public function examinationsPage(Request $request)
+    {
+        $teachers = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        return view('school_admin.examinations_page', ['teachers' => $teachers]);
+    }
+
+    public function subjectsPage(Request $request)
+    {
+        $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
+        return view('school_admin.subjects_page', ['subjects' => $subjects]);
     }
 
     public function studentsPage(Request $request)
@@ -189,6 +202,22 @@ class SchoolAdminController extends Controller
     }
 
 
+    public function addSubject(Request $request)
+    {
+
+        $validated = $request->validate([
+            'subject_name' => 'required|string|max:255',
+            'short_name' => 'required|string|max:255',
+        ]);
+
+        $subject = new Subject();
+        $subject->name = $request->subject_name;
+        $subject->short_name = $request->short_name;
+        $subject->school_id = Auth::user()->school_id;
+        $subject->save();
+
+        return redirect()->route('all_subjects_page')->with('message', 'Subject added successfully!');
+    }
 
     public function addTeacher(Request $request)
     {
