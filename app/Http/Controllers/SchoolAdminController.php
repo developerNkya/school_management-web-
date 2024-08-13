@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Teacher;
 
 class SchoolAdminController extends Controller
 {
@@ -19,6 +20,12 @@ class SchoolAdminController extends Controller
     {
         $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
         return view('school_admin.class_page',['classes'=>$classes]);
+    }
+
+    public function teachersPage(Request $request)
+    {
+        $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
+        return view('school_admin.teachers_page',['classes'=>$classes]);
     }
 
     public function studentsPage(Request $request)
@@ -34,6 +41,7 @@ class SchoolAdminController extends Controller
             $rules = [
                 'class_name' => 'required',
                 'sections.*' => 'nullable|string',
+                'subjects.*' => 'nullable|string',
             ];
     
             $validator = validator::make($request->all(), $rules);
@@ -46,6 +54,7 @@ class SchoolAdminController extends Controller
             $class->name = $request->class_name;
             $class->school_id = Auth::user()->school_id;
             $class->sections = json_encode($request->sections);
+            $class->subjects = json_encode($request->subjects);  // Save subjects as JSON
             $class->save();
     
             return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
@@ -53,6 +62,7 @@ class SchoolAdminController extends Controller
             return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
     }
+    
     
 
 public function addStudent(Request $request)
@@ -125,4 +135,71 @@ public function addStudent(Request $request)
 
     return redirect()->route('add_student_page')->with('message', 'Student added successfully!');
 }
+
+public function getStreams($classId)
+{
+    $class = SchoolClass::find($classId);
+    if ($class) {
+        return response()->json(['streams' => json_decode($class->sections)]);
+    }
+    return response()->json(['streams' => []]);
+}
+
+public function getSubjects($classId, $stream)
+{
+    $class = SchoolClass::find($classId);
+    if ($class) {
+        return response()->json(['subjects' => json_decode($class->subjects)]);
+    }
+    return response()->json(['subjects' => []]);
+}
+
+
+
+    public function addTeacher(Request $request)
+    {
+
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'second_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:Male,Female',
+            'nationality' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+        ]);
+
+        $user= new User();
+        $user->name = $request->first_name.''.$request->last_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone_number;
+        $user->location = $request->nationality;
+        $user->password = bcrypt('teacher');
+        $user->role_id = 4;
+        $user->school_id = Auth::user()->school_id;
+        $user->save();
+    
+        $teacher_id = $user->id;
+
+        $TeacherInfo = new Teacher();
+        $TeacherInfo->first_name = $request->first_name;
+        $TeacherInfo->second_name = $request->second_name;
+        $TeacherInfo->last_name = $request->last_name;
+        $TeacherInfo->phone_number = $request->phone_number;
+        $TeacherInfo->email = $request->email;
+        $TeacherInfo->date_of_birth = $request->date_of_birth;
+        $TeacherInfo->gender = $request->gender;
+        $TeacherInfo->nationality = $request->nationality;
+        $TeacherInfo->city = $request->city;
+        $TeacherInfo->school_id = Auth::user()->school_id;
+        $TeacherInfo->user_id = $teacher_id;
+        $TeacherInfo->save();
+    
+
+        return redirect()->route('all_teachers_page')->with('message', 'Teacher added successfully!');
+    }
+
+
 }

@@ -28,6 +28,12 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/',  [SchoolAdminController::class, 'index']);
     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
+    Route::get('/teachers',  [SchoolAdminController::class, 'teachersPage'])->name('all_teachers_page');
     Route::get('/students',  [SchoolAdminController::class, 'studentsPage'])->name('add_student_page');
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');
-})->middleware('auth');;
+    Route::get('/get-streams/{classId}', [SchoolAdminController::class, 'getStreams']);
+    Route::get('/get-subjects/{classId}/{stream}', [SchoolAdminController::class, 'getSubjects']);
+Route::post('/add-teacher', [SchoolAdminController::class, 'addTeacher']);
+
+
+})->middleware('auth');

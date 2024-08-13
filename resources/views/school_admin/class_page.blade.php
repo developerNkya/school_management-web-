@@ -68,10 +68,18 @@
 
                             <h3 class="card-title">Sections</h3>
                             <div id="sectionsContainer" class="form-group">
-                              <div class="section-container" style="display: flex; margin-bottom: 10px;">
-                                <input name="sections[]" class="form-control" placeholder="Section name">
-                              </div>
-                              <button type="button" class="btn btn-dark addBtn" onclick="addSection()">Add</button>
+                                <div class="section-container" style="display: flex; margin-bottom: 10px;">
+                                    <input name="sections[]" class="form-control" placeholder="Section name">
+                                </div>
+                                <button type="button" class="btn btn-dark addBtn" onclick="addSection('sectionsContainer')">Add</button>
+                            </div>
+
+                            <h3 class="card-title">Subjects</h3>
+                            <div id="subjectsContainer" class="form-group">
+                                <div class="section-container" style="display: flex; margin-bottom: 10px;">
+                                    <input name="subjects[]" class="form-control" placeholder="Subject name">
+                                </div>
+                                <button type="button" class="btn btn-dark addBtn" onclick="addSection('subjectsContainer')">Add</button>
                             </div>
                             <div class="submit-container" style="margin-top: 10%">
                               <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -110,26 +118,27 @@
         event.preventDefault();
     }
 
-    function addSection() {
-    const container = document.getElementById('sectionsContainer');
-    
-    // Create a new section
+    function addSection(containerId) {
+    const container = document.getElementById(containerId);
+
+    // Create a new section or subject
     const newSection = document.createElement('div');
     newSection.classList.add('section-container');
     newSection.style.display = 'flex';
     newSection.style.marginBottom = '10px';
-    
+
     newSection.innerHTML = `
-      <input name="sections[]" class="form-control" placeholder="Section name">
-      <button type="button" class="btn btn-danger removeBtn" onclick="removeSection(this)" style="margin-left:10px">Remove</button>
+        <input name="${containerId === 'sectionsContainer' ? 'sections[]' : 'subjects[]'}" class="form-control" placeholder="${containerId === 'sectionsContainer' ? 'Section name' : 'Subject name'}">
+        <button type="button" class="btn btn-danger removeBtn" onclick="removeSection(this)" style="margin-left:10px">Remove</button>
     `;
-    
+
     // Insert the new section before the "Add" button
     container.insertBefore(newSection, container.lastElementChild);
-  }
-  
-  function removeSection(button) {
+}
+
+function removeSection(button) {
     button.parentElement.remove();
-  }
+}
+
 </script>
 
