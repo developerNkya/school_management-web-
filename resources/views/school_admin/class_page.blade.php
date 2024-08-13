@@ -19,7 +19,6 @@
                                         <th> No.</th>
                                         <th> Class Name </th>
                                         <th> Total Students </th>
-                                        <th> Total Teachers </th>
                                         <th> Actions</th>
                                     </tr>
                                 </thead>
@@ -27,9 +26,8 @@
                                     @foreach ($classes as $class)
                                         <tr>
                                             <td>1</td>
-                                            <td>{{ $class->name }}</td>
-                                            <td>{{ $class->name }}</td>
-                                            <td>{{ $class->name }}</td>
+                                            <td>{{ $class->info->name }}</td>
+                                            <td>{{ $class->total_students }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>
                                         </tr>
                                     @endforeach
