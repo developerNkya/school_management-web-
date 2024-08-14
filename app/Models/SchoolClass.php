@@ -19,4 +19,10 @@ class SchoolClass extends Model
         'name',
         'school_id',
     ];
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_class');
+    }
+    
 }

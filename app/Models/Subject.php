@@ -15,4 +15,15 @@ class Subject extends Model
         'short_name',
         'school_id'
     ];
+
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_subject');
+    }
+
+    public function marks()
+    {
+        return $this->hasMany(Mark::class);
+    }
+    
 }

@@ -48,8 +48,9 @@ class SchoolAdminController extends Controller
 
     public function examinationsPage(Request $request)
     {
-        $teachers = SchoolClass::where('school_id', Auth::user()->school_id)->get();
-        return view('school_admin.examinations_page', ['teachers' => $teachers]);
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
+        return view('school_admin.examinations_page', ['classes' => $classes,'subjects' => $subjects]);
     }
 
     public function subjectsPage(Request $request)

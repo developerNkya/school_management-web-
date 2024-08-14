@@ -24,7 +24,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($teachers as $teacher)
+                                    @foreach ($classes as $teacher)
                                         <tr>
                                             <td>1</td>
                                             <td>{{ $teacher->first_name . ' ' . $teacher->second_name . ' ' . $teacher->last_name }}
@@ -60,41 +60,38 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Add Exam</h4>
-                        <form class="forms-sample" method="POST" action="/school_admin/add-teacher">
+                        <form class="forms-sample" method="POST" action="/school_admin/add-exam">
                             @csrf
                             <div class="form-group">
-                                <label for="firstName">Exam Name</label>
-                                <input name="first_name" class="form-control" id="firstName" placeholder="First name"
-                                    required>
+                                <label for="name">Exam Name</label>
+                                <input name="name" class="form-control" id="name" placeholder="Exam Name" required>
                             </div>
                             <div class="form-group">
-                                <label for="subjects">Select Classes</label><br>
-                                <select id="classes" name="classes[]" class="form-control multiple-selector"
-                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
-                                    @foreach ($teachers as $subject)
-                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                <label for="classes">Select Classes</label><br>
+                                <select id="classes" name="classes[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                    @foreach ($classes as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="form-group">
                                 <label for="subjects">Select Subjects</label><br>
-                                <select id="subjects" name="subjects[]" class="form-control multiple-selector"
-                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
-                                    @foreach ($teachers as $subject)
+                                <select id="subjects" name="subjects[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                    @foreach ($subjects as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="dob">Start Date</label>
-                                <input type="date" name="date_of_birth" class="form-control" id="dob" required>
+                                <label for="start_date">Start Date</label>
+                                <input type="date" name="start_date" class="form-control" id="start_date" required>
                             </div>
                             <div class="submit-container" style="margin-top: 10%">
                                 <button type="submit" class="btn btn-primary me-2">Submit</button>
                                 <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
                             </div>
                         </form>
+                        
 
                     </div>
                 </div>
