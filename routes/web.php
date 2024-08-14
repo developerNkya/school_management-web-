@@ -34,6 +34,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/examinations',  [SchoolAdminController::class, 'examinationsPage'])->name('all_exam_page');
     Route::get('/all-subjects',  [SchoolAdminController::class, 'subjectsPage'])->name('all_subjects_page');
     Route::post('/add-subject', [SchoolAdminController::class, 'addSubject']);
+    Route::post('/add-marks', [ExamController::class, 'addMarks'])->name('marks.store');;
     Route::post('/add-exam', [ExamController::class, 'store']);
     Route::get('/marks', [ExamController::class, 'marks'])->name('marks.index');
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');
