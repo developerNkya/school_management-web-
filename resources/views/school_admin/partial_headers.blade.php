@@ -175,6 +175,7 @@
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/examinations'}}">Exam List</a></li>
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/marks'}}">Add Marks</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/tabulation'}}">Tabulations</a></li>
                 </ul>
               </div>
             </li>

@@ -66,10 +66,7 @@ class ExamController extends Controller
     public function marks(Request $request)
     {
         $schoolId = Auth::user()->school_id;
-    
-        // Fetch exams for the school
         $exams = Exam::where('school_id', $schoolId)->get();
-    
         $classes = collect();
         $subjects = collect();
         $students = collect();
@@ -123,6 +120,72 @@ class ExamController extends Controller
             'exam_name'
         ));
     }
+
+    public function tabulation(Request $request)
+    {
+        $schoolId = Auth::user()->school_id;
+        $exams = Exam::where('school_id', $schoolId)->get();
+        
+        $classes = collect();
+        $subjects = collect();
+        $students = collect();
+        $marks = collect();
+        $class_name = '';
+        $exam_name = '';
+        
+        $selectedExamId = $request->input('exam_id');
+        $selectedClassId = $request->input('class_id');
+        
+        if ($selectedExamId) {
+            $selectedExam = Exam::where('id', $selectedExamId)
+                                ->where('school_id', $schoolId)
+                                ->with('classes', 'subjects')
+                                ->first();     
+            if ($selectedExam) {
+                $classes = $selectedExam->classes;
+                $subjects = $selectedExam->subjects;
+                $exam_name = $selectedExam->name;
+            }
+        }
+        
+        if ($selectedExamId && $selectedClassId) {
+            $students = StudentInfo::where('class_id', $selectedClassId)->get();
+            $class_name = $students->first()->class->name ?? '';
+            $marks = Mark::where('exam_id', $selectedExamId)
+                         ->whereIn('student_id', $students->pluck('id'))
+                         ->get()
+                         ->groupBy('student_id');
+
+            foreach ($students as $student) {
+                $studentMarks = $marks->get($student->id, collect());
+                $totalMarks = $studentMarks->sum('marks');
+                $subjectCount = $studentMarks->count();
+                $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
+                
+                $student->average = round($average, 2);
+            }
+            $students = $students->sortByDesc('average')->values();
+            $position = 1;
+            foreach ($students as $student) {
+                $student->position = $position++;
+            }
+        }
+
+    
+        
+        return view('school_admin.tabulation', compact(
+            'classes', 
+            'exams', 
+            'subjects', 
+            'students', 
+            'marks', 
+            'class_name', 
+            'exam_name'
+        ));
+    }
+    
+    
+    
     
     
 

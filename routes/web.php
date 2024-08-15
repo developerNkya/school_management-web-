@@ -37,6 +37,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::post('/add-marks', [ExamController::class, 'addMarks'])->name('marks.store');;
     Route::post('/add-exam', [ExamController::class, 'store']);
     Route::get('/marks', [ExamController::class, 'marks'])->name('marks.index');
+    Route::get('/tabulation', [ExamController::class, 'tabulation'])->name('admin.tabulation');
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');
     Route::get('/get-streams/{classId}', [SchoolAdminController::class, 'getStreams']);
     Route::get('/get-subjects/{classId}/{stream}', [SchoolAdminController::class, 'getSubjects']);
