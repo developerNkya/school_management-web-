@@ -72,7 +72,6 @@ class SchoolAdminController extends Controller
             $rules = [
                 'class_name' => 'required|string|max:255',
                 'sections.*' => 'nullable|string|max:255',
-                'subjects.*' => 'nullable|string|max:255',
             ];
 
             $validator = \Validator::make($request->all(), $rules);
@@ -85,7 +84,6 @@ class SchoolAdminController extends Controller
             $class = new SchoolClass();
             $class->name = $request->input('class_name');
             $class->school_id = Auth::user()->school_id;
-            $class->subjects = json_encode($request->input('subjects'));
             $class->save();
 
             // Retrieve the class ID
@@ -95,7 +93,7 @@ class SchoolAdminController extends Controller
             $allSections = $request->input('sections', []);
 
             foreach ($allSections as $sectionName) {
-                if ($sectionName) { // Only create sections with non-empty names
+                if ($sectionName) {
                     $section = new Section();
                     $section->name = $sectionName;
                     $section->class_id = $class_id;

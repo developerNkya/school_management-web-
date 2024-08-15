@@ -43,7 +43,6 @@
                                         <th>S/N</th>
                                         <th>Name</th>
                                         <th>ADM_NO</th>
-                                        <th>ADM_NO2</th>
                                         @foreach ($subjects as $subject)
                                             <th>{{ $subject->name }}</th>
                                         @endforeach
@@ -56,7 +55,6 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $student->first_name }}</td>
-                                            <td>{{ $student->registration_no }}</td>
                                             <td>{{ $student->registration_no }}</td>
                                             @foreach ($subjects as $subject)
                                             @php

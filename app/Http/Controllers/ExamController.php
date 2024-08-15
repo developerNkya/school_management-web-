@@ -59,7 +59,7 @@ class ExamController extends Controller
             );
         }
     
-        return redirect()->route('marks.index')->with('success', 'Marks updated successfully.');
+        return redirect()->route('marks.index')->with('message', 'Marks updated successfully.');
     }
     
     

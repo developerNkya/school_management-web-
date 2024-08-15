@@ -71,14 +71,6 @@
                                 </div>
                                 <button type="button" class="btn btn-dark addBtn" onclick="addSection('sectionsContainer')">Add</button>
                             </div>
-
-                            <h3 class="card-title">Subjects</h3>
-                            <div id="subjectsContainer" class="form-group">
-                                <div class="section-container" style="display: flex; margin-bottom: 10px;">
-                                    <input name="subjects[]" class="form-control" placeholder="Subject name">
-                                </div>
-                                <button type="button" class="btn btn-dark addBtn" onclick="addSection('subjectsContainer')">Add</button>
-                            </div>
                             <div class="submit-container" style="margin-top: 10%">
                               <button type="submit" class="btn btn-primary me-2">Submit</button>
                               <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
