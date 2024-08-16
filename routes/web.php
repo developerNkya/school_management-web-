@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\SchoolAdminController;
@@ -11,7 +12,6 @@ Route::get('/', function () {
 })->name('user_login');;
 
 Route::post('/user-login',  [AuthController::class, 'userLogin']);
-
 Route::get('/initial-user',  [AuthController::class, 'initialUser']);
 
 
@@ -42,6 +42,12 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/get-streams/{classId}', [SchoolAdminController::class, 'getStreams']);
     Route::get('/get-subjects/{classId}/{stream}', [SchoolAdminController::class, 'getSubjects']);
     Route::post('/add-teacher', [SchoolAdminController::class, 'addTeacher']);
+})->middleware('auth');
 
 
+// attendence
+Route::group(['prefix' => 'attendence'], function () {
+    Route::get('/create-new',  [AttendenceController::class, 'createNew']);
+    Route::post('/new-attendence',  [AttendenceController::class, 'newAttendence'])->name('attendance.createNew');
+    // Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
 })->middleware('auth');
