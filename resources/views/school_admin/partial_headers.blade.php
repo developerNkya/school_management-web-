@@ -200,7 +200,7 @@
               <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="{{'/attendence/create-new'}}">Create New </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/all-subjects'}}">Take Attendence</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{{'/attendence/add-attendence'}}">Take Attendence</a></li>
                 </ul>
               </div>
             </li>
