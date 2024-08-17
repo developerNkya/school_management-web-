@@ -32,6 +32,8 @@ class AuthController extends Controller
                     return redirect('super_admin/');
                 case 2:
                     return redirect('school_admin/');
+                case 3:
+                    return redirect('student/');
                 default:
                     // Handle unknown roles
                     break;

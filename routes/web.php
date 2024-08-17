@@ -4,6 +4,7 @@ use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\SchoolAdminController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,5 +58,12 @@ Route::group(['prefix' => 'attendence'], function () {
 Route::post('/add-attendence', [AttendenceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
 Route::post('/save-attendence', [AttendenceController::class, 'saveAttendence'])->name('attendance.storeData');
 
-
 })->middleware('auth');
+
+
+Route::group(['prefix' => 'student'], function () {
+    Route::get('/',  [StudentController::class, 'index']);
+    Route::get('/about_me',  [StudentController::class, 'aboutMe']);
+    Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
+    Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
+});

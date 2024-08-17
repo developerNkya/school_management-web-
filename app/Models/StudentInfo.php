@@ -29,4 +29,14 @@ class StudentInfo extends Model
         'user_id',
         'school_id',
     ];
+
+
+    public function Schoolclass()
+    {
+        return $this->belongsTo(SchoolClass::class,'class_id');
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class,'section');
+    }
 }
