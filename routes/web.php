@@ -64,6 +64,8 @@ Route::post('/save-attendence', [AttendenceController::class, 'saveAttendence'])
 Route::group(['prefix' => 'student'], function () {
     Route::get('/',  [StudentController::class, 'index']);
     Route::get('/about_me',  [StudentController::class, 'aboutMe']);
+    Route::get('/marks',  [StudentController::class, 'marks'])->name('student.marks');
+    Route::get('/view-marks', [StudentController::class, 'viewMarks'])->name('view-marks');
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
 });
