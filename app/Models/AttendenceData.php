@@ -31,7 +31,7 @@ class AttendenceData extends Model
 
     public function attendance()
     {
-        return $this->belongsTo(Attendence::class);
+        return $this->belongsTo(Attendence::class, 'attendence_id');
     }
 
     public function class()
