@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\StudentInfo;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,18 +16,42 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ];
-    
+
+
         $validator = validator::make($request->all(), $rules);
         $error = $validator->errors()->first();
-        if ($validator->fails()) {
+        if ($validator->fails() && !$request->toJson) {
             return redirect()->route('user_login')->withErrors(['error' => $error]);
+        }else if($validator->fails() && $request->toJson){
+            return response()->json([
+                'success'=>false,
+                'message'=>$error
+            ]); 
         }
     
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-    
+            $user = Auth::user()->load('School');
+            if ($request->toJson) {
+                if ($user->role_id == 3) {
+                    $student_info = StudentInfo::with('SchoolClass', 'section')->where('user_id', Auth::user()->id)
+                                    ->first();
+
+                    return response()->json([
+                        'success'=>true,
+                        'data'=>[
+                          'user' =>$user,
+                          'student_info' => $student_info
+                        ],
+                    ]); 
+                }
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$user
+                ]); 
+            }
+
             switch ($user->role_id) {
                 case 1:
                     return redirect('super_admin/');
@@ -39,6 +64,14 @@ class AuthController extends Controller
                     break;
             }
         } else {
+
+            if ($request->toJson) {
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'Sorry...Incorrect Email or Password!'
+                ]); 
+            }
+
             return redirect()->route('user_login')->withErrors(['error' => 'Sorry...Incorrect Email or Password!']);
         }
     }
