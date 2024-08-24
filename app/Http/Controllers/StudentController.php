@@ -30,9 +30,16 @@ class StudentController extends Controller
 
     public function marks(Request $request)
     {
-        $student = StudentInfo::where('user_id', Auth::user()->id)->first();
-        if (!$student) {
+        $user_id = $request->toJson ? $request->user_id: Auth::user()->id;
+
+        $student = StudentInfo::where('user_id', $user_id)->first();
+        if (!$student && !$request->toJson) {
             return redirect()->back()->with('error', 'Student not found');
+        }else if(!$student && $request->toJson){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Student not found'
+            ]); 
         }
         $exam_list = Mark::where('student_id', $student->id)->pluck('exam_id')->unique();
         $exams = Exam::whereIn('id', $exam_list)->get(['id', 'name']);
@@ -55,10 +62,22 @@ class StudentController extends Controller
                 $studentIds = $marks->keys();
                 $students = StudentInfo::where('id', $student->id)->get();
                 $subjects = ExamSubject::with('subjects')->where('exam_id', $exam_id)->get();
-
-
             }
         }
+
+        if ($request->toJson) {
+            return response()->json([
+                'success'=>true,
+                'data'=>[
+                    'exams' => $exams,
+                    'exam' => $exam,
+                    'marks' => $marks,
+                    'students' => $students,
+                    'subjects' => $subjects
+                  ],
+            ]); 
+        }
+
         return view('student.marks', [
             'exams' => $exams,
             'exam' => $exam,
