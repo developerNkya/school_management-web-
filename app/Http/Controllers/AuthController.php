@@ -54,11 +54,11 @@ class AuthController extends Controller
 
             switch ($user->role_id) {
                 case 1:
-                    return redirect('super_admin/');
+                    return redirect('super_admin/home');
                 case 2:
-                    return redirect('school_admin/');
+                    return redirect('school_admin/home');
                 case 3:
-                    return redirect('student/');
+                    return redirect('student/home');
                 default:
                     // Handle unknown roles
                     break;

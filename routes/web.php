@@ -19,7 +19,7 @@ Route::get('/initial-user',  [AuthController::class, 'initialUser']);
 
 //for super admins
 Route::group(['prefix' => 'super_admin'], function () {
-    Route::get('/',  [SuperAdminController::class, 'index']);
+    Route::get('/home',  [SuperAdminController::class, 'index']);
     Route::post('/add-school',  [SuperAdminController::class, 'addSchool']);
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
@@ -28,7 +28,7 @@ Route::group(['prefix' => 'super_admin'], function () {
 
 //for school admins:::
 Route::group(['prefix' => 'school_admin'], function () {
-    Route::get('/',  [SchoolAdminController::class, 'index']);
+    Route::get('/home',  [SchoolAdminController::class, 'index']);
     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/teachers',  [SchoolAdminController::class, 'teachersPage'])->name('all_teachers_page');
@@ -59,7 +59,7 @@ Route::post('/save-attendence', [AttendenceController::class, 'saveAttendence'])
 
 
 Route::group(['prefix' => 'student'], function () {
-    Route::get('/',  [StudentController::class, 'index']);
+    Route::get('/home',  [StudentController::class, 'index']);
     Route::get('/attendence',  [StudentController::class, 'attendence'])->name('student.attendence');;
     Route::get('/about_me',  [StudentController::class, 'aboutMe']);
     Route::get('/marks',  [StudentController::class, 'marks'])->name('student.marks');
