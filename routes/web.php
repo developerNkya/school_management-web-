@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,10 +51,6 @@ Route::group(['prefix' => 'school_admin'], function () {
 Route::group(['prefix' => 'attendence'], function () {
     Route::get('/create-new',  [AttendenceController::class, 'createNew']);
     Route::post('/new-attendence',  [AttendenceController::class, 'newAttendence'])->name('attendance.createNew');
-    // Route::get('/add-attendence',  [AttendenceController::class, 'addAttendencePage'])->name('attendance.addAttendence');
-    // Route::post('/attendence',  [AttendenceController::class, 'addAttendencePage'])->name('attendance.addAttendencePage');
-    // Route::post('/save-attendence',  [AttendenceController::class, 'saveAttendence'])->name('attendance.storeData');
-    // Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/add-attendence', [AttendenceController::class, 'showAddAttendenceForm'])->name('attendance.addAttendence');
 Route::post('/add-attendence', [AttendenceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
 Route::post('/save-attendence', [AttendenceController::class, 'saveAttendence'])->name('attendance.storeData');
@@ -69,4 +66,5 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/view-marks', [StudentController::class, 'viewMarks'])->name('view-marks');
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
+    Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
 });
