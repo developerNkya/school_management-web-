@@ -65,6 +65,6 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/marks',  [StudentController::class, 'marks'])->name('student.marks');
     Route::get('/view-marks', [StudentController::class, 'viewMarks'])->name('view-marks');
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
-    Route::get('/roles',  [SuperAdminController::class, 'rolesPage']);
+    Route::get('/suggestions',  [StudentController::class, 'suggestionPage'])->name('suggestions');
     Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
 });

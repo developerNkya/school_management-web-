@@ -168,5 +168,9 @@ class StudentController extends Controller
     }
 
 
+    public function suggestionPage(Request $request)
+    {
+        return view('student.suggestion_page');
+    }
 
 }

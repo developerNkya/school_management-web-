@@ -12,7 +12,8 @@ class Suggestion extends Model
     protected $fillable = [
         'student_id',
         'school_id',
-        'suggestion'
+        'suggestion',
+        'suggestion_type'
     ];
 
 

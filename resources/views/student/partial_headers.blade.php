@@ -118,5 +118,18 @@
                 </ul>
               </div>
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#suggestions" aria-expanded="false" aria-controls="suggestions">
+                <i class="menu-icon mdi mdi-chart-line"></i>
+                <span class="menu-title">Suggestions</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="suggestions">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="{{'/student/suggestions'}}">add suggestions</a></li>
+                </ul>
+              </div>
+            </li>
           </ul>
         </nav>
