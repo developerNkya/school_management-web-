@@ -205,6 +205,18 @@
               </div>
             </li>
             <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#suggestions" aria-expanded="false" aria-controls="auth">
+                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <span class="menu-title">Suggestions</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="suggestions">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/view-suggestions'}}">View Suggestions</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="docs/documentation.html">
                 <i class="menu-icon mdi mdi-file-document"></i>
                 <span class="menu-title">Documentation</span>

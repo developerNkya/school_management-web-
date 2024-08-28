@@ -29,6 +29,7 @@ Route::group(['prefix' => 'super_admin'], function () {
 //for school admins:::
 Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/home',  [SchoolAdminController::class, 'index']);
+    Route::get('/view-suggestions',  [SchoolAdminController::class, 'viewSuggestions']);
     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/teachers',  [SchoolAdminController::class, 'teachersPage'])->name('all_teachers_page');
@@ -38,6 +39,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::post('/add-subject', [SchoolAdminController::class, 'addSubject']);
     Route::post('/add-marks', [ExamController::class, 'addMarks'])->name('marks.store');;
     Route::post('/add-exam', [ExamController::class, 'store']);
+    Route::post('/deleteSuggestion', [SuggestionController::class, 'deleteSuggestion'])->name('deleteSuggestion');;
     Route::get('/marks', [ExamController::class, 'marks'])->name('marks.index');
     Route::get('/tabulation', [ExamController::class, 'tabulation'])->name('admin.tabulation');
     Route::post('/add-student',  [SchoolAdminController::class, 'addStudent'])->name('add_student');

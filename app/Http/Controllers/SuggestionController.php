@@ -73,4 +73,21 @@ class SuggestionController extends Controller
         }
     }
 
+    public function deleteSuggestion(Request $request)
+    {
+
+        $validated = $request->validate([
+            'id' => 'required',
+        ]);
+
+        try {
+            $delete_Suggestion = Suggestion::where('id',$request->id)->delete();         
+        return redirect()->back()->with('message', 'Suggestion deleted Successfully!');
+        } catch (\Exception $e) {
+           
+        return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
+        }
+        
+    }
+
 }

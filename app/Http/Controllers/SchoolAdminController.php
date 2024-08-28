@@ -6,6 +6,7 @@ use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
 use App\Models\Subject;
+use App\Models\Suggestion;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -261,6 +262,16 @@ class SchoolAdminController extends Controller
 
 
         return redirect()->route('all_teachers_page')->with('message', 'Teacher added successfully!');
+        
+    }
+
+    public function viewSuggestions(Request $request)
+    {
+        $suggestions = Suggestion::with('school','student','student.Schoolclass')
+                       ->where('school_id',Auth::user()->school_id)
+                       ->get();
+
+        return view('school_admin.viewSuggestions', ['suggestions' => $suggestions]);
     }
 
 
