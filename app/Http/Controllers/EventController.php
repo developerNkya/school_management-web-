@@ -10,9 +10,19 @@ class EventController extends Controller
 {
     public function organizeEvent(Request $request)
     {
-        $events = Event::get();
+
+        $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
+        $events = Event::where('school_id',$school_id)->get();  
+
+    
+        return  $request->toJson ?  response()->json([
+            'success'=>true,
+            'data'=>[
+                'events' => $events,
+              ],
+        ]) : view('school_admin.organizeEvent',compact('events'));
         
-        return view('school_admin.organizeEvent',compact('events'));
+       
     }
 
     public function store(Request $request)

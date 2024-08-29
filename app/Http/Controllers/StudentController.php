@@ -65,26 +65,23 @@ class StudentController extends Controller
             }
         }
 
-        if ($request->toJson) {
-            return response()->json([
-                'success'=>true,
-                'data'=>[
-                    'exams' => $exams,
-                    'exam' => $exam,
-                    'marks' => $marks,
-                    'students' => $students,
-                    'subjects' => $subjects
-                  ],
-            ]); 
-        }
+        return $request->toJson ? response()->json([
+                    'success'=>true,
+                    'data'=>[
+                        'exams' => $exams,
+                        'exam' => $exam,
+                        'marks' => $marks,
+                        'students' => $students,
+                        'subjects' => $subjects
+                      ],
+                ]):view('student.marks', [
+                        'exams' => $exams,
+                        'exam' => $exam,
+                        'marks' => $marks,
+                        'students' => $students,
+                        'subjects' => $subjects
+                ]);
 
-        return view('student.marks', [
-            'exams' => $exams,
-            'exam' => $exam,
-            'marks' => $marks,
-            'students' => $students,
-            'subjects' => $subjects
-        ]);
     }
 
 

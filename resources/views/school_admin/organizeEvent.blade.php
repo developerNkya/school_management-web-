@@ -10,28 +10,31 @@
                         @include('helpers.message_handler')
                         <button type="button" class="btn btn-dark" onclick="showModal()">Add Event +</button>
                         <div class="table-responsive pt-3">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Cost</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($events as $index => $event)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $event->name }}</td>
-                                        <td>{{ $event->event_date }}</td>
-                                        <td>{{ $event->cost }}</td>
-                                        <td>{{ $event->description }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <!-- Wrapper for horizontal scroll -->
+                            <div style="overflow-x: auto;">
+                                <table class="table table-bordered" style="width: 100%; table-layout: fixed;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;">No.</th>
+                                            <th style="width: 150px;">Name</th>
+                                            <th style="width: 100px;">Date</th>
+                                            <th style="width: 100px;">Cost</th>
+                                            <th style="width: 400px; word-wrap: break-word; white-space: normal;">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($events as $index => $event)
+                                        <tr>
+                                            <td style="width: 50px;">{{ $index + 1 }}</td>
+                                            <td style="width: 150px;">{{ $event->name }}</td>
+                                            <td style="width: 100px;">{{ $event->event_date }}</td>
+                                            <td style="width: 100px;">{{ $event->cost }}</td>
+                                            <td style="width: 400px; word-wrap: break-word; white-space: normal;">{{ $event->description }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea name="description" class="form-control" id="description" rows="3" placeholder="Event description" required></textarea>
+                                <textarea name="description" class="form-control textArea-body" id="description" rows="3" placeholder="Event description" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary mr-2">Save</button>
                             <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>

@@ -72,4 +72,5 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/schools',  [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/suggestions',  [StudentController::class, 'suggestionPage'])->name('suggestions');
     Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
+    Route::get('/fetchEvents',  [EventController::class, 'organizeEvent'])->name('organizeEvent'); 
 });
