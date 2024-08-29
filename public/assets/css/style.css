@@ -30489,3 +30489,28 @@ input:focus {
 
 /* select dropdown */
 
+.form-modal{
+  transition: width 0.25s ease, margin 0.25s ease;
+  width: calc(100% - 220px);
+  min-height: calc(100vh - 97px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+@media (min-width: 992px) {
+  .form-modal {
+    margin-left: 0;
+    width: 50%;
+  }
+}
+
+@media (max-width: 991px) {
+  .form-modal {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+
