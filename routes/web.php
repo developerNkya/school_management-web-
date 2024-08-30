@@ -11,6 +11,12 @@ use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+   return  view('starter.home.index');
+})->name('user_login');;
+
+
+
+Route::get('/login', function () {
     return view('auth.login');
 })->name('user_login');;
 
