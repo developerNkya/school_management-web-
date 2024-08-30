@@ -126,7 +126,9 @@
 									 A Tech solution designed to help your institution excel through the use of technology and proper management
 							</div>
 							<!-- LAYER NR. 4 -->
-							<div class="tp-caption Newspaper-Button rev-btn" 
+							<div 
+							id="aboutUs"
+							class="tp-caption Newspaper-Button rev-btn" 
 								id="slide-100-layer-5" 
 								data-x="['center','center','center','center']" 
 								data-hoffset="['90','80','75','90']" 
@@ -287,7 +289,9 @@
 									 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
 							</div>
 							<!-- LAYER NR. 4 -->
-							<div class="tp-caption Newspaper-Button rev-btn " 
+							<div 
+							 id="aboutUs"
+							class="tp-caption Newspaper-Button rev-btn " 
 								id="slide-200-layer-5" 
 								data-x="['center','center','center','center']" 
 								data-hoffset="['90','80','75','90']" 
@@ -769,10 +773,23 @@
     </div>
 
 <script>
-	var btn = document.getElementById('contactBtn');
+document.addEventListener("click", function(event) {
+    if (event.target.tagName === "DIV") {
+        var btnName = event.target.id; 
+        console.log('the id:', btnName);
+        switch (btnName) {
+            case 'contactBtn':
+                document.location.href = '/contact-us';    
+                break;
 
-btn.addEventListener('click', function() {
-  document.location.href = '/contact-us';
+            case 'aboutUs':
+                document.location.href = '/about-us';    
+                break;
+        
+            default:
+                break;
+        }
+    }
 });
 </script>
 @include('starter.helpers.footer')

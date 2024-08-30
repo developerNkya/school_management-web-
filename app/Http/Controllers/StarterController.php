@@ -43,10 +43,13 @@ class StarterController extends Controller
 
             return redirect()->back()->with('message', 'Your message has been sent successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Sorry..something went wrong!');
+            return redirect()->back()->with('error', 'Sorry..something went');
         }
+      
+    }
 
-    
-        
+    public function aboutUs(Request $request)
+    {
+        return view('starter.about_us');
     }
 }
