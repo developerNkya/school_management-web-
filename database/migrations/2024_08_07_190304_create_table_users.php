@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('location');
             $table->unsignedBigInteger('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('role');
-            $table->unsignedBigInteger('school_id')->nullable();
-            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });
     }
