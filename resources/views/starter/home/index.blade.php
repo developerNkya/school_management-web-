@@ -79,7 +79,7 @@
 								data-paddingbottom="[10,10,10,10]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 6; font-family:rubik; font-weight:700; text-align:center; white-space: normal;">
-									Welcome To University
+									Welcome To Shule Yetu
 							</div>
 
 							<!-- LAYER NR. 3 -->
@@ -101,7 +101,7 @@
 								data-paddingbottom="[0,0,0,0]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 7; white-space: nowrap; color:#fff; font-family:rubik; font-size:18px; font-weight:400;">
-									Batter Education For A Better 
+									Better School Management System
 							</div>
 							
 							<!-- LAYER NR. 3 -->
@@ -123,10 +123,10 @@
 								data-paddingbottom="[0,0,0,0]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 7; text-transform:capitalize; white-space: unset; color:#fff; font-family:rubik; font-size:18px; line-height:28px; font-weight:400;">
-									 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+									 A Tech solution designed to help your institution excel through the use of technology and proper management
 							</div>
 							<!-- LAYER NR. 4 -->
-							<div class="tp-caption Newspaper-Button rev-btn " 
+							<div class="tp-caption Newspaper-Button rev-btn" 
 								id="slide-100-layer-5" 
 								data-x="['center','center','center','center']" 
 								data-hoffset="['90','80','75','90']" 
@@ -145,7 +145,10 @@
 								data-paddingbottom="[12,12,12,12]"
 								data-paddingleft="[30,35,35,15]"
 								style="z-index: 8; white-space: nowrap; outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer; background-color:var(--primary) !important; border:0; border-radius:30px; margin-right:5px;">READ MORE </div>
-							<div class="tp-caption Newspaper-Button rev-btn" 
+								
+							<div 
+							id="contactBtn"
+							class="tp-caption Newspaper-Button rev-btn contactBtn" 
 								id="slide-100-layer-6" 
 								data-x="['center','center','center','center']" 
 								data-hoffset="['-90','-80','-75','-90']" 
@@ -237,7 +240,7 @@
 								data-paddingbottom="[10,10,10,10]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 6; font-family:rubik; font-weight:700; text-align:center; white-space: normal;text-transform:uppercase;">
-									Welcome To University
+									Welcome To Shule Yetu
 							</div>
 
 							<!-- LAYER NR. 3 -->
@@ -259,7 +262,7 @@
 								data-paddingbottom="[0,0,0,0]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 7; white-space: nowrap;text-transform:uppercase; color:#fff; font-family:rubik; font-size:18px; font-weight:400;">
-									Batter Education For A Better 
+									Better School Management System
 							</div>
 							
 							<!-- LAYER NR. 3 -->
@@ -303,8 +306,8 @@
 								data-paddingbottom="[12,12,12,12]"
 								data-paddingleft="[30,35,35,15]"
 								style="z-index: 8; white-space: nowrap; outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer; background-color:var(--primary) !important; border:0; border-radius:30px; margin-right:5px;">READ MORE </div>
-							<div class="tp-caption Newspaper-Button rev-btn" 
-								id="slide-200-layer-6" 
+							<div class="tp-caption Newspaper-Button rev-btn contactBtn" 
+								id="slide-200-layer-6 contactBtn" 
 								data-x="['center','center','center','center']" 
 								data-hoffset="['-90','-80','-75','-90']" 
 								data-y="['top','top','top','top']" 
@@ -400,7 +403,7 @@
 									<a href="#" class="btn">Read More</a>
 								</div>
 								<div class="info-bx text-center">
-									<h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
+									<h5><a href="#">Introduction Shule Yetu – LMS plugin</a></h5>
 									<span>Programming</span>
 								</div>
 								<div class="cours-more-info">
@@ -428,7 +431,7 @@
 									<a href="#" class="btn">Read More</a>
 								</div>
 								<div class="info-bx text-center">
-									<h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
+									<h5><a href="#">Introduction Shule Yetu – LMS plugin</a></h5>
 									<span>Programming</span>
 								</div>
 								<div class="cours-more-info">
@@ -456,7 +459,7 @@
 									<a href="#" class="btn">Read More</a>
 								</div>
 								<div class="info-bx text-center">
-									<h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
+									<h5><a href="#">Introduction Shule Yetu – LMS plugin</a></h5>
 									<span>Programming</span>
 								</div>
 								<div class="cours-more-info">
@@ -484,7 +487,7 @@
 									<a href="#" class="btn">Read More</a>
 								</div>
 								<div class="info-bx text-center">
-									<h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
+									<h5><a href="#">Introduction Shule Yetu – LMS plugin</a></h5>
 									<span>Programming</span>
 								</div>
 								<div class="cours-more-info">
@@ -765,5 +768,14 @@
 		<!-- contact area END -->
     </div>
 
+<script>
+	var btn = document.getElementById('contactBtn');
+
+btn.addEventListener('click', function() {
+  document.location.href = '/contact-us';
+});
+</script>
 @include('starter.helpers.footer')
+
+
   

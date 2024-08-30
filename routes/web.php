@@ -5,20 +5,18 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\SchoolAdminController;
+use App\Http\Controllers\StarterController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-   return  view('starter.home.index');
-})->name('user_login');;
 
 
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('user_login');;
+Route::get('/',  [StarterController::class, 'index']);
+Route::get('/login',  [StarterController::class, 'login']);
+Route::get('/contact-us',  [StarterController::class, 'contactUs']);
+Route::post('/contact-message',  [StarterController::class, 'contactMessage'])->name('contact.message');
 
 Route::post('/user-login',  [AuthController::class, 'userLogin']);
 Route::get('/initial-user',  [AuthController::class, 'initialUser']);
