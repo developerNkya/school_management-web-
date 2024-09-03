@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Role;
 use App\Models\StudentInfo;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -80,17 +81,30 @@ class AuthController extends Controller
     public function  initialUser(Request $request)
     {
 
-        $user = new User();
-        $user->name = 'admin';
-        $user->email = 'admin@admin.com';
-        $user->phone = '+255 620 416 606';
-        $user->location = 'Dar es salaam';
-        $user->password = bcrypt('admin');
-        $user->role_id = 1;
-        $user->save();
+        $role_length = Role::get()->count();
 
-        return json_encode('success!');
-
+        if($role_length<=0){
+            $keys =["SUPER_ADMIN","SCHOOL_ADMIN","STUDENT","TEACHER"];
+            $counter = 1;
+            foreach ($keys as $key) {
+               Role::create(['id' =>$counter,'name' => $key]);
+               $counter = $counter +1;
+            }
+        }
+        
+           $user_checker = User::where('email','admin@admin.com')->first();
+           if ($user_checker === null) {
+            $user_checker = User::create([
+                'name' => 'admin',
+                 'email'=>'admin@admin.com',
+                 'phone' => '+255 620 416 606',
+                 'location' =>'Dar es salaam',
+                 'password' => bcrypt('admin'),
+                 'role_id' => 1,
+                ]);         
+           }else{
+            return json_encode('success!');
+           }
     }
     
 }
