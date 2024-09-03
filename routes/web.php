@@ -4,6 +4,7 @@ use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\HelperController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\StarterController;
 use App\Http\Controllers\StudentController;
@@ -78,4 +79,9 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/suggestions',  [StudentController::class, 'suggestionPage'])->name('suggestions');
     Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
     Route::get('/fetchEvents',  [EventController::class, 'organizeEvent'])->name('organizeEvent'); 
+});
+
+
+Route::group(['prefix' => 'helper'], function () {
+    Route::get('/class-existence-checker',  [HelperController::class, 'classExistance']);
 });

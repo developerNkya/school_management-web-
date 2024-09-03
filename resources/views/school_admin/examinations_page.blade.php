@@ -64,11 +64,13 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">Exam Name</label>
-                                <input name="name" class="form-control" id="name" placeholder="Exam Name" required>
+                                <input name="name" class="form-control" id="name" placeholder="Exam Name"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="classes">Select Classes</label><br>
-                                <select id="classes" name="classes[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                <select id="classes" name="classes[]" class="form-control multiple-selector"
+                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
@@ -76,7 +78,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="subjects">Select Subjects</label><br>
-                                <select id="subjects" name="subjects[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                <select id="subjects" name="subjects[]" class="form-control multiple-selector"
+                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
                                     @foreach ($subjects as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                     @endforeach
@@ -91,7 +94,7 @@
                                 <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
                             </div>
                         </form>
-                        
+
 
                     </div>
                 </div>
@@ -102,10 +105,11 @@
 
     <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
-       
-          <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights reserved.</span>
+
+            <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights
+                reserved.</span>
         </div>
-      </footer>
+    </footer>
     <!-- partial -->
 </div>
 
@@ -113,8 +117,17 @@
 @include('school_admin.partial_footers')
 <script>
     function showModal() {
-        document.getElementById('form-modal').style.display = 'block';
-        document.getElementById('main-panel').style.display = 'none';
+        fetch('/helper/class-existence-checker')
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    document.getElementById('form-modal').style.display = 'block';
+                    document.getElementById('main-panel').style.display = 'none';
+                } else {
+                    alert('Kindly create a class before Adding Exam');
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function disableModal() {

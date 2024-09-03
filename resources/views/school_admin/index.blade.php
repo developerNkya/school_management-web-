@@ -25,7 +25,7 @@
                       <h3 class="rate-percentage">7,682</h3>
                     </div>
                     <div>
-                      <p class="statistics-title">New Sessions</p>
+                      <p class="statistics-title">Total Subjects</p>
                       <h3 class="rate-percentage">68.8</h3>
                     </div>
                   </div>
@@ -137,10 +137,6 @@
       </div>
     </div>
   </div>
-  <footer class="footer">
-    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-      <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {{ date('Y') }}. All rights reserved.</span>
-    </div>
-  </footer>
+  @include('helpers.copyright')
 </div>
 @include('school_admin.partial_footers')

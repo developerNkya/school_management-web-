@@ -17,6 +17,10 @@ class SchoolAdminController extends Controller
 {
     public function index(Request $request)
     {
+        $total_classes = SchoolClass::where('school_id',Auth::user()->school_id)->get()->count();
+        $total_students = StudentInfo::where('school_id',Auth::user()->school_id)->get()->count();
+        $total_subjects = Subject::where('school_id',Auth::user()->school_id)->get()->count();
+
         return view('school_admin.index');
     }
 
@@ -37,7 +41,6 @@ class SchoolAdminController extends Controller
         }
 
         // return $all_classes;
-
         return view('school_admin.class_page', ['classes' => $all_classes]);
     }
 

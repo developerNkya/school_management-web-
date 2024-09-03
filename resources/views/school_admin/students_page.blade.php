@@ -36,13 +36,7 @@
 
         </div>
     </div>
-    <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-
-            <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights
-                reserved.</span>
-        </div>
-    </footer>
+  @include('helpers.copyright')
     <!-- partial -->
 </div>
 
@@ -174,23 +168,23 @@
       </div>
     </div>
   </div>
-  <!-- content-wrapper ends -->
-  <!-- partial:../../partials/_footer.html -->
-  <footer class="footer">
-    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-   
-      <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights reserved.</span>
-    </div>
-  </footer>
-  <!-- partial -->
 </div>
 
 
 <script>
-    function showModal() {
-        // alert("Welcome to the javaTpoint.com");
-        document.getElementById( 'form-modal' ).style.display = 'block';
-        document.getElementById( 'main-panel' ).style.display = 'none';
+   function showModal() {
+        fetch('/helper/class-existence-checker')
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    document.getElementById('form-modal').style.display = 'block';
+                    document.getElementById('main-panel').style.display = 'none';
+                } else {
+                    alert('Kindly create a class before registering student');
+                    
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function disableModal() {
@@ -221,9 +215,6 @@
             currentTab += n;
             if (currentTab >= x.length) {
               document.getElementById("studentForm").submit()
-                //post the data 
-                // resetForm();
-                // return false;
             }
             showTab(currentTab);
         }
@@ -278,9 +269,6 @@
                             streamSelect.innerHTML +=
                             `<option value="${stream.id}" name="section_id">${stream.name}</option>`;
                         });
-
-                        // Clear subjects when class or stream changes
-                        // subjectSelect.innerHTML = '<option value="">Select a subject</option>';
                     });
             } else {
                 streamSelect.innerHTML = '<option value="">Select a stream</option>';
@@ -292,23 +280,8 @@
             const classId = document.getElementById('classSelect').value;
             const stream = document.getElementById('streamSelect').value;
             const subjectSelect = document.getElementById('subjectSelect');
-
-            // if (classId && stream) {
-            //     fetch(`/school_admin/get-subjects/${classId}/${stream}`)
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-            //             data.subjects.forEach(subject => {
-            //                 subjectSelect.innerHTML +=
-            //                     `<option value="${subject}">${subject}</option>`;
-            //             });
-            //         });
-            // } else {
-            //     subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-            // }
         }
 
-        // Expose functions to global scope
         window.updateStreams = updateStreams;
         window.updateSubjects = updateSubjects;
     });
