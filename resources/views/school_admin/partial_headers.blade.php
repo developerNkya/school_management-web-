@@ -16,19 +16,13 @@
     <link rel="stylesheet" href="/assets/vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
     <link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="/assets/js/select.dataTables.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
     <link rel="stylesheet" href="/assets/css/style.css">
-    <!-- endinject -->
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
   </head>
   <body class="with-welcome-text">
     <div class="container-scroller">
-      <!-- partial:partials/_navbar.html -->
       <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
           <div class="me-3">
@@ -48,7 +42,10 @@
         <div class="navbar-menu-wrapper d-flex align-items-top">
           <ul class="navbar-nav">
             <li class="nav-item fw-semibold d-none d-lg-block ms-0">
-              <h1 class="welcome-text">Good Morning, <span class="text-black fw-bold">John Doe</span></h1>
+              <?php
+              $value = request()->session()->get('user_name', '');
+              ?>
+              <h1 class="welcome-text">Welcome, <span class="text-black fw-bold">{{$value}}</span></h1>
               <h3 class="welcome-sub-text">Your performance summary this week </h3>
             </li>
           </ul>
@@ -76,52 +73,11 @@
           </button>
         </div>
       </nav>
-      <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
-        {{-- <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url('school_admin/') }}">
-                <i class="mdi mdi-grid-large menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-item nav-category">CONTENTS</li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url('school_admin/classes') }}">
-                <i class="mdi mdi-grid-large menu-icon"></i>
-                <span class="menu-title">Classes</span>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-                <i class="menu-icon mdi mdi-card-text-outline"></i>
-                <span class="menu-title">Form elements</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="form-elements">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
-                </ul>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="{{'/school_admin/students'}}">
-                <i class="mdi mdi-grid-large menu-icon"></i>
-                <span class="menu-title">Students</span>
-              </a>
-            </li>
-
-          </ul>
-        </nav> --}}
-
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="{{ url('school_admin/') }}">
+              <a class="nav-link" href="{{ url('school_admin/home') }}">
                 <i class="mdi mdi-grid-large menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
