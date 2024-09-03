@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
@@ -20,8 +21,18 @@ class SchoolAdminController extends Controller
         $total_classes = SchoolClass::where('school_id',Auth::user()->school_id)->get()->count();
         $total_students = StudentInfo::where('school_id',Auth::user()->school_id)->get()->count();
         $total_subjects = Subject::where('school_id',Auth::user()->school_id)->get()->count();
+        $suggestions =  Suggestion::with('school','student','student.Schoolclass')
+        ->where('school_id',Auth::user()->school_id)
+        ->take(3)->get();
+        $events = Event::where('school_id',Auth::user()->school_id)->take(3)->get();
 
-        return view('school_admin.index');
+        return view('school_admin.index',[
+                'total_classes' =>  $total_classes,
+                'total_students' =>$total_students,
+                'total_subjects' =>$total_subjects,
+                'suggestions' =>$suggestions,
+                'events' =>$events
+        ]);
     }
 
     public function classPage(Request $request)
@@ -39,8 +50,6 @@ class SchoolAdminController extends Controller
             ]);
             
         }
-
-        // return $all_classes;
         return view('school_admin.class_page', ['classes' => $all_classes]);
     }
 
@@ -83,17 +92,12 @@ class SchoolAdminController extends Controller
             if ($validator->fails()) {
                 return redirect()->route('add_class_page')->withErrors($validator)->withInput();
             }
-
-            // Create a new class record
             $class = new SchoolClass();
             $class->name = $request->input('class_name');
             $class->school_id = Auth::user()->school_id;
             $class->save();
-
-            // Retrieve the class ID
+        
             $class_id = $class->id;
-
-            // Create sections
             $allSections = $request->input('sections', []);
 
             foreach ($allSections as $sectionName) {
@@ -151,8 +155,6 @@ class SchoolAdminController extends Controller
         $user->save();
 
         $student_id = $user->id;
-
-
         $studentInfo = new StudentInfo();
         $studentInfo->first_name = $request->first_name;
         $studentInfo->last_name = $request->last_name;
