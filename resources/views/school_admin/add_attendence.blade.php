@@ -16,11 +16,10 @@
                     
                         <form method="POST" action="{{ route('attendance.fetchStudents') }}">
                             @csrf
-                        
-                            <!-- Select Attendance -->
+                                               
                             <div class="form-group">
                                 <label for="attendanceSelect">Select Attendance</label>
-                                <select name="attendance_id" class="form-control" id="attendanceSelect" required>
+                                <select name="attendence_id" class="form-control" id="attendanceSelect" required>
                                     <option value="">Select Attendance</option>
                                     @foreach ($attendances as $attendance)
                                         <option value="{{ $attendance->id }}" data-type="{{ $attendance->attendance_type }}">
@@ -30,7 +29,7 @@
                                 </select>
                             </div>
                         
-                            <!-- Select Class -->
+                           
                             <div class="form-group">
                                 <label for="classSelect">Select Class</label>
                                 <select name="class_id" class="form-control" id="classSelect" required>
@@ -40,8 +39,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        
-                            <!-- Select Section -->
+
                             <div class="form-group">
                                 <label for="sectionSelect">Select Section</label>
                                 <select name="section_id" class="form-control" id="sectionSelect" required>
@@ -51,14 +49,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                        
-                            <!-- Select Date -->
+             
                             <div class="form-group">
                                 <label for="dateSelect">Select Date</label>
                                 <input type="date" name="date" class="form-control" id="dateSelect" value="{{ now()->format('Y-m-d') }}" required>
                             </div>
-                        
-                            <!-- Conditional Form Group for Per Subject Attendance -->
+
                             <div class="form-group" id="subjectGroup" style="display: none;">
                                 <label for="subjectSelect">Select Subject</label>
                                 <select name="subject_id" class="form-control" id="subjectSelect">
@@ -67,9 +63,7 @@
                                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                        
-                            <!-- Submit Button to Fetch Students -->
+                            </div>                    
                             <button type="submit" class="btn btn-primary mt-4">Fetch Students</button>
                         </form>
                         
@@ -79,7 +73,7 @@
         </div>
     </div>
 
-    <!-- Table for Attendance Data -->
+   
     @if($students->count() > 0)
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
@@ -88,11 +82,11 @@
                     <form method="POST" action="{{ route('attendance.storeData') }}">
                         @csrf
 
-                        <input type="hidden" name="attendance_id" value="{{ request('attendance_id') }}">
+                        <input type="hidden" name="attendence_id" value="{{ request('attendence_id') }}">
                         <input type="hidden" name="class_id" value="{{ request('class_id') }}">
                         <input type="hidden" name="section_id" value="{{ request('section_id') }}">
                         <input type="hidden" name="subject_id" value="{{ request('subject_id') }}">
-                        <input type="hidden" name="date" id="dateInput" value="{{ now()->format('Y-m-d') }}">
+                        <input type="hidden" name="date" id="dateInput" value="{{ $day }}">
 
                         <div class="table-responsive mt-4">
                             <table class="table table-bordered">
@@ -111,7 +105,7 @@
                                 <tbody>
                                     @foreach ($students as $index => $student)
                                         @php
-                                            $totalDays = $student->attendances->count();
+                                            $totalDays = $attendenceDays;
                                             if ($totalDays ==0) {
                                                 $totalDays = 1;
                                             }
@@ -121,7 +115,7 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                <a href="#" class="date-picker-trigger">{{ now()->format('Y-m-d') }}</a>
+                                                <a href="#" class="date-picker-trigger">{{ $day}}</a>
                                             </td>
                                             <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                             <td id="subjectDataColumn" style="display: none;">
@@ -171,12 +165,12 @@
         }
     });
 
-    // Date picker functionality
+   
     document.querySelectorAll('.date-picker-trigger').forEach(function (element) {
         element.addEventListener('click', function (event) {
             event.preventDefault();
 
-            // Show date picker
+           
             const dateInput = document.getElementById('dateInput');
             const newDate = prompt('Enter new date (YYYY-MM-DD):', dateInput.value);
             

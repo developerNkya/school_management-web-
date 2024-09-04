@@ -12,6 +12,7 @@ class Attendence extends Model
     protected $table = 'attendances';
 
     protected $fillable = [
+        'id',
         'attendance_name', 
         'academic_year', 
         'attendance_type', 

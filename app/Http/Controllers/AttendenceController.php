@@ -8,6 +8,7 @@ use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
 use App\Models\Subject;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,101 +27,119 @@ class AttendenceController extends Controller
             'attendance_type' => 'required|in:per_day,per_subject',
             'school_id' => 'required|exists:schools,id',
         ]);
-    
+
         Attendence::create([
             'attendance_name' => $request->input('attendance_name'),
             'academic_year' => $request->input('academic_year'),
             'attendance_type' => $request->input('attendance_type'),
             'school_id' => $request->input('school_id'),
         ]);
-    
+
         return redirect()->back()->with('message', 'Attendance created successfully.');
     }
     public function showAddAttendenceForm()
     {
         $schoolId = Auth::user()->school_id;
-        
-        // Fetch data based on the school_id
         $attendances = Attendence::where('school_id', $schoolId)->get();
         $classes = SchoolClass::where('school_id', $schoolId)->get();
         $sections = Section::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
-        
-        // Default empty students collection
         $students = collect();
-        
+
         return view('school_admin.add_attendence', compact('attendances', 'classes', 'sections', 'subjects', 'students'));
     }
-    
+
     public function fetchStudents(Request $request)
     {
         $schoolId = Auth::user()->school_id;
-    
-        // Fetch data based on the school_id
         $attendances = Attendence::where('school_id', $schoolId)->get();
         $classes = SchoolClass::where('school_id', $schoolId)->get();
         $sections = Section::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
-    
-        // Fetch students with their attendance data filtered by date
+
         $students = StudentInfo::where('class_id', $request->input('class_id'))
-                               ->where('section', $request->input('section_id'))
-                               ->with(['attendances' => function ($query) use ($request) {
-                                   $query->where('attendence_id', $request->input('attendence_id'))
-                                         ->whereDate('date', $request->input('date'));
-                               }])
-                               ->get();
+            ->where('section', $request->input('section_id'))
+            ->with([
+                'attendances' => function ($query) use ($request) {
+                    $query->where('attendence_id', $request->input('attendence_id'))
+                        ->whereDate('date', $request->input('date'));
+                }
+            ])
+            ->get();
+
+    $attendenceDays = 0;
+    $day = '';
+    if ($request->input('attendence_id') != null) {
+        $day = $request->input('date');
+        $attendence = Attendence::where('id', $request->input('attendence_id'))
+            ->first(); 
     
-        return view('school_admin.add_attendence', compact('attendances', 'classes', 'sections', 'subjects', 'students'));
+        if ($attendence) {
+            $createdAt = Carbon::parse($attendence->created_at);
+            $now = Carbon::now();
+            $attendenceDays = $this->countWeekdays($createdAt, $now);
+        }
+    }
+        return view('school_admin.add_attendence', compact('day','attendenceDays','attendances', 'classes', 'sections', 'subjects', 'students'));
+    }
+
+
+    function countWeekdays($startDate, $endDate) {
+        $totalDays = 0;
+    
+        $currentDate = $startDate->copy();
+    
+        while ($currentDate <= $endDate) {
+            if ($currentDate->isWeekday()) {
+                $totalDays++;
+            }
+            $currentDate->addDay();
+        }
+    
+        return $totalDays;
     }
     
-    
-    
+
+
     public function saveAttendence(Request $request)
     {
-        // Validation logic
         $request->validate([
-            'attendance_id' => 'required|exists:attendances,id',
+            'attendence_id' => 'required|exists:attendances,id',
             'class_id' => 'required|exists:classes,id',
             'section_id' => 'required|exists:sections,id',
             'date' => 'required|date',
             'status.*' => 'required|in:Present,Absent,Allowed,Sick',
             'subject_id' => 'nullable|exists:subjects,id',
         ]);
-    
+
         foreach ($request->input('status') as $studentId => $status) {
-            // Fetch existing attendance record
-            $attendanceData = AttendenceData::where('attendence_id', $request->input('attendance_id'))
-                                            ->where('student_id', $studentId)
-                                            ->where('date', $request->input('date'))
-                                            ->first();
-    
-            // Determine total appearance
+            $attendanceData = AttendenceData::where('attendence_id', $request->input('attendence_id'))
+                ->where('student_id', $studentId)
+                ->where('date', $request->input('date'))
+                ->first();
+
             if ($attendanceData) {
                 $totalAppearance = $attendanceData->total_appearance;
             } else {
-                $totalAppearance = AttendenceData::where('attendence_id', $request->input('attendance_id'))
-                                                 ->where('student_id', $studentId)
-                                                 ->count();
+                $totalAppearance = AttendenceData::where('attendence_id', $request->input('attendence_id'))
+                    ->where('student_id', $studentId)
+                    ->count();
             }
-    
-            // Adjust total appearance based on status
+
+
             if ($status === 'Absent') {
-                $totalAppearance = max(0, $totalAppearance - 1); // Ensure it doesn't go below 0
+                $totalAppearance = max(0, $totalAppearance - 1); 
             } else {
                 $totalAppearance += 1;
             }
-    
-            // Calculate percentage based on appearance and days
-            $totalDays = AttendenceData::where('attendence_id', $request->input('attendance_id'))
-                                       ->where('student_id', $studentId)
-                                       ->distinct()
-                                       ->count('date');
-            $totalDays = $totalDays > 0 ? $totalDays : 1; // Ensure totalDays is at least 1
-    
+
+            $totalDays = AttendenceData::where('attendence_id', $request->input('attendence_id'))
+                ->where('student_id', $studentId)
+                ->distinct()
+                ->count('date');
+            $totalDays = $totalDays > 0 ? $totalDays : 1; 
             $percentage = ($totalAppearance / $totalDays) * 100;
-    
-            // Update or create the attendance data record
+
             if ($attendanceData) {
                 $attendanceData->update([
                     'status' => $status,
@@ -129,7 +148,7 @@ class AttendenceController extends Controller
                 ]);
             } else {
                 AttendenceData::create([
-                    'attendence_id' => $request->input('attendance_id'),
+                    'attendence_id' => $request->input('attendence_id'),
                     'student_id' => $studentId,
                     'class_id' => $request->input('class_id'),
                     'section_id' => $request->input('section_id'),
@@ -142,14 +161,14 @@ class AttendenceController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('attendance.addAttendence')->with('message', 'Attendance recorded successfully.');
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 
 
 }

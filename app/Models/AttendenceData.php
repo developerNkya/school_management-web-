@@ -27,6 +27,7 @@ class AttendenceData extends Model
         'status',
         'total_appearance',
         'percentage',
+        'created_at'
     ];
 
     public function attendance()
