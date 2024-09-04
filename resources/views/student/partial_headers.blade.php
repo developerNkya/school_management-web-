@@ -37,10 +37,10 @@
             </button>
           </div>
           <div>
-            <a class="navbar-brand brand-logo" href="/index.html">
+            <a class="navbar-brand brand-logo" href="/student/home">
               <img src="assets/images/logo.svg" alt="logo" />
             </a>
-            <a class="navbar-brand brand-logo-mini" href="/index.html">
+            <a class="navbar-brand brand-logo-mini" href="/student/home">
               <img src="assets/images/logo-mini.svg" alt="logo" />
             </a>
           </div>
