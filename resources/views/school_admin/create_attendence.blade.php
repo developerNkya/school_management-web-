@@ -9,7 +9,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Create Attendence</h4>
-                        <form class="forms-sample" method="POST" action="{{ route('attendance.createNew') }}">
+                        @include('helpers.message_handler')
+                        <form class="forms-sample" method="POST" action="{{ route('attendance.saveNewAttendence') }}">
                             @csrf
                             <div class="form-group">
                                 <label for="attendanceName">Attendance Name</label>

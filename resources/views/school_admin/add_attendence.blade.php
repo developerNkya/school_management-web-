@@ -16,7 +16,7 @@
                     
                         <form method="POST" action="{{ route('attendance.fetchStudents') }}">
                             @csrf
-                    
+                        
                             <!-- Select Attendance -->
                             <div class="form-group">
                                 <label for="attendanceSelect">Select Attendance</label>
@@ -29,7 +29,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                    
+                        
                             <!-- Select Class -->
                             <div class="form-group">
                                 <label for="classSelect">Select Class</label>
@@ -40,7 +40,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                    
+                        
                             <!-- Select Section -->
                             <div class="form-group">
                                 <label for="sectionSelect">Select Section</label>
@@ -51,7 +51,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                    
+                        
+                            <!-- Select Date -->
+                            <div class="form-group">
+                                <label for="dateSelect">Select Date</label>
+                                <input type="date" name="date" class="form-control" id="dateSelect" value="{{ now()->format('Y-m-d') }}" required>
+                            </div>
+                        
                             <!-- Conditional Form Group for Per Subject Attendance -->
                             <div class="form-group" id="subjectGroup" style="display: none;">
                                 <label for="subjectSelect">Select Subject</label>
@@ -62,10 +68,11 @@
                                     @endforeach
                                 </select>
                             </div>
-                    
+                        
                             <!-- Submit Button to Fetch Students -->
                             <button type="submit" class="btn btn-primary mt-4">Fetch Students</button>
                         </form>
+                        
                     </div>
                 </div>
             </div>
@@ -96,12 +103,21 @@
                                         <th>Name</th>
                                         <th id="subjectColumn" style="display: none;">Subject</th>
                                         <th>Status</th>
-                                        <th>Total Appearance</th>
+                                        <th>Total No. Days</th>
+                                        <th>Total No. Appearance</th>
                                         <th>%</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($students as $index => $student)
+                                        @php
+                                            $totalDays = $student->attendances->count();
+                                            if ($totalDays ==0) {
+                                                $totalDays = 1;
+                                            }
+                                            $totalAppearance = $student->attendances()->where('status', 'Present')->count();
+                                            $percentage = $totalDays > 0 ? ($totalAppearance / $totalDays) * 100 : 0;
+                                        @endphp
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
@@ -119,19 +135,13 @@
                                                     <option value="Sick">Sick</option>
                                                 </select>
                                             </td>
-                                            <td>
-                                                <input type="number" name="total_appearance[{{ $student->id }}]" class="form-control">
-                                            </td>
-                                            {{-- <td>
-                                                <input type="number" name="percentage[{{ $student->id }}]" class="form-control" readonly>
-                                            </td> --}}
-                                               <td>
-                                                <input type="number" name="percentage" class="form-control" value="1" readonly>
-                                            </td>
+                                            <td>{{ $totalDays}}</td>
+                                            <td>{{ $totalAppearance }}</td>
+                                            <td>{{ round($percentage, 2) }}%</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                            </table>                            
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>

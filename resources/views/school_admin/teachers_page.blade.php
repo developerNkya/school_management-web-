@@ -17,17 +17,22 @@
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th>  Namess </th>
-                                        <th> Total Students </th>
-                                        <th> Total Teachers </th>
+                                        <th>  Names </th>
+                                        <th> Gender</th>
+                                        <th> Nationality</th>
+                                        <th>Phone No</th>
+                                        <th>Email</th>
                                         <th> Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach ($teachers as $teacher)
                                         <tr>
                                             <td>1</td>
                                             <td>{{ $teacher->first_name.' '.$teacher->second_name.' '.$teacher->last_name }}</td>
+                                            <td>{{ $teacher->gender }}</td>
+                                            <td>{{ $teacher->nationality }}</td>
                                             <td>{{$teacher->phone_number }}</td>
                                             <td>{{ $teacher->email }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>
