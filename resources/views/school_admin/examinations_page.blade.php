@@ -17,20 +17,18 @@
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th> Namess </th>
-                                        <th> Total Students </th>
-                                        <th> Total Teachers </th>
+                                        <th> Name </th>
+                                        <th> Start Date</th>
                                         <th> Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classes as $teacher)
+                                    @foreach ($exams as $index=>$exam)
+
                                         <tr>
-                                            <td>1</td>
-                                            <td>{{ $teacher->first_name . ' ' . $teacher->second_name . ' ' . $teacher->last_name }}
-                                            </td>
-                                            <td>{{ $teacher->phone_number }}</td>
-                                            <td>{{ $teacher->email }}</td>
+                                            <td>{{$index+1}}</td>
+                                            <td>{{ $exam->name }}</td>
+                                            <td>{{ $exam->start_date }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>
                                         </tr>
                                     @endforeach
@@ -40,16 +38,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-
-            <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights
-                reserved.</span>
-        </div>
-    </footer>
+    @include('helpers.copyright')
     <!-- partial -->
 </div>
 
@@ -101,15 +92,7 @@
             </div>
         </div>
     </div>
-
-
-    <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-
-            <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights
-                reserved.</span>
-        </div>
-    </footer>
+    @include('helpers.copyright')
     <!-- partial -->
 </div>
 

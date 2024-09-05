@@ -23,9 +23,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($subjects as $subject)
+                                    @foreach ($subjects as $index=> $subject)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{$index+1}}</td>
                                             <td>{{ $subject->name }}</td>
                                             <td>{{ $subject->short_name }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>

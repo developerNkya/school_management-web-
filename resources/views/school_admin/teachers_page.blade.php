@@ -27,9 +27,9 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($teachers as $teacher)
+                                    @foreach ($teachers as $index=> $teacher)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{$index+1}}</td>
                                             <td>{{ $teacher->first_name.' '.$teacher->second_name.' '.$teacher->last_name }}</td>
                                             <td>{{ $teacher->gender }}</td>
                                             <td>{{ $teacher->nationality }}</td>

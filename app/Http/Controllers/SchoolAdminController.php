@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Exam;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
@@ -63,7 +64,8 @@ class SchoolAdminController extends Controller
     {
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
-        return view('school_admin.examinations_page', ['classes' => $classes,'subjects' => $subjects]);
+        $exams = Exam::where('school_id', Auth::user()->school_id)->get();
+        return view('school_admin.examinations_page', ['exams'=>$exams,'classes' => $classes,'subjects' => $subjects]);
     }
 
     public function subjectsPage(Request $request)

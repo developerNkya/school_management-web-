@@ -19,9 +19,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($students as $student)
+                                  @foreach($students as $index => $student)
                                     <tr>
-                                        <td>1</td>
+                                        <td>{{$index+1}}</td>
                                         <td>{{$student->first_name.' '.$student->last_name}}</td>
                                         <td>{{$student->registration_no}}</td>
                                         <td>{{$student->class_id}}</td>

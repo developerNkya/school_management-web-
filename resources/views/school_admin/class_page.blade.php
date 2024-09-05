@@ -23,9 +23,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classes as $class)
+                                    @foreach ($classes as $index => $class)
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{$index+1}}</td>
                                             <td>{{ $class->info->name }}</td>
                                             <td>{{ $class->total_students }}</td>
                                             <td> <button type="button" class="btn btn-light">View More</button></td>
