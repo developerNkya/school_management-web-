@@ -37,6 +37,10 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                    $paginated = $events
+                    ?>
+                    @include('helpers.paginator')
                 </div>
             </div>
         </div>

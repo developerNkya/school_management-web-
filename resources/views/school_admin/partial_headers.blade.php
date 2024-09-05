@@ -183,9 +183,9 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="docs/documentation.html">
-                <i class="menu-icon mdi mdi-file-document"></i>
-                <span class="menu-title">Documentation</span>
+              <a class="nav-link" href="/">
+                <i class="menu-icon mdi mdi-logout"></i>
+                <span class="menu-title">Logout</span>
               </a>
             </li>
           </ul>

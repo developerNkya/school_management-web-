@@ -35,6 +35,10 @@
                             </table>
                         </div>
                     </div>
+                    <?php
+                    $paginated =$subjects
+                    ?>
+                    @include('helpers.paginator')
                 </div>
             </div>
 

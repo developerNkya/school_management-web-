@@ -38,8 +38,7 @@ class SchoolAdminController extends Controller
 
     public function classPage(Request $request)
     {
-        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
-
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->paginate(10);
         $all_classes=[];
         foreach ($classes as $class) {
             $total_students = StudentInfo::where('school_id', Auth::user()->school_id)
@@ -48,36 +47,35 @@ class SchoolAdminController extends Controller
                 array_push($all_classes, (object)[
                     'info'=>$class,
                     'total_students' => $total_students,
-            ]);
-            
+            ]);            
         }
-        return view('school_admin.class_page', ['classes' => $all_classes]);
+        return view('school_admin.class_page', ['classes' => $all_classes,'paginated'=>$classes]);
     }
 
     public function teachersPage(Request $request)
     {
-        $teachers = Teacher::where('school_id', Auth::user()->school_id)->get();
-        return view('school_admin.teachers_page', ['teachers' => $teachers]);
+        $teachers = Teacher::where('school_id', Auth::user()->school_id)->paginate(10);
+        return view('school_admin.teachers_page', ['teachers' => $teachers,]);
     }
 
     public function examinationsPage(Request $request)
     {
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
-        $exams = Exam::where('school_id', Auth::user()->school_id)->get();
+        $exams = Exam::where('school_id', Auth::user()->school_id)->paginate(10);
         return view('school_admin.examinations_page', ['exams'=>$exams,'classes' => $classes,'subjects' => $subjects]);
     }
 
     public function subjectsPage(Request $request)
     {
-        $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
+        $subjects = Subject::where('school_id', Auth::user()->school_id)->paginate(10);
         return view('school_admin.subjects_page', ['subjects' => $subjects]);
     }
 
     public function studentsPage(Request $request)
     {
-        $student_info = StudentInfo::where('school_id', Auth::user()->school_id)
-            ->get();
+        $student_info = StudentInfo::with('SchoolClass')->where('school_id', Auth::user()->school_id)
+            ->paginate(10);
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.students_page', ['students' => $student_info, 'classes' => $classes]);
     }
@@ -276,7 +274,7 @@ class SchoolAdminController extends Controller
     {
         $suggestions = Suggestion::with('school','student','student.Schoolclass')
                        ->where('school_id',Auth::user()->school_id)
-                       ->get();
+                       ->paginate(10);
 
         return view('school_admin.viewSuggestions', ['suggestions' => $suggestions]);
     }

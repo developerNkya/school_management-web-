@@ -11,34 +11,36 @@
                     <div class="card-body">
                         <h4 class="card-title">All Classes</h4>
                         @include('helpers.message_handler')
-                        <button type="button" class="btn btn-dark" onclick = "showModal()">Add Class +</button>
+                        <button type="button" class="btn btn-dark" onclick="showModal()">Add Class +</button>
                         <div class="table-responsive pt-3">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th> No.</th>
-                                        <th> Class Name </th>
-                                        <th> Total Students </th>
-                                        <th> Actions</th>
+                                        <th>No.</th>
+                                        <th>Class Name</th>
+                                        <th>Total Students</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($classes as $index => $class)
                                         <tr>
-                                            <td>{{$index+1}}</td>
+                                            <td>{{ $index + 1 }}</td>
                                             <td>{{ $class->info->name }}</td>
                                             <td>{{ $class->total_students }}</td>
-                                            <td> <button type="button" class="btn btn-light">View More</button></td>
+                                            <td><button type="button" class="btn btn-light">View More</button></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    @include('helpers.paginator')
                 </div>
             </div>
 
         </div>
+        
     </div>
     @include('helpers.copyright')
     <!-- partial -->

@@ -13,9 +13,9 @@
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th> Class Name </th>
-                                        <th> Total Students </th>
-                                        <th> Total Teachers </th>
+                                        <th> Student Name </th>
+                                        <th> Registration No </th>
+                                        <th> Class </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -24,13 +24,17 @@
                                         <td>{{$index+1}}</td>
                                         <td>{{$student->first_name.' '.$student->last_name}}</td>
                                         <td>{{$student->registration_no}}</td>
-                                        <td>{{$student->class_id}}</td>
+                                        <td>{{$student->SchoolClass->name}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    <?php
+                    $paginated = $students;
+                    ?>
+                    @include('helpers.paginator')
                 </div>
             </div>
 

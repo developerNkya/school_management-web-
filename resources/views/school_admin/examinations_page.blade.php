@@ -36,6 +36,10 @@
                             </table>
                         </div>
                     </div>
+                    <?php
+                    $paginated = $exams;
+                    ?>
+                    @include('helpers.paginator')
                 </div>
             </div>
         </div>
