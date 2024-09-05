@@ -48,8 +48,11 @@
         <div class="navbar-menu-wrapper d-flex align-items-top">
           <ul class="navbar-nav">
             <li class="nav-item fw-semibold d-none d-lg-block ms-0">
-              <h1 class="welcome-text">Good Morning, <span class="text-black fw-bold">John Doe</span></h1>
-              <h3 class="welcome-sub-text">Your performance summary this week </h3>
+              <?php
+              $value = request()->session()->get('user_name', '');
+              ?>
+              <h1 class="welcome-text">welcome, <span class="text-black fw-bold">{{$value}}</span></h1>
+              <h3 class="welcome-sub-text">Your personalized dashboard</h3>
             </li>
           </ul>
           <ul class="navbar-nav ms-auto">
@@ -81,6 +84,12 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('student/home') }}">
+                <i class="mdi mdi-grid-large menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
             <li class="nav-item nav-category">Contents</li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
@@ -120,6 +129,18 @@
             </li>
 
             <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#events" aria-expanded="false" aria-controls="events">
+                <i class="menu-icon mdi mdi-chart-line"></i>
+                <span class="menu-title">Events</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="events">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="{{'/student/events'}}">view events</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#suggestions" aria-expanded="false" aria-controls="suggestions">
                 <i class="menu-icon mdi mdi-chart-line"></i>
                 <span class="menu-title">Suggestions</span>
@@ -130,6 +151,12 @@
                   <li class="nav-item"> <a class="nav-link" href="{{'/student/suggestions'}}">add suggestions</a></li>
                 </ul>
               </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="menu-icon mdi mdi-logout"></i>
+                <span class="menu-title">Logout</span>
+              </a>
             </li>
           </ul>
         </nav>
