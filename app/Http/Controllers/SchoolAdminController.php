@@ -283,7 +283,7 @@ class SchoolAdminController extends Controller
                 ->where('school_id', Auth::user()->school_id)
                 ->update(['class_id' => $request->promoted_to]);
 
-            return redirect()->route('promote_class')->with('message', 'Class added successfully!');
+            return redirect()->route('promote_class')->with('message', 'Class promoted successfully!');
         } catch (\Exception $e) {
             return redirect()->route('promote_class')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }

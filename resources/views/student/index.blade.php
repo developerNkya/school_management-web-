@@ -21,8 +21,8 @@
                       <h3 class="rate-percentage">{{$student_info->SchoolClass->name}}</h3>
                     </div>
                     <div>
-                      <p class="statistics-title">Stream</p>
-                      <h3 class="rate-percentage">{{$student_info->Section->name}}</h3>
+                      <p class="statistics-title">Gender</p>
+                      <h3 class="rate-percentage">{{$student_info->gender}}</h3>
                     </div>
                     <div>
                       <p class="statistics-title">Academic Year</p>
