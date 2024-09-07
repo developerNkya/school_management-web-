@@ -19,37 +19,37 @@ class SchoolAdminController extends Controller
 {
     public function index(Request $request)
     {
-        $total_classes = SchoolClass::where('school_id',Auth::user()->school_id)->get()->count();
-        $total_students = StudentInfo::where('school_id',Auth::user()->school_id)->get()->count();
-        $total_subjects = Subject::where('school_id',Auth::user()->school_id)->get()->count();
-        $suggestions =  Suggestion::with('school','student','student.Schoolclass')
-        ->where('school_id',Auth::user()->school_id)
-        ->take(3)->get();
-        $events = Event::where('school_id',Auth::user()->school_id)->take(3)->get();
+        $total_classes = SchoolClass::where('school_id', Auth::user()->school_id)->get()->count();
+        $total_students = StudentInfo::where('school_id', Auth::user()->school_id)->get()->count();
+        $total_subjects = Subject::where('school_id', Auth::user()->school_id)->get()->count();
+        $suggestions = Suggestion::with('school', 'student', 'student.Schoolclass')
+            ->where('school_id', Auth::user()->school_id)
+            ->take(3)->get();
+        $events = Event::where('school_id', Auth::user()->school_id)->take(3)->get();
 
-        return view('school_admin.index',[
-                'total_classes' =>  $total_classes,
-                'total_students' =>$total_students,
-                'total_subjects' =>$total_subjects,
-                'suggestions' =>$suggestions,
-                'events' =>$events
+        return view('school_admin.index', [
+            'total_classes' => $total_classes,
+            'total_students' => $total_students,
+            'total_subjects' => $total_subjects,
+            'suggestions' => $suggestions,
+            'events' => $events
         ]);
     }
 
     public function classPage(Request $request)
     {
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->paginate(10);
-        $all_classes=[];
+        $all_classes = [];
         foreach ($classes as $class) {
             $total_students = StudentInfo::where('school_id', Auth::user()->school_id)
                 ->where('class_id', $class->id)
                 ->count();
-                array_push($all_classes, (object)[
-                    'info'=>$class,
-                    'total_students' => $total_students,
-            ]);            
+            array_push($all_classes, (object) [
+                'info' => $class,
+                'total_students' => $total_students,
+            ]);
         }
-        return view('school_admin.class_page', ['classes' => $all_classes,'paginated'=>$classes]);
+        return view('school_admin.class_page', ['classes' => $all_classes, 'paginated' => $classes]);
     }
 
     public function teachersPage(Request $request)
@@ -63,7 +63,7 @@ class SchoolAdminController extends Controller
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
         $exams = Exam::where('school_id', Auth::user()->school_id)->paginate(10);
-        return view('school_admin.examinations_page', ['exams'=>$exams,'classes' => $classes,'subjects' => $subjects]);
+        return view('school_admin.examinations_page', ['exams' => $exams, 'classes' => $classes, 'subjects' => $subjects]);
     }
 
     public function subjectsPage(Request $request)
@@ -84,7 +84,6 @@ class SchoolAdminController extends Controller
         try {
             $rules = [
                 'class_name' => 'required|string|max:255',
-                'sections.*' => 'nullable|string|max:255',
             ];
 
             $validator = \Validator::make($request->all(), $rules);
@@ -96,28 +95,11 @@ class SchoolAdminController extends Controller
             $class->name = $request->input('class_name');
             $class->school_id = Auth::user()->school_id;
             $class->save();
-        
-            $class_id = $class->id;
-            $allSections = $request->input('sections', []);
-
-            foreach ($allSections as $sectionName) {
-                if ($sectionName) {
-                    $section = new Section();
-                    $section->name = $sectionName;
-                    $section->class_id = $class_id;
-                    $section->school_id = Auth::user()->school_id;
-                    $section->save();
-                }
-            }
-
             return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
         } catch (\Exception $e) {
             return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }
     }
-
-
-
     public function addStudent(Request $request)
     {
         $rules = [
@@ -131,7 +113,6 @@ class SchoolAdminController extends Controller
             'city' => 'required|string|max:255',
             'passport_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'class_id' => 'required|exists:classes,id',
-            'section' => 'required',
             'parent_first_name' => 'required|string|max:255',
             'parent_last_name' => 'required|string|max:255',
             'parent_phone' => 'required|string|max:255',
@@ -174,7 +155,7 @@ class SchoolAdminController extends Controller
         }
 
         $studentInfo->class_id = $request->class_id;
-        $studentInfo->section = $request->section;
+
         $studentInfo->parent_first_name = $request->parent_first_name;
         $studentInfo->parent_last_name = $request->parent_last_name;
         $studentInfo->parent_phone = $request->parent_phone;
@@ -267,17 +248,45 @@ class SchoolAdminController extends Controller
 
 
         return redirect()->route('all_teachers_page')->with('message', 'Teacher added successfully!');
-        
+
     }
 
     public function viewSuggestions(Request $request)
     {
-        $suggestions = Suggestion::with('school','student','student.Schoolclass')
-                       ->where('school_id',Auth::user()->school_id)
-                       ->paginate(10);
+        $suggestions = Suggestion::with('school', 'student', 'student.Schoolclass')
+            ->where('school_id', Auth::user()->school_id)
+            ->paginate(10);
 
         return view('school_admin.viewSuggestions', ['suggestions' => $suggestions]);
     }
 
+    public function promoteClass(Request $request)
+    {
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        return view('school_admin.promoteClass', ['classes' => $classes]);
+    }
+
+    public function handlePromotion(Request $request)
+    {
+        try {
+            $rules = [
+                'class_id' => 'required',
+                'promoted_to' => 'required',
+            ];
+
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return redirect()->route('promote_class')->withErrors($validator)->withInput();
+            }
+
+            StudentInfo::where('class_id', $request->class_id)
+                ->where('school_id', Auth::user()->school_id)
+                ->update(['class_id' => $request->promoted_to]);
+
+            return redirect()->route('promote_class')->with('message', 'Class added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('promote_class')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
+        }
+    }
 
 }

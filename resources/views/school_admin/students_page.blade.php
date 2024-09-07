@@ -120,23 +120,6 @@
                                 <option value="{{ $class->id }}">{{ $class->name }}</option>
                             @endforeach
                         </select>
-                        {{-- <select name="class_id" class="form-control" id="class" required>
-                            @foreach($classes as $class)
-                                <option value="{{ $class->id }}">{{ $class->name }}</option>
-                            @endforeach
-                        </select> --}}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="section">Stream</label>
-                        <select name="section" class="form-control" id="streamSelect" required onchange="updateSubjects()">
-                            <option value="">Select a stream</option>
-                        </select>
-                        {{-- <select name="section_id" class="form-control" id="section" required>
-                            @foreach($students as $section)
-                                <option value="{{ $section->id }}">{{ $section->name }}</option>
-                            @endforeach
-                        </select> --}}
                     </div>
         
                     <div class="form-group">

@@ -36,6 +36,8 @@ Route::group(['prefix' => 'super_admin'], function () {
 //for school admins:::
 Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/home',  [SchoolAdminController::class, 'index']);
+    Route::get('/promote-class',  [SchoolAdminController::class, 'promoteClass'])->name('promote_class');
+    Route::post('/handle-promotion',  [SchoolAdminController::class, 'handlePromotion']);
     Route::get('/view-suggestions',  [SchoolAdminController::class, 'viewSuggestions']);
     Route::post('/add-class',  [SchoolAdminController::class, 'addClass']);
     Route::get('/classes',  [SchoolAdminController::class, 'classPage'])->name('add_class_page');

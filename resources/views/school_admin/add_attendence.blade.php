@@ -40,15 +40,6 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="sectionSelect">Select Section</label>
-                                <select name="section_id" class="form-control" id="sectionSelect" required>
-                                    <option value="">Select Section</option>
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
              
                             <div class="form-group">
                                 <label for="dateSelect">Select Date</label>

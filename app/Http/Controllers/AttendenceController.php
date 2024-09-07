@@ -58,7 +58,6 @@ class AttendenceController extends Controller
         $subjects = Subject::where('school_id', $schoolId)->get();
 
         $students = StudentInfo::where('class_id', $request->input('class_id'))
-            ->where('section', $request->input('section_id'))
             ->with([
                 'attendances' => function ($query) use ($request) {
                     $query->where('attendence_id', $request->input('attendence_id'))
@@ -106,7 +105,6 @@ class AttendenceController extends Controller
         $request->validate([
             'attendence_id' => 'required|exists:attendances,id',
             'class_id' => 'required|exists:classes,id',
-            'section_id' => 'required|exists:sections,id',
             'date' => 'required|date',
             'status.*' => 'required|in:Present,Absent,Allowed,Sick',
             'subject_id' => 'nullable|exists:subjects,id',
@@ -151,7 +149,6 @@ class AttendenceController extends Controller
                     'attendence_id' => $request->input('attendence_id'),
                     'student_id' => $studentId,
                     'class_id' => $request->input('class_id'),
-                    'section_id' => $request->input('section_id'),
                     'subject_id' => $request->input('subject_id', null),
                     'school_id' => Auth::user()->school_id,
                     'status' => $status,
