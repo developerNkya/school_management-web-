@@ -152,9 +152,15 @@ class StudentController extends Controller
 
     public function attendence(Request $request)
     {
-        $student = StudentInfo::where('user_id', Auth::user()->id)->first();
-        if (!$student) {
+        $student_id = $request->toJson ? $request->user_id : Auth::user()->id;
+        $student = StudentInfo::where('user_id', $student_id)->first();
+        if (!$student && !$request->toJson) {
             return redirect()->back()->with('error', 'Student not found');
+        } else if (!$student && $request->toJson) {
+            response()->json([
+                'success' => false,
+                'error' => 'Student not found'
+            ]);
         }
 
         $attendanceData = AttendenceData::where('class_id', $student->class_id)
@@ -183,12 +189,20 @@ class StudentController extends Controller
             }
         }
 
-        return view('student.attendencePage', [
-            'attendanceData' => $attendanceData,
-            'attendance' => $attendance,
-            'attendanceRecords' => $attendanceRecords,
-            'students' => $students
-        ]);
+        return $request->toJson ? response()->json([
+            'success' => true,
+            'data' => [
+                'attendanceData' => $attendanceData,
+                'attendance' => $attendance,
+                'attendanceRecords' => $attendanceRecords,
+                'students' => $students
+            ],
+        ]) : view('student.attendencePage', [
+                'attendanceData' => $attendanceData,
+                'attendance' => $attendance,
+                'attendanceRecords' => $attendanceRecords,
+                'students' => $students
+            ]);
     }
 
 
