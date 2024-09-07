@@ -19,9 +19,9 @@ class AuthController extends Controller
             'password' => 'required',
         ];
 
-
         $validator = validator::make($request->all(), $rules);
         $error = $validator->errors()->first();
+
         if ($validator->fails() && !$request->toJson) {
             return redirect()->route('user_login')->withErrors(['error' => $error]);
         }else if($validator->fails() && $request->toJson){
@@ -35,6 +35,16 @@ class AuthController extends Controller
     
         if (Auth::attempt($credentials)) {
             $user = Auth::user()->load('School');
+          
+            if(!$user->isActive && $request->toJson){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'Sorry...User is not Activated! Please contact Admin for more info'
+                ]);  
+            }else if (!$user->isActive && !$request->toJson) {
+                return redirect()->route('user_login')->withErrors(['error' => 'Sorry...User is not Activated! Please contact Admin for more info']);
+            }
+
             if ($request->toJson) {
                 if ($user->role_id == 3) {
                     $student_info = StudentInfo::with('SchoolClass', 'section')->where('user_id', Auth::user()->id)

@@ -36,35 +36,35 @@ class SuperAdminController extends Controller
             return redirect()->route('add_school_page')->withErrors(['error' => 'Passwords should be same']);
         }
 
-        try{
-        $user = new User();
-        $user->name = $request->owner_name;
-        $user->email = $request->owner_email;
-        $user->phone = $request->owner_phone_no;
-        $user->location = $request->school_location;
-        $user->password = bcrypt($request->new_password);
-        $user->role_id = 2;
-        $user->save();
+        try {
+            $user = new User();
+            $user->name = $request->owner_name;
+            $user->email = $request->owner_email;
+            $user->phone = $request->owner_phone_no;
+            $user->location = $request->school_location;
+            $user->password = bcrypt($request->new_password);
+            $user->role_id = 2;
+            $user->save();
 
-        $owner_id = $user->id;
+            $owner_id = $user->id;
 
-        $school = new School();
-        $school->school_name = $request->school_name;
-        $school->location = $request->school_location;
-        $school->owner_id = $owner_id;
-        $school->save();
+            $school = new School();
+            $school->school_name = $request->school_name;
+            $school->location = $request->school_location;
+            $school->owner_id = $owner_id;
+            $school->save();
 
-        $school_id = $school->id;
-        User::where('id',$owner_id)
+            $school_id = $school->id;
+            User::where('id', $owner_id)
                 ->update([
                     'school_id' => $school_id
                 ]);
-                    
-        return redirect()->route('add_school_page')->with('message', 'School added successfully!');
 
-    } catch (\Exception $e) {
-        return redirect()->route('add_school_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
-    }
+            return redirect()->route('add_school_page')->with('message', 'School added successfully!');
+
+        } catch (\Exception $e) {
+            return redirect()->route('add_school_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+        }
     }
 
     public function schoolPage(Request $request)
@@ -76,4 +76,34 @@ class SuperAdminController extends Controller
     {
         return view('super_admin.roles_page');
     }
+
+    public function activationPage(Request $request)
+    {
+
+        $users = User::with('role')->paginate(1);
+        return view('super_admin.activationPage', compact('users'));
+    }
+
+
+    public function filterUsers($name)
+    {
+        $users = User::where('name', 'LIKE', "%{$name}%")
+            // ->orWhere('first_name', 'LIKE', "%{$name}%")
+            // ->orWhere('last_name', 'LIKE', "%{$name}%")
+            ->with('role')
+            ->paginate(10);
+
+        return response()->json($users);
+    }
+
+    public function alterUserStatus($id)
+    {
+
+        $user = User::findOrFail($id);
+        $user->isActive = !$user->isActive;
+        $user->save();
+         return response()->json(['status' => $user->isActive ? 'active' : 'inactive']);
+    }
+
+
 }

@@ -132,6 +132,7 @@ class SchoolAdminController extends Controller
         $user->location = $request->nationality;
         $user->password = bcrypt('student');
         $user->role_id = 3;
+        $user->isActive = false;
         $user->school_id = Auth::user()->school_id;
         $user->save();
 
