@@ -19,7 +19,7 @@
                                         <th>No.</th>
                                         <th>Class Name</th>
                                         <th>Total Students</th>
-                                        <th>Actions</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -28,7 +28,17 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $class->info->name }}</td>
                                             <td>{{ $class->total_students }}</td>
-                                            <td><button type="button" class="btn btn-light">View More</button></td>
+                                            <td>
+                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'class')">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $class->info->id }}">
+                                                    <input type="hidden" name="table" value="schoolClass">
+                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'class')">
+                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -40,7 +50,7 @@
             </div>
 
         </div>
-        
+
     </div>
     @include('helpers.copyright')
     <!-- partial -->
@@ -60,8 +70,8 @@
                                     placeholder="eg. grade 1">
                             </div>
                             <div class="submit-container" style="margin-top: 10%">
-                              <button type="submit" class="btn btn-primary me-2">Submit</button>
-                              <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
+                                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -87,26 +97,24 @@
     }
 
     function addSection(containerId) {
-    const container = document.getElementById(containerId);
+        const container = document.getElementById(containerId);
 
-    // Create a new section or subject
-    const newSection = document.createElement('div');
-    newSection.classList.add('section-container');
-    newSection.style.display = 'flex';
-    newSection.style.marginBottom = '10px';
+        const newSection = document.createElement('div');
+        newSection.classList.add('section-container');
+        newSection.style.display = 'flex';
+        newSection.style.marginBottom = '10px';
 
-    newSection.innerHTML = `
+        newSection.innerHTML = `
         <input name="${containerId === 'sectionsContainer' ? 'sections[]' : 'subjects[]'}" class="form-control" placeholder="${containerId === 'sectionsContainer' ? 'Section name' : 'Subject name'}">
         <button type="button" class="btn btn-danger removeBtn" onclick="removeSection(this)" style="margin-left:10px">Remove</button>
     `;
+        container.insertBefore(newSection, container.lastElementChild);
+    }
 
-    // Insert the new section before the "Add" button
-    container.insertBefore(newSection, container.lastElementChild);
-}
+    function removeSection(button) {
+        button.parentElement.remove();
+    }
 
-function removeSection(button) {
-    button.parentElement.remove();
-}
+
 
 </script>
-

@@ -191,7 +191,6 @@
               <div class="collapse" id="promotion">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/promote-class'}}">Promote</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/organize_events'}}">Class Sequence</a></li>
                 </ul>
               </div>
             </li>

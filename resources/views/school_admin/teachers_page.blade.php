@@ -22,7 +22,7 @@
                                         <th> Nationality</th>
                                         <th>Phone No</th>
                                         <th>Email</th>
-                                        <th> Actions</th>
+                                        <th> Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -35,7 +35,16 @@
                                             <td>{{ $teacher->nationality }}</td>
                                             <td>{{$teacher->phone_number }}</td>
                                             <td>{{ $teacher->email }}</td>
-                                            <td> <button type="button" class="btn btn-light">View More</button></td>
+                                            <td>
+                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this)">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $teacher->id }}">
+                                                    <input type="hidden" name="table" value="teacher">
+                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'teacher')">
+                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

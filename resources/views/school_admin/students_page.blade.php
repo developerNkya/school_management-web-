@@ -16,6 +16,7 @@
                                         <th> Student Name </th>
                                         <th> Registration No </th>
                                         <th> Class </th>
+                                        <th> Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -25,6 +26,16 @@
                                         <td>{{$student->first_name.' '.$student->last_name}}</td>
                                         <td>{{$student->registration_no}}</td>
                                         <td>{{$student->SchoolClass->name}}</td>
+                                        <td>
+                                            <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'student')">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $student->id }}">
+                                                <input type="hidden" name="table" value="student">
+                                                <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'student')">
+                                                    <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -10,6 +10,7 @@ use App\Http\Controllers\StarterController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SuperAdminController;
+use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Route;
 
 
@@ -94,4 +95,5 @@ Route::group(['prefix' => 'student'], function () {
 
 Route::group(['prefix' => 'helper'], function () {
     Route::get('/class-existence-checker', [HelperController::class, 'classExistance']);
+    Route::post('/delete-item', [HelperController::class, 'deleteById'])->name('deleteById');
 });

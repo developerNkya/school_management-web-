@@ -19,7 +19,7 @@
                                         <th> No.</th>
                                         <th> Name </th>
                                         <th> Short Code </th>
-                                        <th> Actions</th>
+                                        <th> Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -28,7 +28,16 @@
                                             <td>{{$index+1}}</td>
                                             <td>{{ $subject->name }}</td>
                                             <td>{{ $subject->short_name }}</td>
-                                            <td> <button type="button" class="btn btn-light">View More</button></td>
+                                            <td>
+                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'subject')">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $subject->id }}">
+                                                    <input type="hidden" name="table" value="subject">
+                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'subject')">
+                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

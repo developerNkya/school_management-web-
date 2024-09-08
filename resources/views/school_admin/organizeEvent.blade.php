@@ -10,7 +10,6 @@
                         @include('helpers.message_handler')
                         <button type="button" class="btn btn-dark" onclick="showModal()">Add Event +</button>
                         <div class="table-responsive pt-3">
-                            <!-- Wrapper for horizontal scroll -->
                             <div style="overflow-x: auto;">
                                 <table class="table table-bordered" style="width: 100%; table-layout: fixed;">
                                     <thead>
@@ -20,6 +19,7 @@
                                             <th style="width: 100px;">Date</th>
                                             <th style="width: 100px;">Cost</th>
                                             <th style="width: 400px; word-wrap: break-word; white-space: normal;">Description</th>
+                                            <th style="width: 100px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -30,6 +30,16 @@
                                             <td style="width: 100px;">{{ $event->event_date }}</td>
                                             <td style="width: 100px;">{{ $event->cost }}</td>
                                             <td style="width: 400px; word-wrap: break-word; white-space: normal;">{{ $event->description }}</td>
+                                            <td>
+                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'event')">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $event->id }}">
+                                                    <input type="hidden" name="table" value="event">
+                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'event')">
+                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

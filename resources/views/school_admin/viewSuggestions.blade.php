@@ -24,32 +24,35 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($suggestions as $index=>$suggestion)
+                                    @foreach ($suggestions as $index => $suggestion)
                                         <tr>
-                                            <td>{{$index+1}}</td>
+                                            <td>{{ $index + 1 }}</td>
                                             <?php
-                                             $parent_full_name =  $suggestion->student->parent_first_name. ' ' . $suggestion->student->parent_last_name; 
-                                             $student_full_name =  $suggestion->student->first_name. ' '.$suggestion->student->last_name 
+                                            $parent_full_name = $suggestion->student->parent_first_name . ' ' . $suggestion->student->parent_last_name;
+                                            $student_full_name = $suggestion->student->first_name . ' ' . $suggestion->student->last_name;
                                             ?>
-                                            <td>{{$parent_full_name }}</td>
-                                            <td>{{  $student_full_name }}</td>
-                                            <td>{{  $suggestion->student->schoolclass->name  }}</td>
-                                            <td>{{ $suggestion->suggestion  }}</td>
-                                            <td>  
-                                                <form action="{{ route('deleteSuggestion') }}" method="post" name="delete_suggestion">
-                                                    <input type="hidden" name="id" value="{{ $suggestion->id }}">                  
-                                                <button class="btn btn-dark" type="submit">
-                                                    <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
-                                                </button>                                         
-                                                </form>                                             
-                                                </td>
+                                            <td>{{ $parent_full_name }}</td>
+                                            <td>{{ $student_full_name }}</td>
+                                            <td>{{ $suggestion->student->schoolclass->name }}</td>
+                                            <td>{{ $suggestion->suggestion }}</td>
+                                            <td>
+                                                <form action="{{ route('deleteSuggestion') }}" method="post"
+                                                    name="deletable" onsubmit="return deleteSuggestion(this)">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $suggestion->id }}">
+                                                    <button class="btn btn-dark" type="button"
+                                                        onclick="deleteSuggestion(this,'student')">
+                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <?php
-                    $paginated = $suggestions
+                    $paginated = $suggestions;
                     ?>
                     @include('helpers.paginator')
                 </div>
@@ -58,7 +61,14 @@
         </div>
     </div>
     @include('helpers.copyright')
-    <!-- partial -->
 </div>
+
+<script>
+    function deleteSuggestion(button) {
+        if (confirm(`Do you want to delete this suggestion?`)) {
+            button.closest('form').submit();
+        }
+    }
+</script>
 
 @include('school_admin.partial_footers')
