@@ -110,6 +110,11 @@
                 </ul>
               </div>
             </li>
-
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="menu-icon mdi mdi-logout"></i>
+                <span class="menu-title">Logout</span>
+              </a>
+            </li>
           </ul>
         </nav>
