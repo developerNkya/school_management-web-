@@ -58,10 +58,30 @@
                                   <th>Assigned By</th>
                                   <th>Created</th>
                                   <th>Deadline</th>
-                                  <th>Action</th>
+                                  <th>File Size</th>
+                                  <th>Download</th>
                                 </tr>
                               </thead>
                               <tbody>
+                                @foreach ($assignments as $index => $assignment)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $assignment->name }}</td>
+                                    <td>{{ $assignment->sender->name }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($assignment->created_at)->format('F j, Y \a\t g:i A') }}</td>
+                                    <td>{{ $assignment->submission_date }}</td>
+                                    <td>{{ $assignment->file_size }}Mb</td>
+                                    <td>
+                                        <form action="{{ route('downloadFile') }}" method="post" name="downloadForm">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $assignment->id }}">
+                                            <button class="btn btn-dark" type="button" onclick="confirmDownload(this)">
+                                                <i class="fa fa-download" style="font-size:20px;color:white"></i>
+                                            </button>
+                                        </form>
+                                    </td>                                    
+                                </tr>
+                            @endforeach
                               </tbody>
                             </table>
                           </div>

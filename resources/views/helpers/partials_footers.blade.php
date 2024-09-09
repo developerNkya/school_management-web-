@@ -22,5 +22,12 @@
 <script src="/assets/js/dashboard.js"></script>
 <!-- <script src="/assets/js/Chart.roundedBarCharts.js"></script> -->
 <!-- End custom js for this page-->
+<script>
+    function confirmDownload(button) {
+        if (confirm('Do you want to download this file?')) {
+            button.closest('form').submit();
+        }
+    }
+</script>
 </body>
 </html>

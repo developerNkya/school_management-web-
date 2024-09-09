@@ -17,7 +17,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Assignment Name</th>
-                                        <th>From</th>
+                                        <th>Assigned By</th>
                                         <th>class</th>
                                         <th>Subject</th>
                                         <th>Download</th>

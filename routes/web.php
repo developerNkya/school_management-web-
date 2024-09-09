@@ -83,7 +83,6 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/home', [StudentController::class, 'index']);
     Route::get('/events', [StudentController::class, 'events']);
     Route::get('/attendence', [StudentController::class, 'attendence'])->name('student.attendence');
-    ;
     Route::get('/about_me', [StudentController::class, 'aboutMe']);
     Route::get('/marks', [StudentController::class, 'marks'])->name('student.marks');
     Route::get('/view-marks', [StudentController::class, 'viewMarks'])->name('view-marks');
@@ -91,6 +90,7 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/suggestions', [StudentController::class, 'suggestionPage'])->name('suggestions');
     Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
     Route::get('/fetchEvents', [EventController::class, 'organizeEvent'])->name('organizeEvent');
+    Route::get('/view-assignments', [StudentController::class, 'viewAssignments'])->name('viewAssignments');
 });
 
 

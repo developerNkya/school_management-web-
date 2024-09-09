@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Assignment;
 use App\Models\Attendence;
 use App\Models\AttendenceData;
 use App\Models\Event;
@@ -21,9 +22,11 @@ class StudentController extends Controller
         $student_info = StudentInfo::with('SchoolClass', 'Section')->where('user_id', Auth::user()->id)
             ->first();
         $events = Event::where('school_id', Auth::user()->school_id)->take(3)->get();
+        $assignments = Assignment::where('school_id', Auth::user()->school_id)->take(3)->get();
         return view('student.index', [
             'student_info' => $student_info,
-            'events' => $events
+            'events' => $events,
+            'assignments'=>$assignments,
         ]);
     }
 
@@ -209,6 +212,21 @@ class StudentController extends Controller
     public function suggestionPage(Request $request)
     {
         return view('student.suggestion_page');
+    }
+
+    public function viewAssignments(Request $request)
+    {
+
+        $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
+        $assignments = Assignment::where('school_id',$school_id)->paginate(10);  
+
+        return  $request->toJson ?  response()->json([
+            'success'=>true,
+            'data'=>[
+                'assignments' => $assignments,
+              ],
+        ]) : view('student.assignment_page',compact('assignments'));
+          
     }
 
 }

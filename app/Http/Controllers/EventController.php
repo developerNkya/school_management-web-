@@ -13,8 +13,7 @@ class EventController extends Controller
 
         $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
         $events = Event::where('school_id',$school_id)->paginate(10);  
-
-    
+        
         return  $request->toJson ?  response()->json([
             'success'=>true,
             'data'=>[
@@ -44,4 +43,5 @@ class EventController extends Controller
 
         return redirect()->route('organizeEvent')->with('message', 'Event added successfully!');
     }
+
 }
