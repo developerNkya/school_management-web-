@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
@@ -96,4 +97,10 @@ Route::group(['prefix' => 'student'], function () {
 Route::group(['prefix' => 'helper'], function () {
     Route::get('/class-existence-checker', [HelperController::class, 'classExistance']);
     Route::post('/delete-item', [HelperController::class, 'deleteById'])->name('deleteById');
+});
+
+Route::group(['prefix' => 'assignment'], function () {
+    Route::get('/add-assignment', [AssignmentController::class, 'addAssignment']);
+    Route::post('/save-assignment', [AssignmentController::class, 'saveAssignment'])->name('saveAssignment');
+    Route::post('/download-assignment', [AssignmentController::class, 'downloadFile'])->name('downloadFile');
 });

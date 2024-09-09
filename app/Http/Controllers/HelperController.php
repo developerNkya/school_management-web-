@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assignment;
 use App\Models\AttendenceData;
 use App\Models\Event;
 use App\Models\Exam;
@@ -82,6 +83,11 @@ class HelperController extends Controller
                 case 'event':
                     Event::where('id',$request->id)->delete();
                     $message = 'event';
+                    break;
+
+                case 'assignment':
+                    Assignment::where('id',$request->id)->delete();
+                    $message = 'assignment';
                     break;
 
                 default:

@@ -29,8 +29,14 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
         <script>
-            function confirmDelete(button,item) {
+            function confirmDelete(button, item) {
                 if (confirm(`Do you want to delete this ${item}?`)) {
+                    button.closest('form').submit();
+                }
+            }
+
+            function confirmDownload(button) {
+                if (confirm('Do you want to download this file?')) {
                     button.closest('form').submit();
                 }
             }
