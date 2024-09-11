@@ -68,23 +68,30 @@ class AssignmentController extends Controller
             return redirect()->back()->withErrors(['error' => 'File upload failed. Please try again.'])->withInput();
         }
     }
-    
-    public function downloadFile(Request $request)
-    {
-        $validated = $request->validate([
-            'id' => 'required|exists:assignments,id',
-        ]);
 
-        $assignment = Assignment::findOrFail($request->id);
+    public function downloadFile(Request $request){
+    $validated = $request->validate([
+        'id' => 'required|exists:assignments,id',
+    ]);
 
-        $filePath = $assignment->file_path;
+    $assignment = Assignment::findOrFail($request->id);
+    $filePath = $assignment->file_path;
+
+    if (Storage::disk('public')->exists($filePath)) {
         $fileName = basename($filePath);
-
-        if (Storage::disk('public')->exists($filePath)) {
+        if(!$request->toJson){
             return Storage::disk('public')->download($filePath, $fileName);
-        } else {
-            return redirect()->back()->withErrors(['error' => 'File not found.']);
         }
-    } 
+
+        $fileContents = Storage::disk('public')->get($filePath);
+        return response()->json([
+            'file' => base64_encode($fileContents),
+            'file_name' => $fileName
+        ]);
+    } else {
+        return response()->json(['error' => 'File not found.'], 404);
+    }
+}
+
     
 }

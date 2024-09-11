@@ -218,8 +218,7 @@ class StudentController extends Controller
     {
 
         $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
-        $assignments = Assignment::where('school_id',$school_id)->paginate(10);  
-
+        $assignments = Assignment::with('sender')->where('school_id',$school_id)->paginate(10);  
         return  $request->toJson ?  response()->json([
             'success'=>true,
             'data'=>[
