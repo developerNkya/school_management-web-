@@ -43,7 +43,7 @@
                               <p class="card-subtitle card-subtitle-dash">Below are some of your Assignments</p>
                             </div>
                             <div>
-                              <a href="{{ url('/school_admin/view-suggestions') }}" class="btn btn-primary btn-lg text-white mb-0 me-0"><i class="mdi mdi-eye"></i>view more</a>
+                              <a href="{{ url('/student/view-assignments') }}" class="btn btn-primary btn-lg text-white mb-0 me-0"><i class="mdi mdi-eye"></i>view more</a>
                             </div>
                           </div>
 
