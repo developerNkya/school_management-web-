@@ -31,6 +31,11 @@ class StudentInfo extends Model
     ];
 
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     public function Schoolclass()
     {
         return $this->belongsTo(SchoolClass::class,'class_id');

@@ -74,7 +74,7 @@ class SchoolAdminController extends Controller
 
     public function studentsPage(Request $request)
     {
-        $student_info = StudentInfo::with('SchoolClass')->where('school_id', Auth::user()->school_id)
+        $student_info = StudentInfo::with('SchoolClass','user')->where('school_id', Auth::user()->school_id)
             ->paginate(10);
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.students_page', ['students' => $student_info, 'classes' => $classes]);

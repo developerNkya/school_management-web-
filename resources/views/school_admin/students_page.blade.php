@@ -16,6 +16,7 @@
                                         <th> Student Name </th>
                                         <th> Registration No </th>
                                         <th> Class </th>
+                                        <th>Status</th>
                                         <th> Action</th>
                                     </tr>
                                 </thead>
@@ -26,6 +27,13 @@
                                         <td>{{$student->first_name.' '.$student->last_name}}</td>
                                         <td>{{$student->registration_no}}</td>
                                         <td>{{$student->SchoolClass->name}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-{{ $student->user->isActive ?  'success':'danger'  }}"
+                                                    data-user-id="{{ $student->user->id }}"
+                                                    onclick="#">
+                                                {{ $student->user->isActive ? 'Active' : 'Inactive' }}
+                                            </button>
+                                        </td>
                                         <td>
                                             <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'student')">
                                                 @csrf

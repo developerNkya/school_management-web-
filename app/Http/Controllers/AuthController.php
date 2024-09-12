@@ -113,6 +113,7 @@ class AuthController extends Controller
                  'location' =>'Dar es salaam',
                  'password' => bcrypt('admin'),
                  'role_id' => 1,
+                 'isActive' =>1
                 ]);         
            }else{
             return json_encode('success!');
