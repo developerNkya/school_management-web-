@@ -23,21 +23,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($exams as $index=>$exam)
-
+                                    @foreach ($exams as $index => $exam)
                                         <tr>
-                                            <td>{{$index+1}}</td>
+                                            <td>{{ $index + 1 }}</td>
                                             <td>{{ $exam->name }}</td>
                                             <td>{{ $exam->start_date }}</td>
                                             <td>
-                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'exam')">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{ $exam->id }}">
-                                                    <input type="hidden" name="table" value="exam">
-                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'exam')">
-                                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                                <div class="flexer">
+                                                    <form action="{{ route('deleteById') }}" method="post"
+                                                        name="deletable" onsubmit="return confirmDelete(this,'exam')">
+                                                        @csrf
+                                                        <input type="hidden" name="id"
+                                                            value="{{ $exam->id }}">
+                                                        <input type="hidden" name="table" value="exam">
+                                                        <button class="btn btn-dark" type="button"
+                                                            onclick="confirmDelete(this,'exam')">
+                                                            <i class="fa fa-trash-o"
+                                                                style="font-size:20px;color:white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <button class="btn btn-info flexer-item" type="button"
+                                                        onclick="showEditModal({{ $exam }})">
+                                                        <i class="fa fa-pencil-square-o font-icon-sizer"
+                                                            style="font-size:20px;color:white"></i>
                                                     </button>
-                                                </form>
+                                                </div>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -57,24 +69,25 @@
     <!-- partial -->
 </div>
 
+
+
 <div class="form-modal" id="form-modal" style="display: none;">
     <div class="content-wrapper">
         <div class="row">
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Add Exam</h4>
-                        <form class="forms-sample" method="POST" action="/school_admin/add-exam">
+                        <h4 class="card-title" id="card-title">Add Exam</h4>
+                        <form class="forms-sample" id="exam-form" method="POST">
                             @csrf
+                            <input type="hidden" name="exam_id" id="exam-id">
                             <div class="form-group">
                                 <label for="name">Exam Name</label>
-                                <input name="name" class="form-control" id="name" placeholder="Exam Name"
-                                    required>
+                                <input name="name" class="form-control" id="exam-name" placeholder="Exam Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="classes">Select Classes</label><br>
-                                <select id="classes" name="classes[]" class="form-control multiple-selector"
-                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                <select id="classes" name="classes[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%;">
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
@@ -82,8 +95,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="subjects">Select Subjects</label><br>
-                                <select id="subjects" name="subjects[]" class="form-control multiple-selector"
-                                    multiple="multiple" style="width: 100%; box-sizing: border-box;">
+                                <select id="subjects" name="subjects[]" class="form-control multiple-selector" multiple="multiple" style="width: 100%;">
                                     @foreach ($subjects as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                     @endforeach
@@ -94,45 +106,66 @@
                                 <input type="date" name="start_date" class="form-control" id="start_date" required>
                             </div>
                             <div class="submit-container" style="margin-top: 10%">
-                                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                <button type="submit" id="form-btn" class="btn btn-primary me-2">Submit</button>
                                 <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
                             </div>
                         </form>
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
     @include('helpers.copyright')
-    <!-- partial -->
 </div>
-
 
 @include('school_admin.partial_footers')
 <script>
-    function showModal() {
-        fetch('/helper/class-existence-checker')
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    document.getElementById('form-modal').style.display = 'block';
-                    document.getElementById('main-panel').style.display = 'none';
-                } else {
-                    alert('Kindly create a class before Adding Exam');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
+function showEditModal(item) {
+    fetch(`/school_admin/exam-details/${item.id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exam) {
+                document.getElementById('form-modal').style.display = 'block';
+                document.getElementById('main-panel').style.display = 'none';
+                document.getElementById("card-title").innerHTML = "Edit Exam";
+                document.getElementById("exam-name").value = data.exam[0].name;
+                document.getElementById("exam-id").value = data.exam[0].id;
+                document.getElementById("form-btn").innerHTML = "Update";
+                document.getElementById("exam-form").action = "/school_admin/edit-exam";
 
-    function disableModal() {
-        document.getElementById('form-modal').style.display = 'none';
-        document.getElementById('main-panel').style.display = 'block';
-        event.preventDefault();
-    }
+            } else {
+                alert('Kindly create a class before editing an exam.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
 
-    function addSection() {
+function showModal() {
+    fetch('/helper/class-existence-checker')
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                document.getElementById("exam-form").action = "/school_admin/add-exam";
+                document.getElementById('form-modal').style.display = 'block';
+                document.getElementById('main-panel').style.display = 'none';
+                document.getElementById("card-title").innerHTML = "Add Exam";
+                document.getElementById("exam-name").value = "";
+                document.getElementById("exam-id").value = "";
+                document.getElementById("form-btn").innerHTML = "Submit";
+            } else {
+                alert('Kindly create a class before adding an exam.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function disableModal() {
+
+    document.getElementById('form-modal').style.display = 'none';
+    document.getElementById('main-panel').style.display = 'block';
+}
+
+function addSection() {
         const container = document.getElementById('sectionsContainer');
 
         // Create a new section
@@ -155,7 +188,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch streams and subjects based on selected class
         $(document).ready(function() {
             $('#subjects').select2({
                 placeholder: "Select subjects",

@@ -30517,3 +30517,12 @@ input:focus {
 .textArea-body{
   height: 150px;
 }
+
+
+.flexer {
+  display: flex;
+}
+
+.flexer-item{
+  margin-left: 10px;
+}

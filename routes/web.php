@@ -53,10 +53,10 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/all-subjects', [SchoolAdminController::class, 'subjectsPage'])->name('all_subjects_page');
     Route::post('/add-subject', [SchoolAdminController::class, 'addSubject']);
     Route::post('/add-marks', [ExamController::class, 'addMarks'])->name('marks.store');
-    ;
+    Route::get('/exam-details/{id}', [ExamController::class, 'examDetails']);
     Route::post('/add-exam', [ExamController::class, 'store']);
+    Route::post('/edit-exam', [ExamController::class, 'editExam']);
     Route::post('/deleteSuggestion', [SuggestionController::class, 'deleteSuggestion'])->name('deleteSuggestion');
-    ;
     Route::get('/marks', [ExamController::class, 'marks'])->name('marks.index');
     Route::get('/organize_events', [EventController::class, 'organizeEvent'])->name('organizeEvent');
     Route::post('/school_admin/events', [EventController::class, 'store'])->name('events.store');
@@ -104,3 +104,4 @@ Route::group(['prefix' => 'assignment'], function () {
     Route::post('/save-assignment', [AssignmentController::class, 'saveAssignment'])->name('saveAssignment');
     Route::post('/download-assignment', [AssignmentController::class, 'downloadFile'])->name('downloadFile');
 });
+
