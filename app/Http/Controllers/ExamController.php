@@ -171,30 +171,31 @@ class ExamController extends Controller
         }
 
         if ($selectedExamId && $selectedClassId) {
-            $students = StudentInfo::where('class_id', $selectedClassId)->get();
-            $class_name = $students->first()->class->name ?? '';
-            $marks = Mark::where('exam_id', $selectedExamId)
-                ->whereIn('student_id', $students->pluck('id'))
-                ->get()
-                ->groupBy('student_id');
+                $students = StudentInfo::where('class_id', $selectedClassId)->get();
+                $class_name = $students->first()->class->name ?? '';
+                $marks = Mark::where('exam_id', $selectedExamId)
+                    ->whereIn('student_id', $students->pluck('id'))
+                    ->get()
+                    ->groupBy('student_id');
 
-            foreach ($students as $student) {
-                $studentMarks = $marks->get($student->id, collect());
-                $totalMarks = $studentMarks->sum('marks');
-                $subjectCount = $studentMarks->count();
-                $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
+                if ($marks->isEmpty()) {
+                    return redirect()->back()->withErrors(['error' => 'Marks Not found for this exam!'])->withInput();
+                }
 
-                $student->average = round($average, 2);
-            }
-            $students = $students->sortByDesc('average')->values();
-            $position = 1;
-            foreach ($students as $student) {
-                $student->position = $position++;
-            }
+                foreach ($students as $student) {
+                    $studentMarks = $marks->get($student->id, collect());
+                    $totalMarks = $studentMarks->sum('marks');
+                    $subjectCount = $studentMarks->count();
+                    $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
+                    $student->average = round($average, 2);
+                }
+                $students = $students->sortByDesc('average')->values();
+                $position = 1;
+                foreach ($students as $student) {
+                    $student->position = $position++;
+                }
+
         }
-
-
-
         return view('school_admin.tabulation', compact(
             'classes',
             'exams',

@@ -6,6 +6,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tabulation</h4>
+                        @include('helpers.message_handler')
                         <form class="forms-sample" method="GET" action="{{ route('admin.tabulation') }}">
                             @csrf
                             <div class="form-group">
@@ -68,8 +69,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
-                        
+                        </div>              
                         @endif
                     </div>
                 </div>
