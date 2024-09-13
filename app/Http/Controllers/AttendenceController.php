@@ -71,12 +71,15 @@ class AttendenceController extends Controller
     if ($request->input('attendence_id') != null) {
         $day = $request->input('date');
         $attendence = Attendence::where('id', $request->input('attendence_id'))
-            ->first(); 
+                     ->where('created_at','<',$day)
+                     ->first();        
     
         if ($attendence) {
             $createdAt = Carbon::parse($attendence->created_at);
             $now = Carbon::now();
             $attendenceDays = $this->countWeekdays($createdAt, $now);
+        }else{
+            return redirect()->back()->withErrors(['error' => 'Date Should be greater than the date to which Attendence was created!.'])->withInput();
         }
     }
         return view('school_admin.add_attendence', compact('day','attendenceDays','attendances', 'classes', 'sections', 'subjects', 'students'));
