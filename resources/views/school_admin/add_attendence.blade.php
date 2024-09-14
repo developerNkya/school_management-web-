@@ -28,8 +28,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                        
-                           
                             <div class="form-group">
                                 <label for="classSelect">Select Class</label>
                                 <select name="class_id" class="form-control" id="classSelect" required>
@@ -66,10 +64,12 @@
 
    
     @if($students->count() > 0)
+
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
+                    <h4 class="card-title">Fill Attendence</h4>
                     <form method="POST" action="{{ route('attendance.storeData') }}">
                         @csrf
 

@@ -56,7 +56,6 @@ class AttendenceController extends Controller
         $classes = SchoolClass::where('school_id', $schoolId)->get();
         $sections = Section::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
-
         $students = StudentInfo::where('class_id', $request->input('class_id'))
             ->with([
                 'attendances' => function ($query) use ($request) {
@@ -66,41 +65,42 @@ class AttendenceController extends Controller
             ])
             ->get();
 
-    $attendenceDays = 0;
-    $day = '';
-    if ($request->input('attendence_id') != null) {
-        $day = $request->input('date');
-        $attendence = Attendence::where('id', $request->input('attendence_id'))
-                     ->where('created_at','<',$day)
-                     ->first();        
-    
-        if ($attendence) {
-            $createdAt = Carbon::parse($attendence->created_at);
-            $now = Carbon::now();
-            $attendenceDays = $this->countWeekdays($createdAt, $now);
-        }else{
-            return redirect()->back()->withErrors(['error' => 'Date Should be greater than the date to which Attendence was created!.'])->withInput();
+        $attendenceDays = 0;
+        $day = '';
+        if ($request->input('attendence_id') != null) {
+            $day = $request->input('date');
+            $attendence = Attendence::where('id', $request->input('attendence_id'))
+                ->where('created_at', '<', $day)
+                ->first();
+
+            if ($attendence) {
+                $createdAt = Carbon::parse($attendence->created_at);
+                $now = Carbon::now();
+                $attendenceDays = $this->countWeekdays($createdAt, $now);
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Date Should be greater than the date to which Attendence was created!.'])->withInput();
+            }
         }
-    }
-        return view('school_admin.add_attendence', compact('day','attendenceDays','attendances', 'classes', 'sections', 'subjects', 'students'));
+        return view('school_admin.add_attendence', compact('createdAt', 'day', 'attendenceDays', 'attendances', 'classes', 'sections', 'subjects', 'students'));
     }
 
 
-    function countWeekdays($startDate, $endDate) {
+    function countWeekdays($startDate, $endDate)
+    {
         $totalDays = 0;
-    
+
         $currentDate = $startDate->copy();
-    
+
         while ($currentDate <= $endDate) {
             if ($currentDate->isWeekday()) {
                 $totalDays++;
             }
             $currentDate->addDay();
         }
-    
+
         return $totalDays;
     }
-    
+
 
 
     public function saveAttendence(Request $request)
@@ -108,7 +108,7 @@ class AttendenceController extends Controller
         $request->validate([
             'attendence_id' => 'required|exists:attendances,id',
             'class_id' => 'required|exists:classes,id',
-            'date' => 'required|date',
+            'date' => 'required|date|before_or_equal:today',
             'status.*' => 'required|in:Present,Absent,Allowed,Sick',
             'subject_id' => 'nullable|exists:subjects,id',
         ]);
@@ -119,6 +119,10 @@ class AttendenceController extends Controller
                 ->where('date', $request->input('date'))
                 ->first();
 
+            if ($attendanceData && $attendanceData->status === $status) {
+                continue;
+            }
+
             if ($attendanceData) {
                 $totalAppearance = $attendanceData->total_appearance;
             } else {
@@ -127,9 +131,8 @@ class AttendenceController extends Controller
                     ->count();
             }
 
-
             if ($status === 'Absent') {
-                $totalAppearance = max(0, $totalAppearance - 1); 
+                $totalAppearance = max(0, $totalAppearance - 1);
             } else {
                 $totalAppearance += 1;
             }
@@ -138,7 +141,7 @@ class AttendenceController extends Controller
                 ->where('student_id', $studentId)
                 ->distinct()
                 ->count('date');
-            $totalDays = $totalDays > 0 ? $totalDays : 1; 
+            $totalDays = $totalDays > 0 ? $totalDays : 1;
             $percentage = ($totalAppearance / $totalDays) * 100;
 
             if ($attendanceData) {
@@ -164,11 +167,5 @@ class AttendenceController extends Controller
 
         return redirect()->route('attendance.addAttendence')->with('message', 'Attendance recorded successfully.');
     }
-
-
-
-
-
-
 
 }
