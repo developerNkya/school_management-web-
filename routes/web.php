@@ -73,7 +73,7 @@ Route::group(['prefix' => 'attendence'], function () {
     Route::get('/create-new', [AttendenceController::class, 'createNew']);
     Route::post('/new-attendence', [AttendenceController::class, 'newAttendence'])->name('attendance.saveNewAttendence');
     Route::get('/add-attendence', [AttendenceController::class, 'showAddAttendenceForm'])->name('attendance.addAttendence');
-    Route::post('/add-attendence', [AttendenceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
+    Route::post('/fetch-students', [AttendenceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
     Route::post('/save-attendence', [AttendenceController::class, 'saveAttendence'])->name('attendance.storeData');
 
 })->middleware('auth');

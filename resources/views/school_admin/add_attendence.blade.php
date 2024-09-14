@@ -137,7 +137,7 @@
     </div>
     @endif
 </div>
-
+@include('school_admin.partial_footers')
 <script>
     document.getElementById('attendanceSelect').addEventListener('change', function () {
         const attendanceType = this.options[this.selectedIndex].getAttribute('data-type');
