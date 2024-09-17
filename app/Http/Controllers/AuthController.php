@@ -65,6 +65,7 @@ class AuthController extends Controller
             }
 
             Session::put('user_name',$user->name);
+            Session::put('role_id',$user->role_id);
             switch ($user->role_id) {
                 case 1:
                     return redirect('super_admin/home');
@@ -72,6 +73,8 @@ class AuthController extends Controller
                     return redirect('school_admin/home');
                 case 3:
                     return redirect('student/home');
+                case 4:
+                    return redirect('school_admin/home');
                 default:
                     // Handle unknown roles
                     break;

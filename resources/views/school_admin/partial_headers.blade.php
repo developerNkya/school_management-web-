@@ -43,7 +43,8 @@
           <ul class="navbar-nav">
             <li class="nav-item fw-semibold d-none d-lg-block ms-0">
               <?php
-              $value = request()->session()->get('user_name', '');
+                $value = request()->session()->get('user_name', '');  
+                $role = request()->session()->get('role_id', '');  
               ?>
               <h1 class="welcome-text">Welcome, <span class="text-black fw-bold">{{$value}}</span></h1>
               <h3 class="welcome-sub-text">Your performance summary this week </h3>
@@ -76,13 +77,18 @@
       <div class="container-fluid page-body-wrapper">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
+
+            @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" href="{{ url('school_admin/home') }}">
                 <i class="mdi mdi-grid-large menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
+            @endif
+
             <li class="nav-item nav-category">Contents</li>
+            @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <i class="menu-icon mdi mdi-floor-plan"></i>
@@ -131,6 +137,8 @@
                 </ul>
               </div>
             </li>
+            @endif
+
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                 <i class="menu-icon mdi mdi-table"></i>
@@ -139,7 +147,9 @@
               </a>
               <div class="collapse" id="tables">
                 <ul class="nav flex-column sub-menu">
+                  @if($role == 2)  
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/examinations'}}">Exam List</a></li>
+                  @endif
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/marks'}}">Add Marks</a></li>
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/tabulation'}}">Tabulations</a></li>
                 </ul>
@@ -153,7 +163,9 @@
               </a>
               <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
+                  @if($role == 2)  
                   <li class="nav-item"> <a class="nav-link" href="{{'/attendence/create-new'}}">Create New </a></li>
+                  @endif
                   <li class="nav-item"> <a class="nav-link" href="{{'/attendence/add-attendence'}}">Take Attendence</a></li>
                 </ul>
               </div>
@@ -170,6 +182,7 @@
                 </ul>
               </div>
             </li>
+            @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#suggestions" aria-expanded="false" aria-controls="auth">
                 <i class="menu-icon mdi mdi-account-circle-outline"></i>
@@ -182,6 +195,7 @@
                 </ul>
               </div>
             </li>
+            @endif
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#events" aria-expanded="false" aria-controls="auth">
                 <i class="menu-icon mdi mdi-account-circle-outline"></i>
@@ -194,6 +208,7 @@
                 </ul>
               </div>
             </li>
+            @if($role == 2) 
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#promotion" aria-expanded="false" aria-controls="auth">
                 <i class="menu-icon mdi mdi-account-circle-outline"></i>
@@ -206,6 +221,7 @@
                 </ul>
               </div>
             </li>
+            @endif
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="menu-icon mdi mdi-logout"></i>
