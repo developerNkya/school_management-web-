@@ -126,6 +126,10 @@ class SchoolAdminController extends Controller
             return redirect()->route('add_student_page')->withErrors($validator)->withInput();
         }
 
+        if (User::where('email', '=', $request->registration_no)->exists()) {
+            return redirect()->route('add_student_page')->withErrors('Registration No. already Exists!')->withInput();
+         }
+
         $user = new User();
         $user->name = $request->first_name . '' . $request->last_name;
         $user->email = $request->parent_email;
