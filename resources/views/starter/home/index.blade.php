@@ -123,7 +123,7 @@
 								data-paddingbottom="[0,0,0,0]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 7; text-transform:capitalize; white-space: unset; color:#fff; font-family:rubik; font-size:18px; line-height:28px; font-weight:400;">
-									 A Tech solution designed to help your institution excel through the use of technology and proper management
+								Shule yetu is a system designed to help institutions work with ease. It is comprised of a functionalities that allow easy communications between parents and institutions.
 							</div>
 							<!-- LAYER NR. 4 -->
 							<div 
@@ -286,7 +286,7 @@
 								data-paddingbottom="[0,0,0,0]"
 								data-paddingleft="[0,0,0,0]"
 								style="z-index: 7; text-transform:capitalize; white-space: unset; color:#fff; font-family:rubik; font-size:18px; line-height:28px; font-weight:400;">
-									 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+								Shule yetu is a system designed to help institutions work with ease. It is comprised of a functionalities that allow easy communications between parents and institutions.
 							</div>
 							<!-- LAYER NR. 4 -->
 							<div 

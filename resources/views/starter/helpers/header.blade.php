@@ -27,13 +27,7 @@
 	<title>Shule Yetu  </title>
 	
 	<!-- MOBILE SPECIFIC ============================================= -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<!--[if lt IE 9]>
-	<script src="../../assets/starter/js/html5shiv.min.js"></script>
-	<script src="../../assets/starter/js/respond.min.js"></script>
-	<![endif]-->
-	
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
 	<!-- All PLUGINS CSS ============================================= -->
 	<link rel="stylesheet" type="text/css" href="../../assets/starter/css/assets.css">
 	

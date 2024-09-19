@@ -1,5 +1,3 @@
-  <!-- Content END-->
-	<!-- Footer ==== -->
     <footer>
         <div class="footer-top">
 			<div class="pt-exebar">
