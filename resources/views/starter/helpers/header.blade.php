@@ -11,11 +11,11 @@
 	<meta name="robots" content="" />
 	
 	<!-- DESCRIPTION -->
-	<meta name="description" content="Shule Yetu : Education HTML Template" />
+	<meta name="description" content="Shule Yetu " />
 	
 	<!-- OG -->
-	<meta property="og:title" content="Shule Yetu : Education HTML Template" />
-	<meta property="og:description" content="Shule Yetu : Education HTML Template" />
+	<meta property="og:title" content="Shule Yetu " />
+	<meta property="og:description" content="Shule Yetu " />
 	<meta property="og:image" content="" />
 	<meta name="format-detection" content="telephone=no">
 	
@@ -24,7 +24,7 @@
 	<link rel="shortcut icon" type="image/x-icon" href="../../assets/starter/images/favicon.png" />
 	
 	<!-- PAGE TITLE HERE ============================================= -->
-	<title>Shule Yetu : Education HTML Template </title>
+	<title>Shule Yetu  </title>
 	
 	<!-- MOBILE SPECIFIC ============================================= -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
