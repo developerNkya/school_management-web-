@@ -27,7 +27,7 @@
                         <h2 class="title-head ">Manage your institution<br/> <span class="text-primary">with ease</span></h2>
                         <h4>+<span class="counter">100 </span> Features</h4>
                         <p>Shule Yetu is a comprehensive platform designed to simplify school management. We provide tools for administrators, teachers, and parents to enhance communication, streamline processes, and foster a more organized educational environment. Our mission is to empower schools to operate more efficiently, allowing them to focus on what matters most: education.</p>
-                        <a href="#" class="btn button-md">Join Now</a>
+                        <a href="contact-us" class="btn button-md">Join Now</a>
                      </div>
                      <div class="col-lg-6">
                          <div class="row">
@@ -197,7 +197,7 @@
         </div>
         <!-- Our Story END ==== -->
         <!-- Testimonials ==== -->
-        <div class="section-area section-sp2">
+        {{-- <div class="section-area section-sp2">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 heading-bx left">
@@ -236,7 +236,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!-- Testimonials END ==== -->
     </div>
     <!-- Page Content Box END ==== -->

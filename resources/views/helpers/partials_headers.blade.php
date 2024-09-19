@@ -35,10 +35,10 @@
             </button>
           </div>
           <div>
-            <a class="navbar-brand brand-logo" href="/index.html">
+            <a class="navbar-brand brand-logo" href="#">
               <img src="/assets/images/logo.svg" alt="logo" />
             </a>
-            <a class="navbar-brand brand-logo-mini" href="/index.html">
+            <a class="navbar-brand brand-logo-mini" href="#">
               <img src="/assets/images/logo-mini.svg" alt="logo" />
             </a>
           </div>

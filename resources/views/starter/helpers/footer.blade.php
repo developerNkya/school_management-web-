@@ -4,7 +4,7 @@
 				<div class="container">
 					<div class="d-flex align-items-stretch">
 						<div class="pt-logo mr-auto">
-							<a href="index.html"><img src="../../assets/starter/images/logo-white.png" alt=""/></a>
+							<a href="/"><img src="../../assets/starter/images/shule_icon.png" alt=""/></a>
 						</div>
 						<div class="pt-social-link">
 							<ul class="list-inline m-a0">
@@ -15,7 +15,7 @@
 							</ul>
 						</div>
 						<div class="pt-btn-join">
-							<a href="#" class="btn ">Join Now</a>
+							<a href="login" class="btn ">Login</a>
 						</div>
 					</div>
 				</div>
@@ -43,12 +43,12 @@
 						<div class="row">
 							<div class="col-4 col-lg-4 col-md-4 col-sm-4">
 								<div class="widget footer_widget">
-									<h5 class="footer-title">Company</h5>
+									<h5 class="footer-title">Pages</h5>
 									<ul>
-										<li><a href="index.html">Home</a></li>
-										<li><a href="about-1.html">About</a></li>
-										<li><a href="faq-1.html">FAQs</a></li>
-										<li><a href="contact-1.html">Contact</a></li>
+										<li><a href="#">Home</a></li>
+										<li><a href="about-us">About Us</a></li>
+										<li><a href="contact-us">Contact Us</a></li>
+										<li><a href="login">Login</a></li>
 									</ul>
 								</div>
 							</div>
@@ -56,21 +56,8 @@
 								<div class="widget footer_widget">
 									<h5 class="footer-title">Get In Touch</h5>
 									<ul>
-										<li><a href="http://Shule Yetu.themetrades.com/admin/index.html">Dashboard</a></li>
-										<li><a href="blog-classic-grid.html">Blog</a></li>
-										<li><a href="portfolio.html">Portfolio</a></li>
-										<li><a href="event.html">Event</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-4 col-lg-4 col-md-4 col-sm-4">
-								<div class="widget footer_widget">
-									<h5 class="footer-title">Courses</h5>
-									<ul>
-										<li><a href="courses.html">Courses</a></li>
-										<li><a href="courses-details.html">Details</a></li>
-										<li><a href="membership.html">Membership</a></li>
-										<li><a href="profile.html">Profile</a></li>
+										<li><a href="#">+255 620 416 606</a></li>
+										<li><a href="#">developernkya@gmail.com</a></li>
 									</ul>
 								</div>
 							</div>
@@ -97,7 +84,9 @@
         <div class="footer-bottom">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
+					<div class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {{ date('Y') }}. All rights reserved.</span>
+					  </div>
                 </div>
             </div>
         </div>
