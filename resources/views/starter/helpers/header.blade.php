@@ -63,7 +63,7 @@
                 <div class="container clearfix">
 					<!-- Header Logo ==== -->
 					<div class="menu-logo">
-						<a href="index.html"><img src="../../assets/starter/images/logo-white.png" alt=""></a>
+						<a href="/"><img  src="../../assets/starter/images/shule_icon.png" alt=""></a>
 					</div>
 					<!-- Mobile Nav Button ==== -->
                     <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@
 					<!-- Navigation Menu ==== -->
                     <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
 						<div class="menu-logo">
-							<a href="index.html"><img src="../../assets/starter/images/logo.png" alt=""></a>
+							<a href="/"><img src="../../assets/starter/images/logo.png" alt=""></a>
 						</div>
                         <ul class="nav navbar-nav">	
 							<li class="active"><a href="/">Home</a></li>
