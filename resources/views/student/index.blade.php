@@ -26,7 +26,7 @@
                     </div>
                     <div>
                       <p class="statistics-title">Academic Year</p>
-                      <h3 class="rate-percentage">N/A</h3>
+                      <h3 class="rate-percentage">{{ date('Y') }}</h3>
                     </div>
                   </div>
                 </div>

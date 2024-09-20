@@ -44,7 +44,7 @@
                 $role = request()->session()->get('role_id', '');  
               ?>
               <h1 class="welcome-text">Welcome, <span class="text-black fw-bold">{{$value}}</span></h1>
-              <h3 class="welcome-sub-text">Your performance summary this week </h3>
+              <h3 class="welcome-sub-text">Your personalized dashboard </h3>
             </li>
           </ul>
           <ul class="navbar-nav ms-auto">
@@ -61,7 +61,7 @@
             @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" href="{{ url('school_admin/home') }}">
-                <i class="mdi mdi-grid-large menu-icon"></i>
+                <i class="mdi mdi-home menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
@@ -71,7 +71,7 @@
             @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="menu-icon mdi mdi-floor-plan"></i>
+                <i class="menu-icon mdi mdi-account-group"></i>
                 <span class="menu-title">Classes</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -83,7 +83,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-                <i class="menu-icon mdi mdi-card-text-outline"></i>
+                <i class="menu-icon mdi mdi-human-male-board"></i>
                 <span class="menu-title">Teachers</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -95,7 +95,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                <i class="menu-icon mdi mdi-chart-line"></i>
+                <i class="menu-icon mdi mdi-account-tie"></i>
                 <span class="menu-title">Students</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -107,7 +107,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-                <i class="menu-icon mdi mdi-layers-outline"></i>
+                <i class="menu-icon mdi mdi-book-open-variant-outline"></i>
                 <span class="menu-title">Subjects</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -121,7 +121,7 @@
 
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-                <i class="menu-icon mdi mdi-table"></i>
+                <i class="menu-icon mdi mdi-list-box-outline"></i>
                 <span class="menu-title">Examinations</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -137,7 +137,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <i class="menu-icon mdi mdi-calendar-check-outline"></i>
                 <span class="menu-title">Attendence</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -152,7 +152,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#assignment" aria-expanded="false" aria-controls="auth">
-                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <i class="menu-icon mdi mdi-lead-pencil"></i>
                 <span class="menu-title">Assignments</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -165,7 +165,7 @@
             @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#suggestions" aria-expanded="false" aria-controls="auth">
-                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <i class="menu-icon mdi mdi-comment-text-outline"></i>
                 <span class="menu-title">Suggestions</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -178,7 +178,7 @@
             @endif
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#events" aria-expanded="false" aria-controls="auth">
-                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <i class="menu-icon mdi mdi-calendar-check-outline"></i>
                 <span class="menu-title">Events</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -191,7 +191,7 @@
             @if($role == 2) 
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#promotion" aria-expanded="false" aria-controls="auth">
-                <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                <i class="menu-icon mdi mdi-plus"></i>
                 <span class="menu-title">Promotion</span>
                 <i class="menu-arrow"></i>
               </a>
