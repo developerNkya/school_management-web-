@@ -24,7 +24,7 @@
                 <div class="row">
 					<div class="col-lg-4 col-md-12 col-sm-12 footer-col-4">
                         <div class="widget">
-                            <h5 class="footer-title">Sign Up For A Newsletter</h5>
+                            {{-- <h5 class="footer-title">Sign Up For A Newsletter</h5>
 							<p class="text-capitalize m-b20">Weekly Breaking news analysis and cutting edge advices on job searching.</p>
                             <div class="subscribe-form m-b20">
 								<form class="subscription-form" action="http://Shule Yetu.themetrades.com/demo/assets/script/mailchamp.php" method="post">
@@ -36,7 +36,7 @@
 										</span> 
 									</div>
 								</form>
-							</div>
+							</div> --}}
                         </div>
                     </div>
 					<div class="col-12 col-lg-5 col-md-7 col-sm-12">

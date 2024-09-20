@@ -90,13 +90,13 @@
 						<div class="menu-logo">
 							<a href="/"><img src="../../assets/starter/images/shule_bold.png" alt=""></a>
 						</div>
-                        <ul class="nav navbar-nav">	
-							<li class="active"><a href="/">Home</a></li>
-							<li ><a href="about-us">ABOUT US</a></li>
-							<li ><a href="downloads">DOWNLOAD</a></li>
-							<li ><a href="contact-us">CONTACT US</a></li>
-							<li ><a href="login">LOGIN</a></li>
-						</ul>
+						<ul class="nav navbar-nav">	
+							<li class="{{ request()->is('/') ? 'active' : '' }}"><a href="/">Home</a></li>
+							<li class="{{ request()->is('about-us') ? 'active' : '' }}"><a href="{{ url('about-us') }}">ABOUT US</a></li>
+							<li class="{{ request()->is('downloads') ? 'active' : '' }}"><a href="{{ url('downloads') }}">DOWNLOAD</a></li>
+							<li class="{{ request()->is('contact-us') ? 'active' : '' }}"><a href="{{ url('contact-us') }}">CONTACT US</a></li>
+							<li class="{{ request()->is('login') ? 'active' : '' }}"><a href="{{ url('login') }}">LOGIN</a></li>
+						</ul>						
 						<div class="nav-social-link">
 							<a href="javascript:;"><i class="fa fa-facebook"></i></a>
 							<a href="javascript:;"><i class="fa fa-google-plus"></i></a>
