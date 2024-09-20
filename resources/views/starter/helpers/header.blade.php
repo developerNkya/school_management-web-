@@ -88,7 +88,7 @@
 					<!-- Navigation Menu ==== -->
                     <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
 						<div class="menu-logo">
-							<a href="/"><img src="../../assets/starter/images/logo.png" alt=""></a>
+							<a href="/"><img src="../../assets/starter/images/shule_bold.png" alt=""></a>
 						</div>
                         <ul class="nav navbar-nav">	
 							<li class="active"><a href="/">Home</a></li>
