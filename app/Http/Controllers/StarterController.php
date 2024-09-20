@@ -52,4 +52,9 @@ class StarterController extends Controller
     {
         return view('starter.about_us');
     }
+
+    public function Downloads(Request $request)
+    {
+        return view('starter.downloads');
+    }
 }

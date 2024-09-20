@@ -20,6 +20,7 @@ Route::get('/', [StarterController::class, 'index']);
 Route::get('/login', [StarterController::class, 'login'])->name('user_login');
 Route::get('/contact-us', [StarterController::class, 'contactUs']);
 Route::get('/about-us', [StarterController::class, 'aboutUs']);
+Route::get('/downloads', [StarterController::class, 'Downloads']);
 Route::post('/contact-message', [StarterController::class, 'contactMessage'])->name('contact.message');
 
 Route::post('/user-login', [AuthController::class, 'userLogin']);

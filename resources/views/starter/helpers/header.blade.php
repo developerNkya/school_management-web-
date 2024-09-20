@@ -93,6 +93,7 @@
                         <ul class="nav navbar-nav">	
 							<li class="active"><a href="/">Home</a></li>
 							<li ><a href="about-us">ABOUT US</a></li>
+							<li ><a href="downloads">DOWNLOAD</a></li>
 							<li ><a href="contact-us">CONTACT US</a></li>
 							<li ><a href="login">LOGIN</a></li>
 						</ul>
