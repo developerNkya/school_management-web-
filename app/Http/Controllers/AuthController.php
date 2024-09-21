@@ -99,7 +99,7 @@ class AuthController extends Controller
         $role_length = Role::get()->count();
 
         if($role_length<=0){
-            $keys =["SUPER_ADMIN","SCHOOL_ADMIN","STUDENT","TEACHER"];
+            $keys =["SUPER_ADMIN","SCHOOL_ADMIN","STUDENT","TEACHER","DRIVER"];
             $counter = 1;
             foreach ($keys as $key) {
                Role::create(['id' =>$counter,'name' => $key]);

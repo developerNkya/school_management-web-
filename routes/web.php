@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BusManagementController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HelperController;
@@ -106,3 +107,9 @@ Route::group(['prefix' => 'assignment'], function () {
     Route::post('/download-assignment', [AssignmentController::class, 'downloadFile'])->name('downloadFile');
 });
 
+
+Route::group(['prefix' => 'bus-management'], function () {
+    Route::get('/all-drivers', [BusManagementController::class, 'allDrivers'])->name('allDriversPage');
+    Route::post('/add-driver', [BusManagementController::class, 'addDriver']);
+
+})->middleware('auth');

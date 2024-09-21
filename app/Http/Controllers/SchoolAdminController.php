@@ -55,7 +55,7 @@ class SchoolAdminController extends Controller
     public function teachersPage(Request $request)
     {
         $teachers = Teacher::where('school_id', Auth::user()->school_id)->paginate(10);
-        return view('school_admin.teachers_page', ['teachers' => $teachers,]);
+        return view('school_admin.teachers_page', ['teachers' => $teachers]);
     }
 
     public function examinationsPage(Request $request)

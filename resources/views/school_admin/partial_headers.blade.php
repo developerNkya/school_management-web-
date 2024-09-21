@@ -175,6 +175,19 @@
                 </ul>
               </div>
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#bus_tracker" aria-expanded="false" aria-controls="auth">
+                <i class="menu-icon mdi mdi-bus"></i>
+                <span class="menu-title">Bus Tracker</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="bus_tracker">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="{{'/bus-management/all-drivers'}}">All Drivers</a></li>
+                </ul>
+              </div>
+            </li>
             @endif
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#events" aria-expanded="false" aria-controls="auth">

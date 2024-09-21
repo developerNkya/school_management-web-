@@ -90,6 +90,11 @@ class HelperController extends Controller
                     $message = 'assignment';
                     break;
 
+                case 'driver':
+                    User::where('id',$request->id)->delete();
+                    $message = 'driver';
+                    break;
+
                 default:
                     # code...
                     break;
