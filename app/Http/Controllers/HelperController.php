@@ -106,4 +106,13 @@ class HelperController extends Controller
         }
 
     }
+    public static function formatPhoneNumber($phoneNumber)
+    {
+        $phoneNumber = preg_replace('/\D/', '', $phoneNumber);
+        if (strlen($phoneNumber) === 10 && $phoneNumber[0] === '0') {
+            $phoneNumber = '255' . substr($phoneNumber, 1);
+        }
+        return (strlen($phoneNumber) === 12 && substr($phoneNumber, 0, 3) === '255') ? $phoneNumber : null;
+    }
+    
 }

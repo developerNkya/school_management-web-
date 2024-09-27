@@ -132,6 +132,7 @@
                   @endif
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/marks'}}">Add Marks</a></li>
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/tabulation'}}">Tabulations</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{{'/results/sent-results'}}">Send Results</a></li>
                 </ul>
               </div>
             </li>

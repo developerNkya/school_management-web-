@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use CONSTANTS;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -12,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->alias(\App\Constants::class, 'CONSTANTS');
     }
 
     /**

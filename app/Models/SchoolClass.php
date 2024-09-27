@@ -9,7 +9,7 @@ class SchoolClass extends Model
 {
     use HasFactory;
     protected $table = 'classes';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,5 +24,11 @@ class SchoolClass extends Model
     {
         return $this->belongsToMany(Exam::class, 'exam_class');
     }
-    
+
+    public function resultSent()
+    {
+        return $this->hasMany(ResultSent::class, 'class_id');
+    }
+
+
 }

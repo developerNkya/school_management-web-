@@ -7,6 +7,7 @@ use App\Http\Controllers\BusManagementController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HelperController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\StarterController;
 use App\Http\Controllers\StudentController;
@@ -113,6 +114,11 @@ Route::group(['prefix' => 'bus-management'], function () {
     Route::post('/add-driver', [BusManagementController::class, 'addDriver']);
     Route::post('/daily-bus-attendance', [BusManagementController::class, 'dailyBusAttendance']);
     Route::get('/driver-attendance', [BusManagementController::class, 'driverAttendance']);
+})->middleware('auth');
 
 
+Route::group(['prefix' => 'results'], function () {
+    Route::get('/unsent-exams', [ResultController::class, 'unsentExams'])->name('unsentExams');
+    Route::get('/sent-results', [ResultController::class, 'sendResultsPage'])->name('sendResultsPage');
+    Route::post('/send-exams', [ResultController::class, 'sendExams'])->name('sendExams');
 })->middleware('auth');
