@@ -16,15 +16,18 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Middleware\CheckUserAuth;
 use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Route;
+use App\Jobs\TestJob;
 
 
 
 
+
+Route::get('/dispatch-job', function () {
+    TestJob::dispatch();
+    return 'Job dispatched!';
+});
 
 Route::middleware(CheckUserAuth::class)->group(function () {
-
-
-
 Route::get('/', [StarterController::class, 'index']);
 Route::get('/login', [StarterController::class, 'login'])->name('user_login');
 Route::get('/contact-us', [StarterController::class, 'contactUs']);
