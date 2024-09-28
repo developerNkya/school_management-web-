@@ -13,8 +13,15 @@ use App\Http\Controllers\StarterController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Middleware\CheckUserAuth;
 use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Route;
+
+
+
+
+
+Route::middleware(CheckUserAuth::class)->group(function () {
 
 
 
@@ -38,7 +45,6 @@ Route::group(['prefix' => 'super_admin'], function () {
     Route::get('/activation-page', [SuperAdminController::class, 'activationPage'])->name('activationPage');
     Route::get('/filter-users/{name}', [SuperAdminController::class, 'filterUsers'])->name('filter.users');
     Route::post('/alter-user-status/{id}', [SuperAdminController::class, 'alterUserStatus'])->name('alter.user.status');
-
 });
 
 
@@ -121,4 +127,6 @@ Route::group(['prefix' => 'results'], function () {
     Route::get('/unsent-exams', [ResultController::class, 'unsentExams'])->name('unsentExams');
     Route::get('/sent-results', [ResultController::class, 'sendResultsPage'])->name('sendResultsPage');
     Route::post('/send-exams', [ResultController::class, 'sendExams'])->name('sendExams');
-})->middleware('auth');
+});
+
+});  
