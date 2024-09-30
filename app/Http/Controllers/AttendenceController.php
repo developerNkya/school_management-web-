@@ -9,6 +9,7 @@ use App\Models\Section;
 use App\Models\StudentInfo;
 use App\Models\Subject;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,14 +57,15 @@ class AttendenceController extends Controller
         $classes = SchoolClass::where('school_id', $schoolId)->get();
         $sections = Section::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
-        $students = StudentInfo::where('class_id', $request->input('class_id'))
-            ->with([
-                'attendances' => function ($query) use ($request) {
-                    $query->where('attendence_id', $request->input('attendence_id'))
-                        ->whereDate('date', $request->input('date'));
-                }
-            ])
-            ->get();
+        $students = StudentInfo::with([
+            'attendances' => function ($query) use ($request) {
+                $query->where('attendence_id', $request->input('attendence_id'))
+                    ->whereDate('date', $request->input('date'));
+            }
+        ])
+        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+        ->where('class_id', $request->input('class_id'))
+        ->get();    
 
         $attendenceDays = 0;
         $day = '';
@@ -98,7 +100,7 @@ class AttendenceController extends Controller
             $currentDate->addDay();
         }
 
-        return $totalDays;
+        return $totalDays +1;
     }
 
 

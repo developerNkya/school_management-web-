@@ -12,6 +12,7 @@ use App\Models\ExamSubject;
 use App\Models\Mark;
 use App\Models\StudentInfo;
 use App\Models\Subject;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -160,53 +161,86 @@ class StudentController extends Controller
         if (!$student && !$request->toJson) {
             return redirect()->back()->with('error', 'Student not found');
         } else if (!$student && $request->toJson) {
-            response()->json([
+            return response()->json([
                 'success' => false,
                 'error' => 'Student not found'
             ]);
         }
-
+    
         $attendanceData = AttendenceData::where('class_id', $student->class_id)
             ->with('attendance')
             ->select('attendence_id')
             ->distinct()
             ->get();
-
+    
 
         $attendance = null;
         $attendanceRecords = collect();
         $students = collect();
-
+        $numberPresent = 0;
+        $totalClasses = 0;
+        $percentage = 0;
+        $dateFrom = null;
+        $dateTo = now()->format('Y-m-d');
+    
         if ($request->has('attendance_id')) {
             $attendance_id = $request->input('attendance_id');
             $attendance = Attendence::find($attendance_id);
-
+    
             if ($attendance) {
                 $attendanceRecords = AttendenceData::where('attendence_id', $attendance_id)
                     ->where('class_id', $student->class_id)
                     ->where('student_id', $student->id)
                     ->with('attendance')
                     ->get();
+    
+                $students = StudentInfo::where('id', $student->id)
+                ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+                ->get();
+                $dateFrom = $attendance->created_at->format('Y-m-d');
+                $dateFromCarbon = \Carbon\Carbon::parse($dateFrom);
+                $dateToCarbon = \Carbon\Carbon::now();
+                for ($date = $dateFromCarbon->copy(); $date->lte($dateToCarbon); $date->addDay()) {
+                    if ($date->isWeekday()) {
+                        $totalClasses++;
+                    }
+                }
 
-                $students = StudentInfo::where('id', $student->id)->get();
+                $weeklyRecords = $attendanceRecords->filter(function ($record) use ($dateFromCarbon, $dateToCarbon) {
+                    $recordDate = \Carbon\Carbon::parse($record->date);
+                    return $recordDate->between($dateFromCarbon, $dateToCarbon);
+                });
+    
+                $numberPresent = $weeklyRecords->where('status', 'Present')->count();
+                $percentage = $totalClasses > 0 ? ($numberPresent / $totalClasses) * 100 : 0;
             }
         }
-
+    
         return $request->toJson ? response()->json([
             'success' => true,
             'data' => [
                 'attendanceData' => $attendanceData,
                 'attendance' => $attendance,
                 'attendanceRecords' => $attendanceRecords,
-                'students' => $students
+                'students' => $students,
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+                'number_present' => $numberPresent,
+                'total_classes' => $totalClasses,
+                'percentage' => number_format($percentage, 2)
             ],
         ]) : view('student.attendencePage', [
-                'attendanceData' => $attendanceData,
-                'attendance' => $attendance,
-                'attendanceRecords' => $attendanceRecords,
-                'students' => $students
-            ]);
-    }
+            'attendanceData' => $attendanceData,
+            'attendance' => $attendance,
+            'attendanceRecords' => $attendanceRecords,
+            'students' => $students,
+            'date_from' => $dateFrom,
+            'date_to' => $dateTo,
+            'number_present' => $numberPresent,
+            'total_classes' => $totalClasses,
+            'percentage' => number_format($percentage, 2)
+        ]);
+    } 
 
 
     public function suggestionPage(Request $request)

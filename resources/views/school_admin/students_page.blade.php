@@ -24,7 +24,7 @@
                                   @foreach($students as $index => $student)
                                     <tr>
                                         <td>{{$index+1}}</td>
-                                        <td>{{$student->first_name.' '.$student->last_name}}</td>
+                                        <td>{{$student->full_name}}</td>
                                         <td>{{$student->registration_no}}</td>
                                         <td>{{$student->SchoolClass->name}}</td>
                                         <td>
@@ -82,6 +82,12 @@
                         <label for="firstName">First Name</label>
                         <input name="first_name" class="form-control" id="firstName" placeholder="e.g. John" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="middleName">Middle Name</label>
+                        <input name="middle_name" class="form-control" id="middleName" placeholder="e.g. Lee" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="lastName">Last Name</label>
                         <input name="last_name" class="form-control" id="lastName" placeholder="e.g. Doe" required>

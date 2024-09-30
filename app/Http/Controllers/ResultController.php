@@ -10,6 +10,7 @@ use App\Models\SchoolClass;
 use App\Models\StudentInfo;
 use App\Models\Subject;
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 use App\Constants;
 
@@ -71,7 +72,10 @@ class ResultController extends Controller
     
         $exam_name = $selectedExam->name;
     
-        $students = StudentInfo::where('class_id', $selectedClassId)->get();
+        $students = StudentInfo::where('class_id', $selectedClassId)
+        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+        ->get();
+    
         if ($students->isEmpty()) {
             return redirect()->route('sendResultsPage')->withErrors('Sorry, no students found for the selected class!')->withInput();
         }
@@ -106,7 +110,7 @@ class ResultController extends Controller
     
             $formattedPhone = HelperController::formatPhoneNumber($student->parent_phone);
             if ($formattedPhone) {
-                $sentMessage = "Habari Mzazi wa {$student->first_name}, matokeo ya mtoto wako katika mtihani wa $exam_name ni: $subjectMarks. Wastani: {$student->average}. Asante.";
+                $sentMessage = "Habari Mzazi wa {$student->full_name}, matokeo ya mtoto wako katika mtihani wa $exam_name ni: $subjectMarks. Wastani: {$student->average}. Asante.";
                 SendSms::dispatch($formattedPhone, $sentMessage)->delay(now()->addSeconds(10));
             }
         }

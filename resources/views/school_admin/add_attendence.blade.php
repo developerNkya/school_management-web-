@@ -106,9 +106,10 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                <a href="#" class="date-picker-trigger">{{ $day}}</a>
+                                                {{-- <a href="#" class="date-picker-trigger">{{ $day}}</a> --}}
+                                                <a href="#">{{ $day}}</a>
                                             </td>
-                                            <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                            <td>{{ $student->full_name }}</td>
                                             <td id="subjectDataColumn" style="display: none;">
                                                 <input type="text" name="subject[{{ $student->id }}]" value="{{ request('subject_id') }}">
                                             </td>

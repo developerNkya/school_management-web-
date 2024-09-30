@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SchoolClass;
 use App\Models\StudentInfo;
+use DB;
 use Illuminate\Http\Request;
 use App\Models\Exam;
 use App\Models\ClassModel;
@@ -116,7 +117,9 @@ class ExamController extends Controller
 
         if ($selectedExamId && $selectedSubjectId) {
             if ($selectedClassId) {
-                $students = StudentInfo::where('class_id', $selectedClassId)->get();
+                $students = StudentInfo::where('class_id', $selectedClassId)
+                ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+                ->get();            
                 $class_name = $students->first()->class->name ?? '';
             }
 
@@ -171,7 +174,10 @@ class ExamController extends Controller
         }
 
         if ($selectedExamId && $selectedClassId) {
-                $students = StudentInfo::where('class_id', $selectedClassId)->get();
+            $students = StudentInfo::where('class_id', $selectedClassId)
+            ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+            ->get();
+        
                 $class_name = $students->first()->class->name ?? '';
                 $marks = Mark::where('exam_id', $selectedExamId)
                     ->whereIn('student_id', $students->pluck('id'))

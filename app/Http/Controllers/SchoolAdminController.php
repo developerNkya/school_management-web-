@@ -10,6 +10,7 @@ use App\Models\StudentInfo;
 use App\Models\Subject;
 use App\Models\Suggestion;
 use App\Models\User;
+use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +64,7 @@ class SchoolAdminController extends Controller
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
         $exams = Exam::where('school_id', Auth::user()->school_id)->paginate(10);
-        
+
         return view('school_admin.examinations_page', ['exams' => $exams, 'classes' => $classes, 'subjects' => $subjects]);
     }
 
@@ -75,8 +76,11 @@ class SchoolAdminController extends Controller
 
     public function studentsPage(Request $request)
     {
-        $student_info = StudentInfo::with('SchoolClass','user')->where('school_id', Auth::user()->school_id)
+        $student_info = StudentInfo::with('SchoolClass', 'user')
+            ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+            ->where('school_id', Auth::user()->school_id)
             ->paginate(10);
+
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.students_page', ['students' => $student_info, 'classes' => $classes]);
     }
@@ -105,6 +109,7 @@ class SchoolAdminController extends Controller
     {
         $rules = [
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'registration_no' => 'required|string|unique:student_info|max:255',
             'date_of_birth' => 'required|date',
@@ -128,10 +133,12 @@ class SchoolAdminController extends Controller
 
         if (User::where('email', '=', $request->registration_no)->exists()) {
             return redirect()->route('add_student_page')->withErrors('Registration No. already Exists!')->withInput();
-         }
+        }
+
+
 
         $user = new User();
-        $user->name = $request->first_name . '' . $request->last_name;
+        $user->name = $request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name;
         $user->email = $request->parent_email;
         $user->phone = $request->parent_phone;
         $user->location = $request->nationality;
@@ -144,6 +151,7 @@ class SchoolAdminController extends Controller
         $student_id = $user->id;
         $studentInfo = new StudentInfo();
         $studentInfo->first_name = $request->first_name;
+        $studentInfo->middle_name = $request->middle_name;
         $studentInfo->last_name = $request->last_name;
         $studentInfo->registration_no = $request->registration_no;
         $studentInfo->date_of_birth = $request->date_of_birth;
@@ -260,8 +268,8 @@ class SchoolAdminController extends Controller
     public function viewSuggestions(Request $request)
     {
         $suggestions = Suggestion::with('school', 'student', 'student.Schoolclass')
-            ->where('school_id', Auth::user()->school_id)
-            ->paginate(10);
+        ->where('school_id', Auth::user()->school_id)
+        ->paginate(10);
 
         return view('school_admin.viewSuggestions', ['suggestions' => $suggestions]);
     }

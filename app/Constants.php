@@ -13,3 +13,6 @@ class Constants
 
 // work:
 // php artisan queue:work
+//tail -n 1 laravel.log
+
+

@@ -51,22 +51,14 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($students as $index => $student)
-                                            @php
-                                                $studentRecords = $attendanceRecords->where('student_id', $student->id);
-                                                $fromDate = $studentRecords->min('date');
-                                                $toDate = $studentRecords->max('date');
-                                                $totalPresent = $studentRecords->where('status', 'Present')->count();
-                                                $totalClasses = $studentRecords->count();
-                                                $percentage = $totalClasses > 0 ? ($totalPresent / $totalClasses) * 100 : 0;
-                                            @endphp
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $student->first_name }}</td>
-                                                <td>{{ $fromDate }}</td>
-                                                <td>{{ $toDate }}</td>
-                                                <td>{{ $totalPresent }}</td>
-                                                <td>{{ number_format($percentage, 2) }}%</td>
-                                                <td>{{ $totalClasses }}</td>
+                                                <td>{{ $student->full_name }}</td>
+                                                <td>{{ $date_from}}</td>
+                                                <td>{{ $date_to }}</td>
+                                                <td>{{ $number_present }}</td>
+                                                <td>{{ $percentage }}%</td>
+                                                <td>{{ $total_classes }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

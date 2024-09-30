@@ -68,7 +68,7 @@
                                     <td>{{$index+1}}</td>
                                     <?php
                                      $parent_full_name =  $suggestion->student->parent_first_name. ' ' . $suggestion->student->parent_last_name; 
-                                     $student_full_name =  $suggestion->student->first_name. ' '.$suggestion->student->last_name 
+                                     $student_full_name = $suggestion->student->first_name . ' ' . $suggestion->student->middle_name. ' ' . $suggestion->student->last_name;
                                     ?>
                                     <td>{{$parent_full_name }}</td>
                                     <td>{{  $student_full_name }}</td>
