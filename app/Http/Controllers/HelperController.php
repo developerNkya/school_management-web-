@@ -64,11 +64,12 @@ class HelperController extends Controller
                     break;
 
                 case 'student':
+                    Mark::where('student_id',$request->id)->delete();
+                    AttendenceData::where('student_id',$request->id)->delete();
+                    Suggestion::where('student_id',$request->id)->delete();
                     $user_id = StudentInfo::where('id',$request->id)->first();
                     StudentInfo::where('id',$request->id)->delete();
                     User::where('id',$user_id->user_id)->delete();
-                    AttendenceData::where('student_id',$request->id)->delete();
-                    Suggestion::where('student_id',$request->id)->delete();
                     $message = 'student';
                     break;
 
