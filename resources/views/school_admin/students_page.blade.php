@@ -14,6 +14,7 @@
                                     <tr>
                                         <th> No.</th>
                                         <th> Student Name </th>
+                                        <th> Email </th>
                                         <th> Registration No </th>
                                         <th> Class </th>
                                         <th>Status</th>
@@ -25,6 +26,7 @@
                                     <tr>
                                         <td>{{$index+1}}</td>
                                         <td>{{$student->full_name}}</td>
+                                        <td>{{$student->parent_email}}</td>
                                         <td>{{$student->registration_no}}</td>
                                         <td>{{$student->SchoolClass->name}}</td>
                                         <td>

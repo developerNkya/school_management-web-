@@ -121,18 +121,23 @@ class SchoolAdminController extends Controller
             'class_id' => 'required|exists:classes,id',
             'parent_first_name' => 'required|string|max:255',
             'parent_last_name' => 'required|string|max:255',
-            'parent_phone' => 'required|string|max:255',
+            'parent_phone' => ['required', 'string', 'regex:/^0\d{9}$/'],
             'parent_email' => 'required|email|max:255',
         ];
-
-        $validator = validator::make($request->all(), $rules);
-
+        
+        $customMessages = [
+            'parent_phone.regex' => 'Enter a 10-digit number starting with 0 for the parent\'s phone.',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules, $customMessages);
+        
         if ($validator->fails()) {
             return redirect()->route('add_student_page')->withErrors($validator)->withInput();
         }
+        
 
-        if (User::where('email', '=', $request->registration_no)->exists()) {
-            return redirect()->route('add_student_page')->withErrors('Registration No. already Exists!')->withInput();
+        if (User::where('email', '=', $request->parent_email)->exists()) {
+            return redirect()->route('add_student_page')->withErrors('Email already Exists!')->withInput();
         }
 
 
