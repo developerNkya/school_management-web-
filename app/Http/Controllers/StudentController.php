@@ -251,14 +251,19 @@ class StudentController extends Controller
     public function viewAssignments(Request $request)
     {
 
+        $assignment_type = $request->assignment_type;
         $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
-        $assignments = Assignment::with('sender')->where('school_id',$school_id)->paginate(10);  
+        $assignments = Assignment::with('sender')
+                       ->where('assignment_type',$assignment_type)
+                       ->where('school_id',$school_id)->paginate(10);  
+
         return  $request->toJson ?  response()->json([
             'success'=>true,
             'data'=>[
                 'assignments' => $assignments,
+                'assignment_type' => $assignment_type
               ],
-        ]) : view('student.assignment_page',compact('assignments'));
+        ]) : view('student.assignment_page',compact('assignments','assignment_type'));
           
     }
 

@@ -6,7 +6,10 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">All Assignments</h4>
+                        @php
+                         $assignment = $assignment_type == 'home_work' ? 'Home Works' : 'Holiday Packages'
+                         @endphp
+                        <h4 class="card-title">All {{$assignment}}</h4>
                         <div class="table-responsive  pt-3">
                             @include('helpers.message_handler')
                             <table class="table table-bordered">

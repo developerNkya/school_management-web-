@@ -102,7 +102,7 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('/suggestions', [StudentController::class, 'suggestionPage'])->name('suggestions');
     Route::post('/add-suggestion', [SuggestionController::class, 'addSuggestion']);
     Route::get('/fetchEvents', [EventController::class, 'organizeEvent'])->name('organizeEvent');
-    Route::get('/view-assignments', [StudentController::class, 'viewAssignments'])->name('viewAssignments');
+    Route::get('/view-assignments/{assignment_type}', [StudentController::class, 'viewAssignments'])->name('viewAssignments');
 });
 
 

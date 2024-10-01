@@ -15,51 +15,61 @@ class AssignmentController extends Controller
 {
     public function addAssignment(Request $request)
     {
-        $subjects = Subject::where('school_id',Auth::user()->school_id)->get();
-        $classes = SchoolClass::where('school_id',Auth::user()->school_id)->get();
-        $assignments = Assignment::with('subject','class','sender','school')
-                       ->where('school_id',Auth::user()->school_id)->paginate(10);
+        $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        $assignments = Assignment::with('subject', 'class', 'sender', 'school')
+            ->where('school_id', Auth::user()->school_id)->paginate(10);
         $totalSize = Assignment::where('school_id', Auth::user()->school_id)
-                ->sum('file_size');
-        return view('school_admin.assignment_page',compact('subjects','classes','assignments','totalSize'));
+            ->sum('file_size');
+        return view('school_admin.assignment_page', compact('subjects', 'classes', 'assignments', 'totalSize'));
     }
 
     public function saveAssignment(Request $request)
     {
-        $validated = $request->validate([
-            'assignment_name' => 'required|string|max:255',
-            'subject_id' => 'required|exists:subjects,id',
-            'class_id' => 'required|exists:classes,id',
-            'submission_date' => 'required|date'
-        ]);
+        $validated = $request->validate(
+            [
+                'assignment_name' => 'required|string|max:255',
+                'subject_id' => 'required|exists:subjects,id',
+                'class_id' => 'required|exists:classes,id',
+                'submission_date' => 'required|date',
+                'assignment_file' => 'required|file|max:1024'
+            ],
+            [
+                'assignment_file.required' => 'Please upload a file.',
+                'assignment_file.max' => 'The uploaded file should not be more than 1MB!',
+            ]
+        );
+        
     
+
         if ($request->hasFile('assignment_file')) {
             $file = $request->file('assignment_file');
             $fileSize = ceil($file->getSize() / 1024 / 1024);
-    
+
             $totalSize = Assignment::where('school_id', Auth::user()->school_id)
                 ->sum('file_size');
-    
-             $maxAllowedSize = 20; 
+
+            $maxAllowedSize = 20;
             if (($totalSize + $fileSize) > $maxAllowedSize) {
                 return redirect()->back()->withErrors(['error' => 'Space full: You have exceeded the 20MB limit for assignments.'])->withInput();
             }
 
             $filename = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('assignments', $filename, 'public');
-    
+
             try {
                 $assignment = new Assignment();
                 $assignment->name = $request->assignment_name;
                 $assignment->subject_id = $request->subject_id;
                 $assignment->class_id = $request->class_id;
+                $assignment->assignment_type = $request->assignment_type;
                 $assignment->sender_id = Auth::user()->id;
                 $assignment->school_id = Auth::user()->school_id;
                 $assignment->submission_date = $request->submission_date;
                 $assignment->file_path = $filePath;
                 $assignment->file_size = $fileSize;
                 $assignment->save();
-    
+
                 return redirect()->back()->with('message', 'Assignment saved successfully!');
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['error' => 'An error occurred while saving the assignment: ' . $e->getMessage()])->withInput();
@@ -69,29 +79,30 @@ class AssignmentController extends Controller
         }
     }
 
-    public function downloadFile(Request $request){
-    $validated = $request->validate([
-        'id' => 'required|exists:assignments,id',
-    ]);
-
-    $assignment = Assignment::findOrFail($request->id);
-    $filePath = $assignment->file_path;
-
-    if (Storage::disk('public')->exists($filePath)) {
-        $fileName = basename($filePath);
-        if(!$request->toJson){
-            return Storage::disk('public')->download($filePath, $fileName);
-        }
-
-        $fileContents = Storage::disk('public')->get($filePath);
-        return response()->json([
-            'file' => base64_encode($fileContents),
-            'file_name' => $fileName
+    public function downloadFile(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:assignments,id',
         ]);
-    } else {
-        return response()->json(['error' => 'File not found.'], 404);
-    }
-}
 
-    
+        $assignment = Assignment::findOrFail($request->id);
+        $filePath = $assignment->file_path;
+
+        if (Storage::disk('public')->exists($filePath)) {
+            $fileName = basename($filePath);
+            if (!$request->toJson) {
+                return Storage::disk('public')->download($filePath, $fileName);
+            }
+
+            $fileContents = Storage::disk('public')->get($filePath);
+            return response()->json([
+                'file' => base64_encode($fileContents),
+                'file_name' => $fileName
+            ]);
+        } else {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+    }
+
+
 }

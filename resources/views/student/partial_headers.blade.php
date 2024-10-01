@@ -92,7 +92,8 @@
               </a>
               <div class="collapse" id="assignment">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments') }}">View Assignments</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments/home_work') }}">Home Work</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments/holiday_package') }}">Holiday Package</a></li>
                 </ul>
               </div>
             </li>
