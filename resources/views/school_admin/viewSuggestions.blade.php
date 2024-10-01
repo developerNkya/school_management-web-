@@ -16,10 +16,8 @@
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th> Parent Name </th>
-                                        <th> Student Name</th>
-                                        <th> Class</th>
                                         <th> Suggestion</th>
+                                        <th>Date</th>
                                         <th> Action</th>
                                     </tr>
                                 </thead>
@@ -27,14 +25,8 @@
                                     @foreach ($suggestions as $index => $suggestion)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <?php
-                                            $parent_full_name = $suggestion->student->parent_first_name . ' ' . $suggestion->student->parent_last_name;
-                                            $student_full_name = $suggestion->student->first_name . ' ' . $suggestion->student->middle_name. ' ' . $suggestion->student->last_name;
-                                            ?>
-                                            <td>{{ $parent_full_name }}</td>
-                                            <td>{{ $student_full_name}}</td>
-                                            <td>{{ $suggestion->student->schoolclass->name }}</td>
                                             <td>{{ $suggestion->suggestion }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($suggestion->created_at)->format('F j, Y \a\t g:i A') }}</td>
                                             <td>
                                                 <form action="{{ route('deleteSuggestion') }}" method="post"
                                                     name="deletable" onsubmit="return deleteSuggestion(this)">
