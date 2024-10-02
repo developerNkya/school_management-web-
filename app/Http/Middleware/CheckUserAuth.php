@@ -28,14 +28,19 @@ class CheckUserAuth
             'user-login', 
             'initial-user'
         ];
+    
+        $toJsonRequest = $request->query('toJson') === 'true';
+    
         if (!Auth::check()) {
-            if (in_array($currentPath, $publicRoutes)) {
+            if (in_array($currentPath, $publicRoutes) || $toJsonRequest) {
                 return $next($request);
             }
             return redirect('/login');
         }
+    
         return $next($request);
     }
+    
     
 
 }
