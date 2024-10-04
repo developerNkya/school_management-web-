@@ -71,13 +71,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              
+              </div>              
             </div>
           </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
           @include('helpers.copyright')
-          <!-- partial -->
         </div>
 @include('helpers.partials_footers')

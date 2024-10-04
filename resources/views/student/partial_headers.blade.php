@@ -83,16 +83,15 @@
                 </ul>
               </div>
             </li>
-
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#assignment" aria-expanded="false" aria-controls="assignment">
+              <a class="nav-link" data-bs-toggle="collapse" href="#assignment" aria-expanded="false" aria-controls="form-elements">
                 <i class="menu-icon mdi mdi-lead-pencil"></i>
                 <span class="menu-title">My Assignments</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="assignment">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments/home_work') }}">Home Work</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments/daily-task') }}">Home Work</a></li>
                   <li class="nav-item"><a class="nav-link" href="{{ url('student/view-assignments/holiday_package') }}">Holiday Package</a></li>
                 </ul>
               </div>

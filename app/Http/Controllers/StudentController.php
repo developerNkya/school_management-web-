@@ -251,7 +251,7 @@ class StudentController extends Controller
     public function viewAssignments(Request $request)
     {
 
-        $assignment_type = $request->assignment_type;
+        $assignment_type = $request->assignment_type == 'daily-task' ? 'home_work' : $request->assignment_type;
         $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
         $assignments = Assignment::with('sender')
                        ->where('assignment_type',$assignment_type)
