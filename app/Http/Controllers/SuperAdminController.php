@@ -80,7 +80,7 @@ class SuperAdminController extends Controller
     public function activationPage(Request $request)
     {
 
-        $users = User::with('role')->paginate(1);
+        $users = User::with('role')->paginate(10);
         return view('super_admin.activationPage', compact('users'));
     }
 
