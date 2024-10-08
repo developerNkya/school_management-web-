@@ -17,5 +17,6 @@ class Attendence extends Model
         'academic_year', 
         'attendance_type', 
         'school_id',
+        'created_at'
     ];
 }

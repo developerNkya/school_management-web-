@@ -22,7 +22,7 @@
                                 <select name="attendence_id" class="form-control" id="attendanceSelect" required>
                                     <option value="">Select Attendance</option>
                                     @foreach ($attendances as $attendance)
-                                        <option value="{{ $attendance->id }}" data-type="{{ $attendance->attendance_type }}">
+                                        <option value="{{ $attendance->id }}" {{ old('attendence_id') == $attendance->id ? 'selected' : '' }}>
                                             {{ $attendance->attendance_name }}
                                         </option>
                                     @endforeach
@@ -33,15 +33,17 @@
                                 <select name="class_id" class="form-control" id="classSelect" required>
                                     <option value="">Select Class</option>
                                     @foreach ($classes as $class)
-                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                        <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
+                                            {{ $class->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
 
              
                             <div class="form-group">
-                                <label for="dateSelect">Select Date</label>
-                                <input type="date" name="date" class="form-control" id="dateSelect" value="{{ now()->format('Y-m-d') }}" required>
+                                <label for="dateSelect">Date</label>
+                                <input type="date" name="date" class="form-control read-only-grey" id="dateSelect" value="{{ now()->format('Y-m-d') }}" readonly>
                             </div>
 
                             <div class="form-group" id="subjectGroup" style="display: none;">
@@ -63,7 +65,7 @@
     </div>
 
    
-    @if($students->count() > 0)
+    @if(count($students) > 0)
 
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
@@ -72,13 +74,13 @@
                     <h4 class="card-title">Fill Attendence</h4>
                     <form method="POST" action="{{ route('attendance.storeData') }}">
                         @csrf
-
-                        <input type="hidden" name="attendence_id" value="{{ request('attendence_id') }}">
-                        <input type="hidden" name="class_id" value="{{ request('class_id') }}">
-                        <input type="hidden" name="section_id" value="{{ request('section_id') }}">
-                        <input type="hidden" name="subject_id" value="{{ request('subject_id') }}">
+                    
+                        <input type="hidden" name="attendence_id" value="{{ $attendence_id }}">
+                        <input type="hidden" name="class_id" value="{{ $class_id }}">
+                        <input type="hidden" name="section_id" value="{{ $section_id }}">
+                        <input type="hidden" name="subject_id" value="{{ $subject_id }}">
                         <input type="hidden" name="date" id="dateInput" value="{{ $day }}">
-
+                    
                         <div class="table-responsive mt-4">
                             <table class="table table-bordered">
                                 <thead>
@@ -96,22 +98,18 @@
                                 <tbody>
                                     @foreach ($students as $index => $student)
                                         @php
-                                            $totalDays = $attendenceDays;
-                                            if ($totalDays ==0) {
-                                                $totalDays = 1;
-                                            }
+                                            $totalDays = $attendenceDays > 0 ? $attendenceDays : 1;
                                             $totalAppearance = $student->attendances()->where('status', 'Present')->count();
                                             $percentage = $totalDays > 0 ? ($totalAppearance / $totalDays) * 100 : 0;
                                         @endphp
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                {{-- <a href="#" class="date-picker-trigger">{{ $day}}</a> --}}
-                                                <a href="#">{{ $day}}</a>
+                                                <a href="#">{{ $day }}</a>
                                             </td>
                                             <td>{{ $student->full_name }}</td>
                                             <td id="subjectDataColumn" style="display: none;">
-                                                <input type="text" name="subject[{{ $student->id }}]" value="{{ request('subject_id') }}">
+                                                <input type="text" name="subject[{{ $student->id }}]" value="{{ $subject_id }}">
                                             </td>
                                             <td>
                                                 <select name="status[{{ $student->id }}]" class="form-control">
@@ -121,7 +119,7 @@
                                                     <option value="Sick">Sick</option>
                                                 </select>
                                             </td>
-                                            <td>{{ $totalDays}}</td>
+                                            <td>{{ $totalDays }}</td>
                                             <td>{{ $totalAppearance }}</td>
                                             <td>{{ round($percentage, 2) }}%</td>
                                         </tr>
@@ -129,9 +127,10 @@
                                 </tbody>
                             </table>                            
                         </div>
-
+                    
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>
                     </form>
+                    
                 </div>
             </div>
         </div>

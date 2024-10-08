@@ -30526,3 +30526,9 @@ input:focus {
 .flexer-item{
   margin-left: 10px;
 }
+
+.read-only-grey {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+}
