@@ -18,15 +18,20 @@ class SuperAdminController extends Controller
     {
         $rules = [
             'school_name' => 'required',
+            'school_initial' => 'required',
             'school_location' => 'required',
             'owner_name' => 'required',
-            'owner_phone_no' => 'required',
+            'owner_phone_no' =>['required', 'string', 'regex:/^0\d{9}$/'],
             'owner_email' => 'required',
             'new_password' => 'required',
             'repeat_password' => 'required',
         ];
 
-        $validator = validator::make($request->all(), $rules);
+        $customMessages = [
+            'owner_phone_no' => 'Enter a 10-digit number starting with 0 for the owner\'s phone.',
+        ];
+
+        $validator = validator::make($request->all(), $rules,$customMessages);
         $error = $validator->errors()->first();
         if ($validator->fails()) {
             return redirect()->route('add_school_page')->withErrors(['error' => $error]);
@@ -38,7 +43,7 @@ class SuperAdminController extends Controller
 
         try {
             $user = new User();
-            $user->name = $request->owner_name;
+            $user->name = strtolower($request->owner_name);
             $user->email = $request->owner_email;
             $user->phone = $request->owner_phone_no;
             $user->location = $request->school_location;
@@ -52,6 +57,7 @@ class SuperAdminController extends Controller
             $school->school_name = $request->school_name;
             $school->location = $request->school_location;
             $school->owner_id = $owner_id;
+            $school->initial =  $request->school_initial;
             $school->save();
 
             $school_id = $school->id;
@@ -69,7 +75,8 @@ class SuperAdminController extends Controller
 
     public function schoolPage(Request $request)
     {
-        return view('super_admin.school_page');
+        $schools = School::with('owner')->paginate(10);
+        return view('super_admin.school_page',compact('schools'));
     }
 
     public function rolesPage(Request $request)

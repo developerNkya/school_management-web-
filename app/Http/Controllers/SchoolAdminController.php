@@ -111,82 +111,74 @@ class SchoolAdminController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'registration_no' => 'required|string|unique:student_info|max:255',
+            'registration_no' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
             'gender' => 'required|string',
             'blood_group' => 'required|string',
             'nationality' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'passport_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'class_id' => 'required|exists:classes,id',
             'parent_first_name' => 'required|string|max:255',
             'parent_last_name' => 'required|string|max:255',
             'parent_phone' => ['required', 'string', 'regex:/^0\d{9}$/'],
-            'parent_email' => 'required|email|max:255',
         ];
         
         $customMessages = [
             'parent_phone.regex' => 'Enter a 10-digit number starting with 0 for the parent\'s phone.',
         ];
-        
+    
         $validator = Validator::make($request->all(), $rules, $customMessages);
-        
+    
         if ($validator->fails()) {
             return redirect()->route('add_student_page')->withErrors($validator)->withInput();
         }
-        
-
-        if (User::where('email', '=', $request->parent_email)->exists()) {
-            return redirect()->route('add_student_page')->withErrors('Email already Exists!')->withInput();
+    
+        if (StudentInfo::where('school_id', Auth::user()->school_id)
+            ->where('registration_no', '=', $request->registration_no)->exists()) {
+            return redirect()->route('add_student_page')->withErrors('Registration No. Already exists!')->withInput();
         }
+    
+        $user = Auth::user()->load('School');
+        $school_initial = strtolower($user->school->initial);
+        $total_students = HelperController::totalUsers('students',Auth::user()->school_id);
+        $student_number = $total_students + 1;
+        $formatted_number = str_pad($student_number, 4, '0', STR_PAD_LEFT);
+        $student_email = "{$formatted_number}@{$school_initial}";
 
-
-
-        $user = new User();
-        $user->name = $request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name;
-        $user->email = $request->parent_email;
-        $user->phone = $request->parent_phone;
-        $user->location = $request->nationality;
-        $user->password = bcrypt('student');
-        $user->role_id = 3;
-        $user->isActive = false;
-        $user->school_id = Auth::user()->school_id;
-        $user->save();
-
-        $student_id = $user->id;
+        $newUser = new User();
+        $newUser->name = strtolower($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
+        $newUser->email = $student_email; 
+        $newUser->phone = $request->parent_phone;
+        $newUser->location = $request->nationality;
+        $newUser->password = bcrypt('student');
+        $newUser->role_id = 3;
+        $newUser->isActive = true;
+        $newUser->school_id = Auth::user()->school_id;
+        $newUser->save();
+    
         $studentInfo = new StudentInfo();
-        $studentInfo->first_name = $request->first_name;
-        $studentInfo->middle_name = $request->middle_name;
-        $studentInfo->last_name = $request->last_name;
+        $studentInfo->first_name = strtolower($request->first_name);
+        $studentInfo->middle_name = strtolower($request->middle_name);
+        $studentInfo->last_name = strtolower($request->last_name);
         $studentInfo->registration_no = $request->registration_no;
         $studentInfo->date_of_birth = $request->date_of_birth;
         $studentInfo->gender = $request->gender;
         $studentInfo->blood_group = $request->blood_group;
         $studentInfo->nationality = $request->nationality;
-        $studentInfo->city = $request->city;
-
-        // Handle file upload
-        if ($request->hasFile('passport_photo')) {
-            $file = $request->file('passport_photo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-            $studentInfo->passport_photo = $filename;
-        }
-
+        $studentInfo->city = strtolower($request->city);
+        $studentInfo->passport_photo = null;
         $studentInfo->class_id = $request->class_id;
-
-        $studentInfo->parent_first_name = $request->parent_first_name;
-        $studentInfo->parent_last_name = $request->parent_last_name;
+        $studentInfo->parent_first_name = strtolower($request->parent_first_name);
+        $studentInfo->parent_last_name = strtolower($request->parent_last_name);
         $studentInfo->parent_phone = $request->parent_phone;
-        $studentInfo->parent_email = $request->parent_email;
-
-        $studentInfo->user_id = $student_id;
+        $studentInfo->parent_email = $student_email; 
         $studentInfo->school_id = Auth::user()->school_id;
+        $studentInfo->user_id = $newUser->id; 
         $studentInfo->save();
-
+        
         return redirect()->route('add_student_page')->with('message', 'Student added successfully!');
     }
-
+    
     public function getStreams($classId)
     {
         $sections = Section::where('class_id', $classId)
@@ -307,5 +299,7 @@ class SchoolAdminController extends Controller
             return redirect()->route('promote_class')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }
     }
+
+
 
 }

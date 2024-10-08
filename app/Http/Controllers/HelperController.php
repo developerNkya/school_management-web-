@@ -115,5 +115,21 @@ class HelperController extends Controller
         }
         return (strlen($phoneNumber) === 12 && substr($phoneNumber, 0, 3) === '255') ? $phoneNumber : null;
     }
+
+
+    public static function totalUsers($type,$school_id){
+        switch ($type) {
+            case 'students':
+                $total = StudentInfo::where('school_id',$school_id)->count();
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        return $total;
+    }
+
     
 }

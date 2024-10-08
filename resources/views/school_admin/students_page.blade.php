@@ -65,11 +65,11 @@
     <!-- partial -->
 </div>
 
-<div class="form-modal" id="form-modal" style="display: none">
+<div class="main-panel" id="form-modal" style="display: none">
   @include('helpers.message_handler')
   <div class="content-wrapper">
     <div class="row">
-      <div class="col-lg-12 grid-margin stretch-card">
+      <div class="col-lg-6">
           <form id="studentForm"   class="forms-sample" method="POST" action="{{ route('add_student') }}" enctype="multipart/form-data">
             @csrf
             <div class="container">
@@ -131,10 +131,6 @@
                         <label for="city">Region</label>
                         <input name="city" class="form-control" id="city" placeholder="e.g. Springfield" required>
                     </div>
-                    <div class="form-group">
-                        <label for="passportPhoto">Valid Passport Size Photo</label>
-                        <input type="file" name="passport_photo" class="form-control" id="passportPhoto" required>
-                    </div>
                 </div>
         
                 <div class="step">
@@ -162,13 +158,7 @@
                     <div class="form-group">
                         <label for="parentPhone">Parent Phone No</label>
                         <input name="parent_phone" class="form-control" id="parentPhone" placeholder="e.g. 1234567890" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="parentEmail">Parent Email</label>
-                        <input name="parent_email" class="form-control" id="parentEmail" placeholder="e.g. parent@example.com" required>
-                    </div>
-                
+                    </div>        
                 </div>
         
                 <div class="form-footer d-flex">
@@ -202,13 +192,11 @@
     }
 
     function disableModal() {
-        // alert("Welcome to the javaTpoint.com");
         document.getElementById( 'form-modal' ).style.display = 'none';
         document.getElementById( 'main-panel' ).style.display = 'block';
         event.preventDefault();
     }
 
-    // multi form::
     let currentTab = 0;
         showTab(currentTab);
 
@@ -264,7 +252,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-        // Fetch streams and subjects based on selected class
         function updateStreams() {
             const classId = document.getElementById('classSelect').value;
             const streamSelect = document.getElementById('streamSelect');

@@ -18,5 +18,11 @@ class School extends Model
         'school_name',
         'location',
         'owner_id',
+        'initial'
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'owner_id');
+    }
 }
