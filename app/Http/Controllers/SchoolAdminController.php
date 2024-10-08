@@ -76,6 +76,7 @@ class SchoolAdminController extends Controller
 
     public function studentsPage(Request $request)
     {
+
         $student_info = StudentInfo::with('SchoolClass', 'user')
             ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
             ->where('school_id', Auth::user()->school_id)
@@ -122,32 +123,34 @@ class SchoolAdminController extends Controller
             'parent_last_name' => 'required|string|max:255',
             'parent_phone' => ['required', 'string', 'regex:/^0\d{9}$/'],
         ];
-        
+
         $customMessages = [
             'parent_phone.regex' => 'Enter a 10-digit number starting with 0 for the parent\'s phone.',
         ];
-    
+
         $validator = Validator::make($request->all(), $rules, $customMessages);
-    
+
         if ($validator->fails()) {
             return redirect()->route('add_student_page')->withErrors($validator)->withInput();
         }
-    
-        if (StudentInfo::where('school_id', Auth::user()->school_id)
-            ->where('registration_no', '=', $request->registration_no)->exists()) {
+
+        if (
+            StudentInfo::where('school_id', Auth::user()->school_id)
+                ->where('registration_no', '=', $request->registration_no)->exists()
+        ) {
             return redirect()->route('add_student_page')->withErrors('Registration No. Already exists!')->withInput();
         }
-    
+
         $user = Auth::user()->load('School');
         $school_initial = strtolower($user->school->initial);
-        $total_students = HelperController::totalUsers('students',Auth::user()->school_id);
+        $total_students = HelperController::totalUsers('students', Auth::user()->school_id);
         $student_number = $total_students + 1;
         $formatted_number = str_pad($student_number, 4, '0', STR_PAD_LEFT);
         $student_email = "{$formatted_number}@{$school_initial}";
 
         $newUser = new User();
         $newUser->name = strtolower($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
-        $newUser->email = $student_email; 
+        $newUser->email = $student_email;
         $newUser->phone = $request->parent_phone;
         $newUser->location = $request->nationality;
         $newUser->password = bcrypt('student');
@@ -155,7 +158,7 @@ class SchoolAdminController extends Controller
         $newUser->isActive = true;
         $newUser->school_id = Auth::user()->school_id;
         $newUser->save();
-    
+
         $studentInfo = new StudentInfo();
         $studentInfo->first_name = strtolower($request->first_name);
         $studentInfo->middle_name = strtolower($request->middle_name);
@@ -171,14 +174,14 @@ class SchoolAdminController extends Controller
         $studentInfo->parent_first_name = strtolower($request->parent_first_name);
         $studentInfo->parent_last_name = strtolower($request->parent_last_name);
         $studentInfo->parent_phone = $request->parent_phone;
-        $studentInfo->parent_email = $student_email; 
+        $studentInfo->parent_email = $student_email;
         $studentInfo->school_id = Auth::user()->school_id;
-        $studentInfo->user_id = $newUser->id; 
+        $studentInfo->user_id = $newUser->id;
         $studentInfo->save();
-        
+
         return redirect()->route('add_student_page')->with('message', 'Student added successfully!');
     }
-    
+
     public function getStreams($classId)
     {
         $sections = Section::where('class_id', $classId)
@@ -265,8 +268,8 @@ class SchoolAdminController extends Controller
     public function viewSuggestions(Request $request)
     {
         $suggestions = Suggestion::with('school', 'student', 'student.Schoolclass')
-        ->where('school_id', Auth::user()->school_id)
-        ->paginate(10);
+            ->where('school_id', Auth::user()->school_id)
+            ->paginate(10);
 
         return view('school_admin.viewSuggestions', ['suggestions' => $suggestions]);
     }
@@ -275,6 +278,27 @@ class SchoolAdminController extends Controller
     {
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.promoteClass', ['classes' => $classes]);
+    }
+
+    public function filterStudents($name)
+    {
+
+        $student_info = StudentInfo::with('SchoolClass', 'user')
+        ->where('school_id', Auth::user()->school_id)
+        ->where(function($query) use ($name) {
+            $query->where('first_name', 'LIKE', "%{$name}%")
+                  ->orWhere('middle_name', 'LIKE', "%{$name}%")
+                  ->orWhere('registration_no', 'LIKE', "%{$name}%")
+                  ->orWhere('last_name', 'LIKE', "%{$name}%")
+                  ->orWhere(DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name)"), 'LIKE', "%{$name}%")
+                  ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%{$name}%");
+        })
+        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+        ->paginate(10);
+    
+
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        return response()->json([$student_info,$classes]);
     }
 
     public function handlePromotion(Request $request)
