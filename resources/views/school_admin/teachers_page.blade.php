@@ -88,13 +88,7 @@
                                 <input name="last_name" class="form-control" id="lastName" placeholder="Last name"
                                     required>
                             </div>
-
-
-                            <div class="form-group">
-                                <label for="parentEmail">Email</label>
-                                <input name="email" class="form-control" id="parentEmail"
-                                    placeholder="e.g. teacher@example.com" required>
-                            </div>
+                            
                             <div class="form-group">
                                 <label for="phoneNumber">Phone Number</label>
                                 <input name="phone_number" class="form-control" id="phoneNumber"

@@ -44,55 +44,55 @@ class HelperController extends Controller
         try {
             switch ($table) {
                 case 'subject':
-                    AttendenceData::where('class_id',$request->id)->delete();
-                    ExamSubject::where('subject_id',$request->id)->delete();
-                    Mark::where('subject_id',$request->id)->delete();
-                    Subject::where('id',$request->id)->delete();
+                    AttendenceData::where('class_id', $request->id)->delete();
+                    ExamSubject::where('subject_id', $request->id)->delete();
+                    Mark::where('subject_id', $request->id)->delete();
+                    Subject::where('id', $request->id)->delete();
                     $message = 'subject';
                     break;
 
                 case 'schoolClass':
                     SchoolClass::where('id', $request->id)->delete();
-                    AttendenceData::where('class_id',$request->id)->delete();
-                    Mark::where('class_id',$request->id)->delete();
-                    $message ='Class';
+                    AttendenceData::where('class_id', $request->id)->delete();
+                    Mark::where('class_id', $request->id)->delete();
+                    $message = 'Class';
                     break;
-                
+
                 case 'teacher':
-                    Teacher::where('id',$request->id)->delete();
+                    Teacher::where('id', $request->id)->delete();
                     $message = 'teacher';
                     break;
 
                 case 'student':
-                    Mark::where('student_id',$request->id)->delete();
-                    AttendenceData::where('student_id',$request->id)->delete();
-                    Suggestion::where('student_id',$request->id)->delete();
-                    $user_id = StudentInfo::where('id',$request->id)->first();
-                    StudentInfo::where('id',$request->id)->delete();
-                    User::where('id',$user_id->user_id)->delete();
+                    Mark::where('student_id', $request->id)->delete();
+                    AttendenceData::where('student_id', $request->id)->delete();
+                    Suggestion::where('student_id', $request->id)->delete();
+                    $user_id = StudentInfo::where('id', $request->id)->first();
+                    StudentInfo::where('id', $request->id)->delete();
+                    User::where('id', $user_id->user_id)->delete();
                     $message = 'student';
                     break;
 
                 case 'exam':
-                    Mark::where('exam_id',$request->id)->delete();
-                    ExamSubject::where('exam_id',$request->id)->delete();
-                    ExamClass::where('exam_id',$request->id)->delete();
-                    Exam::where('id',$request->id)->delete();
+                    Mark::where('exam_id', $request->id)->delete();
+                    ExamSubject::where('exam_id', $request->id)->delete();
+                    ExamClass::where('exam_id', $request->id)->delete();
+                    Exam::where('id', $request->id)->delete();
                     $message = 'exam';
                     break;
 
                 case 'event':
-                    Event::where('id',$request->id)->delete();
+                    Event::where('id', $request->id)->delete();
                     $message = 'event';
                     break;
 
                 case 'assignment':
-                    Assignment::where('id',$request->id)->delete();
+                    Assignment::where('id', $request->id)->delete();
                     $message = 'assignment';
                     break;
 
                 case 'driver':
-                    User::where('id',$request->id)->delete();
+                    User::where('id', $request->id)->delete();
                     $message = 'driver';
                     break;
 
@@ -101,7 +101,7 @@ class HelperController extends Controller
                     break;
             }
 
-        return redirect()->back()->with('message', $message.' deleted Successfully!');
+            return redirect()->back()->with('message', $message . ' deleted Successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }
@@ -117,10 +117,11 @@ class HelperController extends Controller
     }
 
 
-    public static function totalUsers($type,$school_id){
+    public static function totalUsers($type, $school_id)
+    {
         switch ($type) {
             case 'students':
-                $total = StudentInfo::where('school_id',$school_id)->count();
+                $total = StudentInfo::where('school_id', $school_id)->count();
                 break;
 
             default:
@@ -131,5 +132,47 @@ class HelperController extends Controller
         return $total;
     }
 
-    
+    public static function emailAssigner($user_role)
+    {
+        $user = Auth::user()->load('School');
+        $school_initial = strtolower($user->school->initial);
+        $counter = '';
+
+        function email_splitter($row)
+        {
+
+            if ($row != '') {
+                $split_email = explode("@", $row);
+                $counter = $split_email[0] + 1;
+                return $counter;
+            } else {
+                return 1;
+            }
+
+        }
+
+
+        switch ($user_role) {
+            case 4:
+                $row = Teacher::where('school_id', $user->school_id)
+                    ->orderBy('created_at', 'desc')->first();
+                $counter = email_splitter($row ? $row->email:'');
+                break;
+            case 3:
+                $row = StudentInfo::where('school_id', $user->school_id)
+                    ->orderBy('created_at', 'desc')->first();
+                $counter = email_splitter($row ? $row->parent_email:'');
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        $counter = str_pad($counter, 4, '0', STR_PAD_LEFT);
+        $assigned_email = "{$counter}@{$school_initial}";
+        return $assigned_email;
+
+    }
+
 }

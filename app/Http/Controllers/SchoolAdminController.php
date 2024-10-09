@@ -141,12 +141,8 @@ class SchoolAdminController extends Controller
             return redirect()->route('add_student_page')->withErrors('Registration No. Already exists!')->withInput();
         }
 
-        $user = Auth::user()->load('School');
-        $school_initial = strtolower($user->school->initial);
-        $total_students = HelperController::totalUsers('students', Auth::user()->school_id);
-        $student_number = $total_students + 1;
-        $formatted_number = str_pad($student_number, 4, '0', STR_PAD_LEFT);
-        $student_email = "{$formatted_number}@{$school_initial}";
+     
+        $student_email = HelperController::emailAssigner(3);
 
         $newUser = new User();
         $newUser->name = strtolower($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
@@ -222,7 +218,7 @@ class SchoolAdminController extends Controller
     public function addTeacher(Request $request)
     {
 
-        $validated = $request->validate([
+        $rules = [
             'first_name' => 'required|string|max:255',
             'second_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -230,13 +226,25 @@ class SchoolAdminController extends Controller
             'gender' => 'required|in:Male,Female',
             'nationality' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-        ]);
+            'phone_number' => ['required', 'string', 'regex:/^0\d{9}$/']
+        ];
+
+        $customMessages = [
+            'phone_number.regex' => 'Enter a 10-digit number starting with 0 for the teacher\'s phone.',
+        ];
+        $validator = Validator::make($request->all(), $rules, $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->route('all_teachers_page')->withErrors($validator)->withInput();
+        }
+
+        $user_email = HelperController::emailAssigner(4);
+        $full_name = strtolower ("{$request->first_name} {$request->second_name} {$request->last_name}");
+
 
         $user = new User();
-        $user->name = $request->first_name . '' . $request->last_name;
-        $user->email = $request->email;
+        $user->name = $full_name;
+        $user->email = $user_email;
         $user->phone = $request->phone_number;
         $user->location = $request->nationality;
         $user->password = bcrypt('teacher');
@@ -247,11 +255,11 @@ class SchoolAdminController extends Controller
         $teacher_id = $user->id;
 
         $TeacherInfo = new Teacher();
-        $TeacherInfo->first_name = $request->first_name;
-        $TeacherInfo->second_name = $request->second_name;
-        $TeacherInfo->last_name = $request->last_name;
+        $TeacherInfo->first_name = strtolower($request->first_name);
+        $TeacherInfo->second_name = strtolower($request->second_name);
+        $TeacherInfo->last_name = strtolower($request->last_name);
         $TeacherInfo->phone_number = $request->phone_number;
-        $TeacherInfo->email = $request->email;
+        $TeacherInfo->email = $user_email;
         $TeacherInfo->date_of_birth = $request->date_of_birth;
         $TeacherInfo->gender = $request->gender;
         $TeacherInfo->nationality = $request->nationality;
@@ -284,21 +292,21 @@ class SchoolAdminController extends Controller
     {
 
         $student_info = StudentInfo::with('SchoolClass', 'user')
-        ->where('school_id', Auth::user()->school_id)
-        ->where(function($query) use ($name) {
-            $query->where('first_name', 'LIKE', "%{$name}%")
-                  ->orWhere('middle_name', 'LIKE', "%{$name}%")
-                  ->orWhere('registration_no', 'LIKE', "%{$name}%")
-                  ->orWhere('last_name', 'LIKE', "%{$name}%")
-                  ->orWhere(DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name)"), 'LIKE', "%{$name}%")
-                  ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%{$name}%");
-        })
-        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
-        ->paginate(10);
-    
+            ->where('school_id', Auth::user()->school_id)
+            ->where(function ($query) use ($name) {
+                $query->where('first_name', 'LIKE', "%{$name}%")
+                    ->orWhere('middle_name', 'LIKE', "%{$name}%")
+                    ->orWhere('registration_no', 'LIKE', "%{$name}%")
+                    ->orWhere('last_name', 'LIKE', "%{$name}%")
+                    ->orWhere(DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name)"), 'LIKE', "%{$name}%")
+                    ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%{$name}%");
+            })
+            ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+            ->paginate(10);
+
 
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
-        return response()->json([$student_info,$classes]);
+        return response()->json([$student_info, $classes]);
     }
 
     public function handlePromotion(Request $request)
