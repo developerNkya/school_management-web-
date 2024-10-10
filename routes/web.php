@@ -7,6 +7,7 @@ use App\Http\Controllers\BusManagementController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HelperController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SchoolAdminController;
 use App\Http\Controllers\StarterController;
@@ -132,6 +133,11 @@ Route::group(['prefix' => 'results'], function () {
     Route::get('/unsent-exams', [ResultController::class, 'unsentExams'])->name('unsentExams');
     Route::get('/sent-results', [ResultController::class, 'sendResultsPage'])->name('sendResultsPage');
     Route::post('/send-exams', [ResultController::class, 'sendExams'])->name('sendExams');
+});
+
+Route::group(['prefix' => 'passwords'], function () {
+    Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('changePassword');
+    Route::post('/alter-password', [PasswordController::class, 'alterPassword'])->name('alterPassword');
 });
 
 });  

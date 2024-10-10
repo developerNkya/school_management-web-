@@ -135,7 +135,9 @@ class HelperController extends Controller
     public static function emailAssigner($user_role)
     {
         $user = Auth::user()->load('School');
-        $school_initial = strtolower($user->school->initial);
+        $school_initial = $user_role == 4 ? strtolower($user->school->initial[0])
+                          :strtolower($user->school->initial); 
+
         $counter = '';
 
         function email_splitter($row)
@@ -150,8 +152,6 @@ class HelperController extends Controller
             }
 
         }
-
-
         switch ($user_role) {
             case 4:
                 $row = Teacher::where('school_id', $user->school_id)

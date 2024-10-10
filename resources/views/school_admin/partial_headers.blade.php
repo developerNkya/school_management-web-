@@ -177,7 +177,7 @@
               </div>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#bus_tracker" aria-expanded="false" aria-controls="auth">
                 <i class="menu-icon mdi mdi-bus"></i>
                 <span class="menu-title">Bus Tracker</span>
@@ -188,7 +188,7 @@
                   <li class="nav-item"> <a class="nav-link" href="{{'/bus-management/all-drivers'}}">All Drivers</a></li>
                 </ul>
               </div>
-            </li>
+            </li> --}}
             @endif
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#events" aria-expanded="false" aria-controls="auth">
@@ -216,6 +216,12 @@
               </div>
             </li>
             @endif
+            <li class="nav-item">
+              <a class="nav-link" href="{{'/passwords/change-password'}}">
+                <i class="menu-icon mdi mdi-lock-reset"></i>
+                <span class="menu-title">Change Password</span>
+              </a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="menu-icon mdi mdi-logout"></i>
