@@ -146,6 +146,12 @@
               </div>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{'/passwords/change-password'}}">
+                <i class="menu-icon mdi mdi-lock-reset"></i>
+                <span class="menu-title">Change Password</span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="menu-icon mdi mdi-logout"></i>
                 <span class="menu-title">Logout</span>
