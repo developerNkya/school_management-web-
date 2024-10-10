@@ -18,10 +18,11 @@
                                     <tr>
                                         <th> No.</th>
                                         <th>  Names </th>
+                                        <th>Email</th>
                                         <th> Gender</th>
                                         <th> Nationality</th>
                                         <th>Phone No</th>
-                                        <th>Email</th>
+                                        <th>Status</th>
                                         <th> Action</th>
                                     </tr>
                                 </thead>
@@ -31,10 +32,17 @@
                                         <tr>
                                             <td>{{$index+1}}</td>
                                             <td>{{ $teacher->first_name.' '.$teacher->second_name.' '.$teacher->last_name }}</td>
+                                            <td>{{ $teacher->email }}</td>
                                             <td>{{ $teacher->gender }}</td>
                                             <td>{{ $teacher->nationality }}</td>
                                             <td>{{$teacher->phone_number }}</td>
-                                            <td>{{ $teacher->email }}</td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-{{ $teacher->user->isActive ? 'success' : 'danger' }}"
+                                                    data-user-id="{{ $teacher->user->id }}" onclick="#">
+                                                    {{ $teacher->user->isActive ? 'Active' : 'Inactive' }}
+                                                </button>
+                                            </td>
                                             <td>
                                                 <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this)">
                                                     @csrf
@@ -121,30 +129,6 @@
                                 <button type="submit" class="btn btn-primary me-2">Submit</button>
                                 <button type="button" class="btn btn-light" onclick="disableModal()">Cancel</button>
                             </div>
-                            {{-- <h3 class="card-title">Class</h3>
-                            <div class="form-group">
-                                <label for="classSelect">Select Class</label>
-                                <select name="class_id" class="form-control" id="classSelect" required onchange="updateStreams()">
-                                    <option value="">Select a class</option>
-                                    @foreach ($classes as $class)
-                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="streamSelect">Select Stream</label>
-                                <select name="stream" class="form-control" id="streamSelect" required onchange="updateSubjects()">
-                                    <option value="">Select a stream</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="subjectSelect">Select Subject</label>
-                                <select name="subject" class="form-control" id="subjectSelect" required>
-                                    <option value="">Select a subject</option>
-                                </select>
-                            </div> --}}
                         </form>
 
                     </div>

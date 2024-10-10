@@ -246,6 +246,8 @@ class SchoolAdminController extends Controller
         $user->name = $full_name;
         $user->email = $user_email;
         $user->phone = $request->phone_number;
+        $user->isActive = 1;
+        $user->gender = $request->gender;
         $user->location = $request->nationality;
         $user->password = bcrypt('teacher');
         $user->role_id = 4;
