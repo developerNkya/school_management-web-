@@ -15,6 +15,7 @@ use App\Models\Subject;
 use App\Models\Suggestion;
 use App\Models\Teacher;
 use App\Models\User;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -87,7 +88,15 @@ class HelperController extends Controller
                     break;
 
                 case 'assignment':
-                    Assignment::where('id', $request->id)->delete();
+                    $assignment = Assignment::where('id', $request->id)->first();
+
+                    if ($assignment && $assignment->file_path) {
+                        $file_path = storage_path('app/public/' . str_replace('/', DIRECTORY_SEPARATOR, $assignment->file_path));                     
+                        if (file_exists($file_path)) {
+                            unlink($file_path);
+                             $assignment->delete();
+                        } 
+                    }
                     $message = 'assignment';
                     break;
 
@@ -154,12 +163,12 @@ class HelperController extends Controller
             case 4:
                 $row = Teacher::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
-                $counter = email_splitter($row ? $row->email:'');
+                $counter = email_splitter($row ? $row->email : '');
                 break;
             case 3:
                 $row = StudentInfo::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
-                $counter = email_splitter($row ? $row->parent_email:'');
+                $counter = email_splitter($row ? $row->parent_email : '');
                 break;
 
             default:

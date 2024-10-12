@@ -19,6 +19,7 @@
                                         <th>No.</th>
                                         <th>Assignment Name</th>
                                         <th>Assignment Type</th>
+                                        <th>Submission Date</th>
                                         <th>Assigned By</th>
                                         <th>class</th>
                                         <th>Subject</th>
@@ -37,6 +38,7 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $assignment->name }}</td>
                                             <td>{{ $assignment_type }}</td>
+                                            <td>{{ $assignment->submission_date }}</td>
                                             <td>{{ $assignment->sender->name }}</td>
                                             <td>{{ $assignment->class->name }}</td>
                                             <td>{{ $assignment->subject->name }}</td>
