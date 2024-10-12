@@ -17,12 +17,20 @@ class AssignmentController extends Controller
     {
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
-        $assignments = Assignment::with('subject', 'class', 'sender', 'school')
-            ->where('school_id', Auth::user()->school_id)->paginate(10);
-        $totalSize = Assignment::where('school_id', Auth::user()->school_id)
-            ->sum('file_size');
+    
+        $assignmentsQuery = Assignment::with('subject', 'class', 'sender', 'school')
+            ->where('school_id', Auth::user()->school_id);
+    
+        $assignmentsQuery->when(Auth::user()->role_id == 4, function($query) {
+            return $query->where('sender_id', Auth::user()->id);
+        });
+    
+        $assignments = $assignmentsQuery->paginate(10);  
+        $totalSize = $assignmentsQuery->sum('file_size');
+    
         return view('school_admin.assignment_page', compact('subjects', 'classes', 'assignments', 'totalSize'));
     }
+    
 
     public function saveAssignment(Request $request)
     {
