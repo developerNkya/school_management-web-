@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Exam;
 use App\Models\SchoolClass;
@@ -33,6 +34,20 @@ class SchoolAdminController extends Controller
             'total_students' => $total_students,
             'total_subjects' => $total_subjects,
             'suggestions' => $suggestions,
+            'events' => $events
+        ]);
+    }
+
+    public function teacherHome(Request $request)
+    {
+        
+        $assignments = Assignment::where('school_id', Auth::user()->school_id)
+        ->where('sender_id',Auth::user()->id)
+        ->take(3)->get();
+        $events = Event::where('school_id', Auth::user()->school_id)->take(3)->get();
+
+        return view('school_admin.teacher_home', [
+            'assignments' =>$assignments,
             'events' => $events
         ]);
     }

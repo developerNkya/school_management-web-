@@ -57,6 +57,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/filter-students/{name}', [SchoolAdminController::class, 'filterStudents'])->name('filter.students');
     Route::get('/filter-teachers/{name}', [SchoolAdminController::class, 'filterTeachers'])->name('filter.teachers');
     Route::get('/home', [SchoolAdminController::class, 'index']);
+    Route::get('/teacher_home', [SchoolAdminController::class, 'teacherHome']);
     Route::get('/promote-class', [SchoolAdminController::class, 'promoteClass'])->name('promote_class');
     Route::post('/handle-promotion', [SchoolAdminController::class, 'handlePromotion']);
     Route::get('/view-suggestions', [SchoolAdminController::class, 'viewSuggestions']);

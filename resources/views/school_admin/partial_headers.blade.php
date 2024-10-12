@@ -67,6 +67,15 @@
             </li>
             @endif
 
+            @if($role == 4)  
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('school_admin/teacher_home') }}">
+                <i class="mdi mdi-home menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+            @endif
+
             <li class="nav-item nav-category">Contents</li>
             @if($role == 2)  
             <li class="nav-item">
