@@ -23,7 +23,9 @@ class StudentController extends Controller
         $student_info = StudentInfo::with('SchoolClass', 'Section')->where('user_id', Auth::user()->id)
             ->first();
         $events = Event::where('school_id', Auth::user()->school_id)->take(3)->get();
-        $assignments = Assignment::where('school_id', Auth::user()->school_id)->take(3)->get();
+        $assignments = Assignment::where('school_id', Auth::user()->school_id)
+        ->where('class_id', $student_info->class_id)
+        ->take(3)->get();
         return view('student.index', [
             'student_info' => $student_info,
             'events' => $events,
@@ -252,10 +254,16 @@ class StudentController extends Controller
     {
 
         $assignment_type = $request->assignment_type == 'daily-task' ? 'home_work' : $request->assignment_type;
-        $school_id = $request->toJson ? $request->school_id: Auth::user()->school_id;
+        $user_id = $request->toJson ? $request->user_id: Auth::user()->id;
+
+        $student_info = StudentInfo::where('user_id', $user_id)
+        ->first();
+
         $assignments = Assignment::with('sender')
                        ->where('assignment_type',$assignment_type)
-                       ->where('school_id',$school_id)->paginate(10);  
+                       ->where('school_id', $student_info->school_id)
+                       ->where('class_id', $student_info->class_id)
+                       ->paginate(10);  
 
         return  $request->toJson ?  response()->json([
             'success'=>true,
