@@ -299,6 +299,7 @@ class SchoolAdminController extends Controller
                 $query->where('first_name', 'LIKE', "%{$name}%")
                     ->orWhere('middle_name', 'LIKE', "%{$name}%")
                     ->orWhere('registration_no', 'LIKE', "%{$name}%")
+                    ->orWhere('email', 'LIKE', "%{$name}%")
                     ->orWhere('last_name', 'LIKE', "%{$name}%")
                     ->orWhere(DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name)"), 'LIKE', "%{$name}%")
                     ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%{$name}%");
@@ -309,6 +310,25 @@ class SchoolAdminController extends Controller
 
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return response()->json([$student_info, $classes]);
+    }
+
+    public function filterTeachers($name)
+    {
+
+        $teachers = Teacher::with('user')
+            ->where('school_id', Auth::user()->school_id)
+            ->where(function ($query) use ($name) {
+                $query->where('first_name', 'LIKE', "%{$name}%")
+                    ->orWhere('second_name', 'LIKE', "%{$name}%")
+                    ->orWhere('email', 'LIKE', "%{$name}%")
+                    ->orWhere('last_name', 'LIKE', "%{$name}%")
+                    ->orWhere(DB::raw("CONCAT(first_name, ' ', second_name, ' ', last_name)"), 'LIKE', "%{$name}%")
+                    ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%{$name}%");
+            })
+            ->select('teachers.*', DB::raw("CONCAT(first_name, ' ', second_name, ' ', last_name) as full_name"))
+            ->paginate(10);
+
+        return response()->json([$teachers]);
     }
 
     public function handlePromotion(Request $request)

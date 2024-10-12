@@ -11,13 +11,17 @@
                     <div class="card-body">
                         <h4 class="card-title">All Teachers</h4>
                         @include('helpers.message_handler')
+                        <div class="form-group">
+                            <input type="text" id="searchField" class="form-control"
+                                placeholder="Search Teacher by name or email...">
+                        </div>
                         <button type="button" class="btn btn-dark" onclick = "showModal()">Add Teacher +</button>
                         <div class="table-responsive pt-3">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="usersTable">
                                 <thead>
                                     <tr>
                                         <th> No.</th>
-                                        <th>  Names </th>
+                                        <th> Names </th>
                                         <th>Email</th>
                                         <th> Gender</th>
                                         <th> Nationality</th>
@@ -29,14 +33,15 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($teachers as $index=> $teacher)
+                                    @foreach ($teachers as $index => $teacher)
                                         <tr>
-                                            <td>{{$index+1}}</td>
-                                            <td>{{ $teacher->first_name.' '.$teacher->second_name.' '.$teacher->last_name }}</td>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $teacher->first_name . ' ' . $teacher->second_name . ' ' . $teacher->last_name }}
+                                            </td>
                                             <td>{{ $teacher->email }}</td>
                                             <td>{{ $teacher->gender }}</td>
                                             <td>{{ $teacher->nationality }}</td>
-                                            <td>{{$teacher->phone_number }}</td>
+                                            <td>{{ $teacher->phone_number }}</td>
                                             <td>
                                                 <button type="button"
                                                     class="btn btn-{{ $teacher->user->isActive ? 'success' : 'danger' }}"
@@ -45,18 +50,20 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-success" 
-                                                onclick="showPasswordManager('{{ $teacher->user->id }}', '{{ $teacher->first_name }} {{ $teacher->second_name }} {{ $teacher->last_name }}', 'all_teachers_page')">
-                                            Change
-                                        </button>                                        
+                                                <button type="button" class="btn btn-success"
+                                                    onclick="showPasswordManager('{{ $teacher->user->id }}', '{{ $teacher->first_name }} {{ $teacher->second_name }} {{ $teacher->last_name }}', 'all_teachers_page')">
+                                                    Change
+                                                </button>
                                             </td>
-                                            
+
                                             <td>
-                                                <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this)">
+                                                <form action="{{ route('deleteById') }}" method="post"
+                                                    name="deletable" onsubmit="return confirmDelete(this)">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $teacher->id }}">
                                                     <input type="hidden" name="table" value="teacher">
-                                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'teacher')">
+                                                    <button class="btn btn-dark" type="button"
+                                                        onclick="confirmDelete(this,'teacher')">
                                                         <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
                                                     </button>
                                                 </form>
@@ -104,7 +111,7 @@
                                 <input name="last_name" class="form-control" id="lastName" placeholder="Last name"
                                     required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="phoneNumber">Phone Number</label>
                                 <input name="phone_number" class="form-control" id="phoneNumber"
@@ -130,8 +137,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="city">Region</label>
-                                <input name="city" class="form-control" id="city" placeholder="e.g. Springfield"
-                                    required>
+                                <input name="city" class="form-control" id="city"
+                                    placeholder="e.g. Springfield" required>
                             </div>
                             <div class="submit-container" style="margin-top: 10%">
                                 <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -149,12 +156,7 @@
 </div>
 
 
-@include('helpers.password_manager', [
-    'modalId' => 'teacher-password-manager',
-    'page' =>'all_teachers_page',
-    'fullName' => $teacher->first_name . ' ' . $teacher->second_name . ' ' . $teacher->last_name,
-    'postAction' => route('alterPassword'),
-])
+@include('helpers.password_manager')
 
 
 @include('school_admin.partial_footers')
@@ -173,18 +175,65 @@
 
 
     function showPasswordManager(userId, fullName, page) {
-    document.getElementById('password-manager').style.display = 'block';
-    document.getElementById('main-panel').style.display = 'none';
-    document.getElementById('fullName').value = fullName;
-    document.getElementById('page').value = page;
-    document.getElementById('user_id').value = userId; 
+        document.getElementById('password-manager').style.display = 'block';
+        document.getElementById('main-panel').style.display = 'none';
+        document.getElementById('fullName').value = fullName;
+        document.getElementById('page').value = page;
+        document.getElementById('user_id').value = userId;
 
-    event.preventDefault();
-}
-
-
+        event.preventDefault();
+    }
 
 
+    document.getElementById('searchField').addEventListener('keyup', function() {
+        const searchValue = this.value.trim().toLowerCase();
 
+        if (searchValue.length > 0) {
+            fetch(`/school_admin/filter-teachers/${encodeURIComponent(searchValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#usersTable tbody');
+                    tableBody.innerHTML = '';
 
+                    const teachers = data[0].data;
+                    console.log(teachers);
+
+                    teachers.forEach((teacher, index) => {
+                        const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${teacher.full_name}</td>
+                            <td>${teacher.email}</td>
+                            <td>${teacher.gender}</td>
+                            <td>${teacher.nationality}</td>
+                             <td>${teacher.phone_number}</td>
+                            <td>
+                                <button type="button" class="btn btn-${teacher.user.isActive ? 'success' : 'danger'}" data-user-id="${teacher.user.id}">
+                                    ${teacher.user.isActive ? 'Active' : 'Inactive'}
+                                </button>
+                            </td>
+                             <td>
+                                <button type="button" class="btn btn-success" onclick="showPasswordManager('${teacher.user.id}','${teacher.fullName}',, 'all_teachers_page')">
+                                   Change
+                                </button>
+                            </td>
+                            <td>
+                                <form action="/deleteById" method="post" name="deletable" onsubmit="return confirmDelete(this,'teacher')">
+                                    <input type="hidden" name="id" value="${teacher.id}">
+                                    <input type="hidden" name="table" value="teacher">
+                                    <button class="btn btn-dark" type="button" onclick="confirmDelete(this,'teacher')">
+                                        <i class="fa fa-trash-o" style="font-size:20px;color:white"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    `;
+                        tableBody.insertAdjacentHTML('beforeend', row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+        }
+    });
 </script>

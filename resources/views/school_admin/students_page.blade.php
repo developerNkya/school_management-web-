@@ -9,7 +9,7 @@
                         @include('helpers.message_handler')
                         <div class="form-group">
                             <input type="text" id="searchField" class="form-control"
-                                placeholder="Search Student by name or registration no...">
+                                placeholder="Search Student by name,email or registration no...">
                         </div>
                         <button type="button" class="btn btn-dark" onclick = "showModal()">Add Student +</button>
                         <div class="table-responsive pt-3">
@@ -216,20 +216,20 @@
     }
 
     document.getElementById('searchField').addEventListener('keyup', function() {
-    const searchValue = this.value.trim().toLowerCase();
-    
-    if (searchValue.length > 0) {
-        fetch(`/school_admin/filter-students/${encodeURIComponent(searchValue)}`)
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.querySelector('#usersTable tbody');
-                tableBody.innerHTML = ''; // Clear the table
-                
-                const students = data[0].data;
-                console.log(students);
-                
-                students.forEach((student, index) => {
-                    const row = `
+        const searchValue = this.value.trim().toLowerCase();
+
+        if (searchValue.length > 0) {
+            fetch(`/school_admin/filter-students/${encodeURIComponent(searchValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#usersTable tbody');
+                    tableBody.innerHTML = ''; // Clear the table
+
+                    const students = data[0].data;
+                    console.log(students);
+
+                    students.forEach((student, index) => {
+                        const row = `
                         <tr>
                             <td>${index + 1}</td>
                             <td>${student.full_name}</td>
@@ -252,72 +252,72 @@
                             </td>
                         </tr>
                     `;
-                    tableBody.insertAdjacentHTML('beforeend', row);
+                        tableBody.insertAdjacentHTML('beforeend', row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching users:', error);
-            });
+        }
+    });
+
+
+    // multi form::
+    let currentTab = 0;
+    showTab(currentTab);
+
+    function showTab(n) {
+        let x = document.getElementsByClassName("step");
+        x[n].style.display = "block";
+        let progress = (n / (x.length - 1)) * 100;
+        document.querySelector(".progress-bar").style.width = progress + "%";
+        document.querySelector(".progress-bar").setAttribute("aria-valuenow", progress);
+        document.getElementById("prevBtn").style.display = n == 0 ? "none" : "inline";
+        document.getElementById("nextBtn").innerHTML = n == x.length - 1 ? "Submit" : "Next";
     }
-});
 
-
-     // multi form::
-     let currentTab = 0;
+    function nextPrev(n) {
+        let x = document.getElementsByClassName("step");
+        if (n == 1 && !validateForm()) return false;
+        x[currentTab].style.display = "none";
+        currentTab += n;
+        if (currentTab >= x.length) {
+            document.getElementById("studentForm").submit()
+        }
         showTab(currentTab);
+    }
 
-        function showTab(n) {
-            let x = document.getElementsByClassName("step");
-            x[n].style.display = "block";
-            let progress = (n / (x.length - 1)) * 100;
-            document.querySelector(".progress-bar").style.width = progress + "%";
-            document.querySelector(".progress-bar").setAttribute("aria-valuenow", progress);
-            document.getElementById("prevBtn").style.display = n == 0 ? "none" : "inline";
-            document.getElementById("nextBtn").innerHTML = n == x.length - 1 ? "Submit" : "Next";
-        }
-
-        function nextPrev(n) {
-            let x = document.getElementsByClassName("step");
-            if (n == 1 && !validateForm()) return false;
-            x[currentTab].style.display = "none";
-            currentTab += n;
-            if (currentTab >= x.length) {
-              document.getElementById("studentForm").submit()
+    function validateForm() {
+        let valid = true;
+        let x = document.getElementsByClassName("step");
+        let y = x[currentTab].getElementsByTagName("input");
+        for (var i = 0; i < y.length; i++) {
+            if (y[i].value == "") {
+                y[i].className += " invalid";
+                valid = false;
             }
-            showTab(currentTab);
         }
+        return valid;
+    }
 
-        function validateForm() {
-            let valid = true;
-            let x = document.getElementsByClassName("step");
-            let y = x[currentTab].getElementsByTagName("input");
-            for (var i = 0; i < y.length; i++) {
-                if (y[i].value == "") {
-                    y[i].className += " invalid";
-                    valid = false;
-                }
-            }
-            return valid;
+    function resetForm() {
+        let x = document.getElementsByClassName("step");
+        for (var i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
         }
+        let inputs = document.querySelectorAll("input");
+        inputs.forEach(input => {
+            input.value = "";
+            input.className = "";
+        });
+        currentTab = 0;
+        showTab(currentTab);
+        document.querySelector(".progress-bar").style.width = "0%";
+        document.querySelector(".progress-bar").setAttribute("aria-valuenow", 0);
+        document.getElementById("prevBtn").style.display = "none";
+    }
 
-        function resetForm() {
-            let x = document.getElementsByClassName("step");
-            for (var i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            let inputs = document.querySelectorAll("input");
-            inputs.forEach(input => {
-                input.value = "";
-                input.className = "";
-            });
-            currentTab = 0;
-            showTab(currentTab);
-            document.querySelector(".progress-bar").style.width = "0%";
-            document.querySelector(".progress-bar").setAttribute("aria-valuenow", 0);
-            document.getElementById("prevBtn").style.display = "none";
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         // Fetch streams and subjects based on selected class
         function updateStreams() {
             const classId = document.getElementById('classSelect').value;
@@ -325,17 +325,17 @@
             const subjectSelect = document.getElementById('subjectSelect');
 
             if (classId) {
-                console.log('class id',classId);
-                
+                console.log('class id', classId);
+
                 fetch(`/school_admin/get-streams/${classId}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('the response',data);
-                        
+                        console.log('the response', data);
+
                         streamSelect.innerHTML = '<option value="">Select a stream</option>';
                         data.streams.forEach(stream => {
                             streamSelect.innerHTML +=
-                            `<option value="${stream.id}" name="section_id">${stream.name}</option>`;
+                                `<option value="${stream.id}" name="section_id">${stream.name}</option>`;
                         });
                     });
             } else {
@@ -353,6 +353,5 @@
         window.updateStreams = updateStreams;
         window.updateSubjects = updateSubjects;
     });
-   
 </script>
 @include('school_admin.partial_footers')

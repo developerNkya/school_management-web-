@@ -11,7 +11,7 @@
                             <input type="hidden" id="page" name="page" value="">
                             <div class="form-group">
                                 <label for="fullName">Full Name</label>
-                                <input type="text" class="form-control read-only-grey" id="fullName" value="{{ $teacher->first_name }} {{ $teacher->last_name }}" readonly>
+                                <input type="text" class="form-control read-only-grey" id="fullName" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="newPassword">New Password</label>
