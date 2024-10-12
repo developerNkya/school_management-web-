@@ -1,5 +1,10 @@
-@include('school_admin.partial_headers')
 
+<?php
+$value = request()->session()->get('user_name', '');  
+$role = request()->session()->get('role_id', '');  
+?>
+
+@include($role !== 3 ? 'school_admin.partial_headers' : 'student.partial_headers')
 
 <div class="main-panel" id="main-panel">
     <div class="content-wrapper">
@@ -33,4 +38,4 @@
     <!-- partial -->
 </div>
 
-@include('school_admin.partial_footers')
+@include($role !== 3 ? 'school_admin.partial_footers' : 'helpers.partials_footers')
