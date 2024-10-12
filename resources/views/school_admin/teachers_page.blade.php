@@ -23,6 +23,7 @@
                                         <th> Nationality</th>
                                         <th>Phone No</th>
                                         <th>Status</th>
+                                        <th>Password</th>
                                         <th> Action</th>
                                     </tr>
                                 </thead>
@@ -43,6 +44,13 @@
                                                     {{ $teacher->user->isActive ? 'Active' : 'Inactive' }}
                                                 </button>
                                             </td>
+                                            <td>
+                                                <button type="button" class="btn btn-success" 
+                                                onclick="showPasswordManager('{{ $teacher->user->id }}', '{{ $teacher->first_name }} {{ $teacher->second_name }} {{ $teacher->last_name }}', 'all_teachers_page')">
+                                            Change
+                                        </button>                                        
+                                            </td>
+                                            
                                             <td>
                                                 <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this)">
                                                     @csrf
@@ -141,6 +149,14 @@
 </div>
 
 
+@include('helpers.password_manager', [
+    'modalId' => 'teacher-password-manager',
+    'page' =>'all_teachers_page',
+    'fullName' => $teacher->first_name . ' ' . $teacher->second_name . ' ' . $teacher->last_name,
+    'postAction' => route('alterPassword'),
+])
+
+
 @include('school_admin.partial_footers')
 <script>
     function showModal() {
@@ -151,79 +167,24 @@
     function disableModal() {
         document.getElementById('form-modal').style.display = 'none';
         document.getElementById('main-panel').style.display = 'block';
+        document.getElementById('password-manager').style.display = 'none';
         event.preventDefault();
     }
 
-    function addSection() {
-        const container = document.getElementById('sectionsContainer');
 
-        // Create a new section
-        const newSection = document.createElement('div');
-        newSection.classList.add('section-container');
-        newSection.style.display = 'flex';
-        newSection.style.marginBottom = '10px';
+    function showPasswordManager(userId, fullName, page) {
+    document.getElementById('password-manager').style.display = 'block';
+    document.getElementById('main-panel').style.display = 'none';
+    document.getElementById('fullName').value = fullName;
+    document.getElementById('page').value = page;
+    document.getElementById('user_id').value = userId; 
 
-        newSection.innerHTML = `
-      <input name="sections[]" class="form-control" placeholder="Section name">
-      <button type="button" class="btn btn-danger removeBtn" onclick="removeSection(this)" style="margin-left:10px">Remove</button>
-    `;
+    event.preventDefault();
+}
 
-        // Insert the new section before the "Add" button
-        container.insertBefore(newSection, container.lastElementChild);
-    }
 
-    function removeSection(button) {
-        button.parentElement.remove();
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Fetch streams and subjects based on selected class
-        function updateStreams() {
-            const classId = document.getElementById('classSelect').value;
-            const streamSelect = document.getElementById('streamSelect');
-            const subjectSelect = document.getElementById('subjectSelect');
 
-            if (classId) {
-                fetch(`/school_admin/get-streams/${classId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        streamSelect.innerHTML = '<option value="">Select a stream</option>';
-                        data.streams.forEach(stream => {
-                            streamSelect.innerHTML +=
-                            `<option value="${stream}">${stream}</option>`;
-                        });
 
-                        // Clear subjects when class or stream changes
-                        subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-                    });
-            } else {
-                streamSelect.innerHTML = '<option value="">Select a stream</option>';
-                subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-            }
-        }
 
-        function updateSubjects() {
-            const classId = document.getElementById('classSelect').value;
-            const stream = document.getElementById('streamSelect').value;
-            const subjectSelect = document.getElementById('subjectSelect');
-
-            if (classId && stream) {
-                fetch(`/school_admin/get-subjects/${classId}/${stream}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-                        data.subjects.forEach(subject => {
-                            subjectSelect.innerHTML +=
-                                `<option value="${subject}">${subject}</option>`;
-                        });
-                    });
-            } else {
-                subjectSelect.innerHTML = '<option value="">Select a subject</option>';
-            }
-        }
-
-        // Expose functions to global scope
-        window.updateStreams = updateStreams;
-        window.updateSubjects = updateSubjects;
-    });
 </script>

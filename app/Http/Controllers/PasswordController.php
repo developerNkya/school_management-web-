@@ -21,22 +21,24 @@ class PasswordController extends Controller
             'password' => 'required',
             'repeated' => 'required|same:password',
         ];
-
+    
         $validator = Validator::make($request->all(), $rules);
-
+    
         if ($validator->fails()) {
-            return redirect()->route('changePassword')->withErrors($validator)->withInput();
+            $redirectRoute = $request->has('page') && !empty($request->page) ? $request->page : 'changePassword';
+            return redirect()->route($redirectRoute)->withErrors($validator)->withInput();
         }
-
-        $user_id = Auth::user()->id;
-
-       User::where('id',$user_id)
+    
+        $user_id = $request->has('user_id') ? $request->user_id : Auth::user()->id;
+    
+        User::where('id', $user_id)
             ->update([
                 'password' => bcrypt($request->repeated)
             ]);
-
-
-
-        return redirect()->route('changePassword')->with('message', 'Password changed successfully!');
+    
+        $redirectRoute = $request->has('page') && !empty($request->page) ? $request->page : 'changePassword';
+        return redirect()->route($redirectRoute)->with('message', 'Password changed successfully!');
     }
+    
+    
 }
