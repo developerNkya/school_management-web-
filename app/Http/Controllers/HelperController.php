@@ -135,9 +135,7 @@ class HelperController extends Controller
     public static function emailAssigner($user_role)
     {
         $user = Auth::user()->load('School');
-        $school_initial = $user_role == 4 ? strtolower($user->school->initial[0])
-                          :strtolower($user->school->initial); 
-
+        $school_initial = strtolower($user->school->initial);
         $counter = '';
 
         function email_splitter($row)
@@ -165,12 +163,11 @@ class HelperController extends Controller
                 break;
 
             default:
-                # code...
                 break;
         }
 
         $counter = str_pad($counter, 4, '0', STR_PAD_LEFT);
-        $assigned_email = "{$counter}@{$school_initial}";
+        $assigned_email = $user_role == 4 ? "t{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
         return $assigned_email;
 
     }
