@@ -1,5 +1,8 @@
 @include('school_admin.partial_headers')
-
+<?php
+$value = request()->session()->get('user_name', '');  
+$role = request()->session()->get('role_id', '');  
+?>
 <div class="main-panel" id="main-panel">
     <div class="content-wrapper">
         <div class="row">
@@ -8,7 +11,9 @@
                     <div class="card-body">
                         <h4 class="card-title">All Events</h4>
                         @include('helpers.message_handler')
+                        @if($role == 2)  
                         <button type="button" class="btn btn-dark" onclick="showModal()">Add Event +</button>
+                        @endif
                         <div class="table-responsive pt-3">
                             <div style="overflow-x: auto;">
                                 <table class="table table-bordered" style="width: 100%; table-layout: fixed;">
@@ -19,7 +24,9 @@
                                             <th style="width: 100px;">Date</th>
                                             <th style="width: 100px;">Cost</th>
                                             <th style="width: 400px; word-wrap: break-word; white-space: normal;">Description</th>
+                                            @if($role == 2)  
                                             <th style="width: 100px;">Action</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -30,6 +37,7 @@
                                             <td style="width: 100px;">{{ $event->event_date }}</td>
                                             <td style="width: 100px;">{{ $event->cost }}</td>
                                             <td style="width: 400px; word-wrap: break-word; white-space: normal;">{{ $event->description }}</td>
+                                            @if($role == 2)  
                                             <td>
                                                 <form action="{{ route('deleteById') }}" method="post" name="deletable" onsubmit="return confirmDelete(this,'event')">
                                                     @csrf
@@ -40,6 +48,7 @@
                                                     </button>
                                                 </form>
                                             </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -65,6 +74,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Add Event</h4>
+
                         <form class="forms-sample" method="POST" action="{{ route('events.store') }}">
                             @csrf
                             <div class="form-group">
