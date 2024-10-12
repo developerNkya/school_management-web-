@@ -22,6 +22,7 @@
                                         <th> Registration No </th>
                                         <th> Class </th>
                                         <th>Status</th>
+                                        <th>Password</th>
                                         <th> Action</th>
                                     </tr>
                                 </thead>
@@ -38,6 +39,12 @@
                                                     class="btn btn-{{ $student->user->isActive ? 'success' : 'danger' }}"
                                                     data-user-id="{{ $student->user->id }}" onclick="#">
                                                     {{ $student->user->isActive ? 'Active' : 'Inactive' }}
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-success"
+                                                    onclick="showPasswordManager('{{ $student->user->id }}', '{{ $student->full_name }}', 'add_student_page')">
+                                                    Change
                                                 </button>
                                             </td>
                                             <td>
@@ -192,6 +199,7 @@
     </div>
 </div>
 
+@include('helpers.password_manager')
 
 <script>
     function showModal() {
@@ -212,6 +220,7 @@
     function disableModal() {
         document.getElementById('form-modal').style.display = 'none';
         document.getElementById('main-panel').style.display = 'block';
+        document.getElementById('password-manager').style.display = 'none';
         event.preventDefault();
     }
 
@@ -353,5 +362,15 @@
         window.updateStreams = updateStreams;
         window.updateSubjects = updateSubjects;
     });
+
+    function showPasswordManager(userId, fullName, page) {
+        document.getElementById('password-manager').style.display = 'block';
+        document.getElementById('main-panel').style.display = 'none';
+        document.getElementById('fullName').value = fullName;
+        document.getElementById('page').value = page;
+        document.getElementById('user_id').value = userId;
+
+        event.preventDefault();
+    }
 </script>
 @include('school_admin.partial_footers')
