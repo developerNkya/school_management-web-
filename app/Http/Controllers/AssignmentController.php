@@ -40,11 +40,12 @@ class AssignmentController extends Controller
                 'subject_id' => 'required|exists:subjects,id',
                 'class_id' => 'required|exists:classes,id',
                 'submission_date' => 'required|date',
-                'assignment_file' => 'required|file|max:1024'
+                'assignment_file' => 'required|mimes:pdf|max:1024'
             ],
             [
                 'assignment_file.required' => 'Please upload a file.',
                 'assignment_file.max' => 'The uploaded file should not be more than 1MB!',
+                'assignment_file.mimes' => 'The apploaded file should be in form of PDF!',
             ]
         );
         
