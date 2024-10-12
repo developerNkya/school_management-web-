@@ -39,7 +39,7 @@ class AssignmentController extends Controller
                 'assignment_name' => 'required|string|max:255',
                 'subject_id' => 'required|exists:subjects,id',
                 'class_id' => 'required|exists:classes,id',
-                'submission_date' => 'required|date',
+                'submission_date' => 'required|date|after_or_equal:today',
                 'assignment_file' => 'required|mimes:pdf|max:1024'
             ],
             [
