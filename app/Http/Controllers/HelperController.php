@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Exam;
 use App\Models\ExamClass;
 use App\Models\ExamSubject;
+use App\Models\Grade;
 use App\Models\Mark;
 use App\Models\SchoolClass;
 use App\Models\StudentInfo;
@@ -110,6 +111,11 @@ class HelperController extends Controller
                     AttendenceData::where('attendence_id', $request->id)->delete();
                     Attendence::where('id', $request->id)->delete();
                     $message = 'attendance';
+                    break;
+
+                case 'grade':
+                    Grade::where('id',$request->id)->delete();
+                    $message = 'grade';
                     break;
 
                 default:

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Exam;
+use App\Models\Grade;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\StudentInfo;
@@ -81,6 +82,45 @@ class SchoolAdminController extends Controller
         $exams = Exam::where('school_id', Auth::user()->school_id)->paginate(10);
 
         return view('school_admin.examinations_page', ['exams' => $exams, 'classes' => $classes, 'subjects' => $subjects]);
+    }
+
+    public function gradesPage(Request $request)
+    {
+
+        $grades = Grade::where('school_id',Auth::user()->school_id)->paginate(10);
+        return view('school_admin.grades_page', ['grades' => $grades]);
+    }
+
+    public function addGrade(Request $request)
+    {
+
+        $rules = [
+            'from' => 'required|numeric|min:0|max:100',
+            'to' => 'required|numeric|min:0|max:100|gt:from',
+            'grade' => 'required|string|max:255',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->route('all_grades_page')->withErrors($validator)->withInput();
+        }
+
+        if (
+            Grade::where('school_id', Auth::user()->school_id)
+                ->where('from', '=', $request->from)
+                ->where('to', '=', $request->to)
+                ->exists()
+        ) {
+            return redirect()->route('all_grades_page')->withErrors('Similar grades already exists!')->withInput();
+        }
+
+        $grade = new Grade();
+        $grade->from = $request->from;
+        $grade->to = $request->to;
+        $grade->grade = $request->grade;
+        $grade->school_id = Auth::user()->school_id;
+        $grade->save();
+        return redirect()->route('all_grades_page')->with('message', 'Grade added successfully!');
+
     }
 
     public function subjectsPage(Request $request)
