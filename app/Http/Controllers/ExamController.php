@@ -25,6 +25,14 @@ class ExamController extends Controller
             'start_date' => 'required|date',
         ]);
 
+        if (
+            Exam::where('name', $request->input('name'))
+                ->where('school_id', Auth::user()->school_id)
+                ->exists()
+        ) {
+            return redirect()->back()->withErrors(['error' => 'Examination name provided is already used!']);
+        }
+
         $exam = Exam::create([
             'name' => $request->input('name'),
             'start_date' => $request->input('start_date'),
@@ -118,8 +126,8 @@ class ExamController extends Controller
         if ($selectedExamId && $selectedSubjectId) {
             if ($selectedClassId) {
                 $students = StudentInfo::where('class_id', $selectedClassId)
-                ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
-                ->get();            
+                    ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+                    ->get();
                 $class_name = $students->first()->class->name ?? '';
             }
 
@@ -175,31 +183,31 @@ class ExamController extends Controller
 
         if ($selectedExamId && $selectedClassId) {
             $students = StudentInfo::where('class_id', $selectedClassId)
-            ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
-            ->get();
-        
-                $class_name = $students->first()->class->name ?? '';
-                $marks = Mark::where('exam_id', $selectedExamId)
-                    ->whereIn('student_id', $students->pluck('id'))
-                    ->get()
-                    ->groupBy('student_id');
+                ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+                ->get();
 
-                if ($marks->isEmpty()) {
-                    return redirect()->back()->withErrors(['error' => 'Marks Not found for this exam!'])->withInput();
-                }
+            $class_name = $students->first()->class->name ?? '';
+            $marks = Mark::where('exam_id', $selectedExamId)
+                ->whereIn('student_id', $students->pluck('id'))
+                ->get()
+                ->groupBy('student_id');
 
-                foreach ($students as $student) {
-                    $studentMarks = $marks->get($student->id, collect());
-                    $totalMarks = $studentMarks->sum('marks');
-                    $subjectCount = $studentMarks->count();
-                    $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
-                    $student->average = round($average, 2);
-                }
-                $students = $students->sortByDesc('average')->values();
-                $position = 1;
-                foreach ($students as $student) {
-                    $student->position = $position++;
-                }
+            if ($marks->isEmpty()) {
+                return redirect()->back()->withErrors(['error' => 'Marks Not found for this exam!'])->withInput();
+            }
+
+            foreach ($students as $student) {
+                $studentMarks = $marks->get($student->id, collect());
+                $totalMarks = $studentMarks->sum('marks');
+                $subjectCount = $studentMarks->count();
+                $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
+                $student->average = round($average, 2);
+            }
+            $students = $students->sortByDesc('average')->values();
+            $position = 1;
+            foreach ($students as $student) {
+                $student->position = $position++;
+            }
 
         }
         return view('school_admin.tabulation', compact(

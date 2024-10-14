@@ -1,7 +1,66 @@
 @include('school_admin.partial_headers')
 
-
 <div class="main-panel" id="main-panel">
+
+
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">All Examinations</h4>
+                        @include('helpers.message_handler')
+                        <button type="button" class="btn btn-dark" onclick = "showModal()">Add Exam +</button>
+                        <div class="table-responsive pt-3">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> No.</th>
+                                        <th> Name </th>
+                                        <th> Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($attendences as $index => $attendence)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $attendence->attendance_name }}</td>
+                                            <td>
+                                                <div class="flexer">
+                                                    <form action="{{ route('deleteById') }}" method="post"
+                                                        name="deletable" onsubmit="return confirmDelete(this,'attendance')">
+                                                        @csrf
+                                                        <input type="hidden" name="id"
+                                                            value="{{ $attendence->id }}">
+                                                        <input type="hidden" name="table" value="attendance">
+                                                        <button class="btn btn-dark" type="button"
+                                                            onclick="confirmDelete(this,'attendance')">
+                                                            <i class="fa fa-trash-o"
+                                                                style="font-size:20px;color:white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <?php
+                    $paginated = $attendences;
+                    ?>
+                    @include('helpers.paginator')
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('helpers.copyright')
+    <!-- partial -->
+</div>
+
+<div class="main-panel" id="form-modal" style="display: none;">
 
     <div class="content-wrapper">
         <div class="row">

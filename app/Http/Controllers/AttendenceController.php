@@ -17,7 +17,9 @@ class AttendenceController extends Controller
 {
     public function createNew(Request $request)
     {
-        return view('school_admin.create_attendence');
+       $attendences =  Attendence::where('school_id',Auth::user()->school_id)
+        ->paginate(10);
+        return view('school_admin.create_attendence',compact('attendences'));
     }
 
     public function newAttendence(Request $request)
@@ -28,6 +30,14 @@ class AttendenceController extends Controller
             'attendance_type' => 'required|in:per_day,per_subject',
             'school_id' => 'required|exists:schools,id',
         ]);
+
+        if (
+            Attendence::where('attendance_name', $request->input('attendance_name'))
+                ->where('school_id', Auth::user()->school_id)
+                ->exists()
+        ) {
+            return redirect()->back()->withErrors(['error' => 'Attendance name provided is already used!']);
+        }
 
         Attendence::create([
             'attendance_name' => $request->input('attendance_name'),

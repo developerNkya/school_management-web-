@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
+use App\Models\Attendence;
 use App\Models\AttendenceData;
 use App\Models\Event;
 use App\Models\Exam;
@@ -91,11 +92,11 @@ class HelperController extends Controller
                     $assignment = Assignment::where('id', $request->id)->first();
 
                     if ($assignment && $assignment->file_path) {
-                        $file_path = storage_path('app/public/' . str_replace('/', DIRECTORY_SEPARATOR, $assignment->file_path));                     
+                        $file_path = storage_path('app/public/' . str_replace('/', DIRECTORY_SEPARATOR, $assignment->file_path));
                         if (file_exists($file_path)) {
                             unlink($file_path);
-                             $assignment->delete();
-                        } 
+                            $assignment->delete();
+                        }
                     }
                     $message = 'assignment';
                     break;
@@ -103,6 +104,12 @@ class HelperController extends Controller
                 case 'driver':
                     User::where('id', $request->id)->delete();
                     $message = 'driver';
+                    break;
+
+                case 'attendance':
+                    AttendenceData::where('attendence_id', $request->id)->delete();
+                    Attendence::where('id', $request->id)->delete();
+                    $message = 'attendance';
                     break;
 
                 default:
