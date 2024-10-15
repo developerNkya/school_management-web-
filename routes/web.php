@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusManagementController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ResultController;
@@ -47,6 +48,8 @@ Route::group(['prefix' => 'super_admin'], function () {
     Route::get('/schools', [SuperAdminController::class, 'schoolPage'])->name('add_school_page');
     Route::get('/roles', [SuperAdminController::class, 'rolesPage']);
     Route::get('/activation-page', [SuperAdminController::class, 'activationPage'])->name('activationPage');
+    Route::get('/payments', [SuperAdminController::class, 'payments'])->name('payments');
+    Route::post('/update_payment', [SuperAdminController::class, 'updatePayment'])->name('update_payments');
     Route::get('/filter-users/{name}', [SuperAdminController::class, 'filterUsers'])->name('filter.users');
     Route::post('/alter-user-status/{id}', [SuperAdminController::class, 'alterUserStatus'])->name('alter.user.status');
 });
@@ -59,6 +62,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/home', [SchoolAdminController::class, 'index']);
     Route::get('/teacher_home', [SchoolAdminController::class, 'teacherHome']);
     Route::get('/promote-class', [SchoolAdminController::class, 'promoteClass'])->name('promote_class');
+    Route::get('/finance', [FinanceController::class, 'financePage'])->name('finance');
     Route::post('/handle-promotion', [SchoolAdminController::class, 'handlePromotion']);
     Route::get('/view-suggestions', [SchoolAdminController::class, 'viewSuggestions']);
     Route::post('/add-class', [SchoolAdminController::class, 'addClass']);

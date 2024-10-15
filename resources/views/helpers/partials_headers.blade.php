@@ -83,7 +83,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="/#ui-activate" aria-expanded="false" aria-controls="ui-activate">
-                <i class="menu-icon mdi mdi-floor-plan"></i>
+                <i class="menu-icon mdi mdi-account-reactivate"></i>
                 <span class="menu-title">Activate</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -92,6 +92,12 @@
                   <li class="nav-item"> <a class="nav-link" href="/{{'super_admin/activation-page'}}">Activate</a></li>
                 </ul>
               </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/{{'super_admin/payments'}}">
+                <i class="menu-icon mdi mdi-currency-usd"></i>
+                <span class="menu-title">Update Payment</span>
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/">

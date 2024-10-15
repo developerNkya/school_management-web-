@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finance;
 use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -89,6 +90,40 @@ class SuperAdminController extends Controller
 
         $users = User::with('role')->paginate(10);
         return view('super_admin.activationPage', compact('users'));
+    }
+
+    public function payments(Request $request)
+    {
+        $schools =   School::select('school_name','id')->get();
+        return view('super_admin.payments',['schools'=>$schools]);
+    }
+    
+    public function updatePayment(Request $request)
+    {
+        $validated = $request->validate([
+            'school_id' => 'required|exists:schools,id',
+            'last_payment' => 'required|numeric',
+            'last_payment_date' => 'required|date',
+            'pending_balance' => 'required|numeric',
+            'next_payment_date' => 'required|date',
+            'next_payment_amount' => 'required|numeric',
+        ]);
+
+        $paymentData = [
+            'last_payment' => $validated['last_payment'],
+            'last_payment_date' => $validated['last_payment_date'],
+            'pending_balance' => $validated['pending_balance'],
+            'next_payment_date' => $validated['next_payment_date'],
+            'next_payment_amount' => $validated['next_payment_amount'],
+            'school_id' => $validated['school_id'],
+        ];
+
+        $payment = Finance::updateOrCreate(
+            ['school_id' => $validated['school_id']],
+            $paymentData
+        );
+
+        return redirect()->back()->with('message', 'Payment information updated successfully!');
     }
 
 

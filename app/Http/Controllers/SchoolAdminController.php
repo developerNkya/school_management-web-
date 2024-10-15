@@ -52,7 +52,6 @@ class SchoolAdminController extends Controller
             'events' => $events
         ]);
     }
-
     public function classPage(Request $request)
     {
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->paginate(10);

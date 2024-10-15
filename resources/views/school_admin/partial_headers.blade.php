@@ -239,6 +239,12 @@
                 </ul>
               </div>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{'/school_admin/finance'}}">
+                <i class="menu-icon mdi mdi-currency-usd"></i>
+                <span class="menu-title">Finance</span>
+              </a>
+            </li>
             @endif
             <li class="nav-item">
               <a class="nav-link" href="{{'/passwords/change-password'}}">
