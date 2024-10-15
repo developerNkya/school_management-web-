@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendSms;
 use App\Models\Exam;
+use App\Models\Grade;
 use App\Models\Mark;
 use App\Models\ResultSent;
 use App\Models\SchoolClass;
@@ -73,8 +74,8 @@ class ResultController extends Controller
         $exam_name = $selectedExam->name;
     
         $students = StudentInfo::where('class_id', $selectedClassId)
-        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
-        ->get();
+            ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+            ->get();
     
         if ($students->isEmpty()) {
             return redirect()->route('sendResultsPage')->withErrors('Sorry, no students found for the selected class!')->withInput();
@@ -89,7 +90,7 @@ class ResultController extends Controller
             return redirect()->route('sendResultsPage')->withErrors('Marks not found for this exam!')->withInput();
         }
     
-        foreach ($students as $student) {
+        foreach ($students as $key => $student) {
             $studentMarks = $marks->get($student->id, collect());
             $totalMarks = $studentMarks->sum('marks');
             $subjectCount = $studentMarks->count();
@@ -110,12 +111,11 @@ class ResultController extends Controller
     
             $formattedPhone = HelperController::formatPhoneNumber($student->parent_phone);
             if ($formattedPhone) {
-                $sentMessage = "Habari Mzazi wa {$student->full_name}, matokeo ya mtoto wako katika mtihani wa $exam_name ni: $subjectMarks. Wastani: {$student->average}. Asante.";
-                SendSms::dispatch($formattedPhone, $sentMessage)->delay(now()->addSeconds(10));
+                $sentMessage = "MATOKEO - $exam_name ni: $subjectMarks. Wastani: {$student->average}. Asante.";
+                SendSms::dispatch($formattedPhone, $sentMessage)->delay(now()->addSeconds(6 * $key));
             }
         }
     
-        
         ResultSent::insert([
             'exam_id' => $selectedExamId,
             'class_id' => $selectedClassId,
@@ -127,6 +127,8 @@ class ResultController extends Controller
     
         return redirect()->route('sendResultsPage')->with('message', 'Exams sent to parents successfully!');
     }
+    
+    
     
 
 

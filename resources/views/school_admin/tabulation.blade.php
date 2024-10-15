@@ -57,19 +57,25 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $student->full_name }}</td>
                                             <td>{{ $student->registration_no }}</td>
+                        
                                             @foreach ($subjects as $subject)
-                                            @php
-                                                $studentMarks = collect($marks[$student->id])->firstWhere('subject_id', $subject->id);
-                                            @endphp
-                                            <td>{{ $studentMarks->marks ?? 'N/A' }}</td>
+                                                @php
+                                                    $studentMarks = collect($marks[$student->id])->firstWhere('subject_id', $subject->id);
+                                                @endphp
+                                                
+                                                <td>
+                                                    {{ $studentMarks ? $studentMarks->formattedMarks : '-' }}
+                                                </td>
                                             @endforeach
+                                            
                                             <td>{{ number_format($student->average, 2) }}</td>
                                             <td>{{ $student->position }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>              
+                        </div>
+                                      
                         @endif
                     </div>
                 </div>

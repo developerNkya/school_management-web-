@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grade;
 use App\Models\SchoolClass;
 use App\Models\StudentInfo;
 use DB;
@@ -158,17 +159,18 @@ class ExamController extends Controller
     {
         $schoolId = Auth::user()->school_id;
         $exams = Exam::where('school_id', $schoolId)->get();
-
+    
         $classes = collect();
         $subjects = collect();
         $students = collect();
         $marks = collect();
         $class_name = '';
         $exam_name = '';
-
+    
         $selectedExamId = $request->input('exam_id');
         $selectedClassId = $request->input('class_id');
-
+        $grades = Grade::where('school_id',Auth::user()->school_id)->get();
+    
         if ($selectedExamId) {
             $selectedExam = Exam::where('id', $selectedExamId)
                 ->where('school_id', $schoolId)
@@ -180,36 +182,48 @@ class ExamController extends Controller
                 $exam_name = $selectedExam->name;
             }
         }
-
+    
         if ($selectedExamId && $selectedClassId) {
             $students = StudentInfo::where('class_id', $selectedClassId)
                 ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
                 ->get();
-
+    
             $class_name = $students->first()->class->name ?? '';
             $marks = Mark::where('exam_id', $selectedExamId)
                 ->whereIn('student_id', $students->pluck('id'))
                 ->get()
                 ->groupBy('student_id');
-
+    
             if ($marks->isEmpty()) {
                 return redirect()->back()->withErrors(['error' => 'Marks Not found for this exam!'])->withInput();
             }
-
+    
             foreach ($students as $student) {
                 $studentMarks = $marks->get($student->id, collect());
                 $totalMarks = $studentMarks->sum('marks');
                 $subjectCount = $studentMarks->count();
                 $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
                 $student->average = round($average, 2);
+                foreach ($studentMarks as $mark) {
+                    $grade = $grades->first(function ($grade) use ($mark) {
+                        return $mark->marks >= $grade->from && $mark->marks <= $grade->to;
+                    });
+                    if ($grade) {
+                        $mark->formattedMarks = "{$mark->marks}({$grade->grade})";
+                    } else {
+                        $mark->formattedMarks = "{$mark->marks}";
+                    }
+                }
             }
+            
+    
             $students = $students->sortByDesc('average')->values();
             $position = 1;
             foreach ($students as $student) {
                 $student->position = $position++;
             }
-
         }
+    
         return view('school_admin.tabulation', compact(
             'classes',
             'exams',
@@ -220,7 +234,7 @@ class ExamController extends Controller
             'exam_name'
         ));
     }
-
+    
 
     public function examDetails($id)
     {
