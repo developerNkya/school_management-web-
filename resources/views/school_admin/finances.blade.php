@@ -24,11 +24,11 @@
                                 <tbody>
                                     @foreach ($finances as $index => $finance)
                                         <tr>
-                                            <td>{{ $finance->last_payment }}</td>
+                                            <td>{{ @number_format($finance->last_payment, 0, '.', ',') }}</td>
                                             <td>{{ $finance->last_payment_date }}</td>
-                                            <td>{{ $finance->pending_balance }}</td>      
-                                            <td>{{ $finance->next_payment_date }}</td>   
-                                            <td>{{ $finance->next_payment_amount }}</td>                                       
+                                            <td>{{ @number_format($finance->pending_balance, 0, '.', ',') }}</td>      
+                                            <td>{{ $finance->next_payment_date }}</td> 
+                                            <td>{{@number_format($next_payment, 0, '.', ',')}}</td>  
                                         </tr>
                                     @endforeach
                                 </tbody>
