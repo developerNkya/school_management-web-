@@ -8,9 +8,9 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">All Examinations</h4>
+                        <h4 class="card-title">All Attendances</h4>
                         @include('helpers.message_handler')
-                        <button type="button" class="btn btn-dark" onclick = "showModal()">Add Exam +</button>
+                        <button type="button" class="btn btn-dark" onclick = "showModal()">Add Atteandance +</button>
                         <div class="table-responsive pt-3">
                             <table class="table table-bordered">
                                 <thead>

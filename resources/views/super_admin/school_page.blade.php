@@ -17,6 +17,7 @@
                                         <th>School Name</th>
                                         <th>initial</th>
                                         <th>Manager</th>
+                                        <th>Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -26,6 +27,7 @@
                                             <td>{{ $school->school_name }}</td>
                                             <td>{{ $school->initial }}</td>
                                             <td>{{ $school->owner->name }}</td>
+                                            <td>{{ $school->owner->email }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
