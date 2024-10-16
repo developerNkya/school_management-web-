@@ -9,6 +9,7 @@ use App\Models\AttendenceData;
 use App\Models\Event;
 use App\Models\Exam;
 use App\Models\ExamSubject;
+use App\Models\Grade;
 use App\Models\Mark;
 use App\Models\StudentInfo;
 use App\Models\Subject;
@@ -61,7 +62,8 @@ class StudentController extends Controller
     public function marks(Request $request)
     {
         $user_id = $request->toJson ? $request->user_id : Auth::user()->id;
-
+        $school_id = $request->toJson ? $request->school_id : Auth::user()->school_id;
+    
         $student = StudentInfo::where('user_id', $user_id)->first();
         if (!$student && !$request->toJson) {
             return redirect()->back()->with('error', 'Student not found');
@@ -71,23 +73,26 @@ class StudentController extends Controller
                 'message' => 'Student not found'
             ]);
         }
+
         $exam_list = Mark::where('student_id', $student->id)->pluck('exam_id')->unique();
         $exams = Exam::whereIn('id', $exam_list)->get(['id', 'name']);
         $exam = null;
         $marks = collect();
         $students = collect();
         $subjects = collect();
-
+        $grades = Grade::where('school_id', $school_id)->get();
+    
         if ($request->has('exam_id')) {
             $exam_id = $request->input('exam_id');
             $exam = Exam::find($exam_id);
-
+    
             if ($exam) {
                 $marks = Mark::where('exam_id', $exam_id)
                     ->where('student_id', $student->id)
                     ->with('subject')
                     ->get()
                     ->groupBy('student_id');
+    
 
                 $students = StudentInfo::where('id', $student->id)->get();
                 foreach ($students as $student) {
@@ -95,14 +100,25 @@ class StudentController extends Controller
                     $totalMarks = $studentMarks->sum('marks');
                     $subjectCount = $studentMarks->count();
                     $average = $subjectCount > 0 ? $totalMarks / $subjectCount : 0;
-
+    
                     $student->average = round($average, 2);
+                    foreach ($studentMarks as $mark) {
+                        $grade = $grades->first(function ($grade) use ($mark) {
+                            return $mark->marks >= $grade->from && $mark->marks <= $grade->to;
+                        });
+                        if ($grade) {
+                            $mark->formattedMarks = "{$mark->marks} ({$grade->grade})";
+                        } else {
+                            $mark->formattedMarks = "{$mark->marks}";
+                        }
+                    }
                 }
+    
                 $studentIds = $marks->keys();
                 $subjects = ExamSubject::with('subjects')->where('exam_id', $exam_id)->get();
             }
         }
-
+    
         return $request->toJson ? response()->json([
             'success' => true,
             'data' => [
@@ -113,14 +129,14 @@ class StudentController extends Controller
                 'subjects' => $subjects
             ],
         ]) : view('student.marks', [
-                'exams' => $exams,
-                'exam' => $exam,
-                'marks' => $marks,
-                'students' => $students,
-                'subjects' => $subjects
-            ]);
-
+            'exams' => $exams,
+            'exam' => $exam,
+            'marks' => $marks,
+            'students' => $students,
+            'subjects' => $subjects
+        ]);
     }
+    
 
 
 

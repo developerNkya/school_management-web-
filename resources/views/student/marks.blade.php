@@ -58,7 +58,7 @@
                                                     @php
                                                         $studentMarks = $marks->get($student->id)->firstWhere('subject_id', $subject->subjects->id);
                                                     @endphp
-                                                    <td>{{ $studentMarks->marks ?? 'N/A' }}</td>
+                                                    <td>{{ $studentMarks->formattedMarks ?? 'N/A' }}</td>
                                                     {{-- <td>{{$studentMarks}}</td> --}}
                                                 @endforeach
                                                 <td>{{ number_format($student->average, 2) }}</td>
