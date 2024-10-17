@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Attendence;
 use App\Models\AttendenceData;
+use App\Models\Driver;
 use App\Models\Event;
 use App\Models\Exam;
 use App\Models\ExamClass;
@@ -114,7 +115,7 @@ class HelperController extends Controller
                     break;
 
                 case 'grade':
-                    Grade::where('id',$request->id)->delete();
+                    Grade::where('id', $request->id)->delete();
                     $message = 'grade';
                     break;
 
@@ -159,6 +160,7 @@ class HelperController extends Controller
         $user = Auth::user()->load('School');
         $school_initial = strtolower($user->school->initial);
         $counter = '';
+        $role_var = '';
 
         function email_splitter($row)
         {
@@ -177,11 +179,18 @@ class HelperController extends Controller
                 $row = Teacher::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
                 $counter = email_splitter($row ? $row->email : '');
+                $role_var = 't';
                 break;
             case 3:
                 $row = StudentInfo::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
                 $counter = email_splitter($row ? $row->parent_email : '');
+                break;
+            case 5:
+                $row = Driver::where('school_id', $user->school_id)
+                    ->orderBy('created_at', 'desc')->first();
+                $counter = email_splitter($row ? $row->email : '');
+                $role_var = 'd';
                 break;
 
             default:
@@ -189,7 +198,7 @@ class HelperController extends Controller
         }
 
         $counter = str_pad($counter, 4, '0', STR_PAD_LEFT);
-        $assigned_email = $user_role == 4 ? "t{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
+        $assigned_email = $user_role !=3 ? "{$role_var}{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
         return $assigned_email;
 
     }
