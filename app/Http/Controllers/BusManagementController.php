@@ -80,7 +80,7 @@ class BusManagementController extends Controller
             'attendance_date' => 'required|date',
             'stage' => 'required|string|in:onboarding,offloadSchool,onboardHome,offloadHome',
         ]);
-        
+
         $attendanceData = [
             'driver_id' => $validated['driver_id'],
             'student_ids' => json_encode($validated['student_ids']),
@@ -89,50 +89,69 @@ class BusManagementController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ];
-    
+
+        if (empty($request->driver_activity)) {
+            Driver::where('user_id', $request->driver_id)
+            ->update([
+                'activity' =>$validated['stage'],
+            ]);
+        }
+        
         foreach ($validated['student_ids'] as $studentId) {
             StudentInfo::where('registration_no', $studentId)
                 ->update([
-                    'location' => $validated['stage'],
+                    'activity' => $validated['stage'],
                     'driver_id' => $validated['driver_id'],
                 ]);
         }
-    
-
+        
         return response()->json([
             'success' => true,
             'message' => 'Attendance Recorded',
         ]);
     }
-    
-    
+
     public function driverAttendance(Request $request)
     {
-        $driver_attendance = StudentInfo::with('SchoolClass')
-            ->where('school_id', $request->school_id)
-            ->where('driver_id', $request->driver_id)
-            ->paginate(10);
+        $activity = Driver::where('user_id', $request->driver_id)->value('activity');
 
-        if($request->toJson){
+        $query = StudentInfo::with('SchoolClass')
+            ->where('school_id', $request->school_id)
+            ->where('driver_id', $request->driver_id);
+
+        if (!empty($activity)) {
+            $query->where('activity', $activity);
+        } else {
+            $query->where(function ($q) {
+                $q->whereNull('activity')
+                    ->orWhere('activity', 'onboarding');
+            });
+        }
+
+        $driver_attendance = $query->paginate(10);
+
+        if ($request->toJson) {
             return response()->json([
                 'success' => true,
-                'driver_attendance' => $driver_attendance
+                'driver_attendance' => $driver_attendance,
+                'activity' => $activity
             ]);
         }
 
         // return view('bus_management.all_drivers', ['drivers' => $drivers]);
     }
 
-    
+
+
     public function updateActivity(Request $request)
     {
-            Driver::where('user_id', $request->driver_id)
-              ->where('school_id', $request->school_id)
-              ->update([
+        Driver::where('user_id', $request->driver_id)
+            ->where('school_id', $request->school_id)
+            ->update([
                 'activity' => $request->activity,
             ]);
 
-        if($request->toJson){
+        if ($request->toJson) {
             return response()->json([
                 'success' => true,
                 'data' => 'Activity updated successfully'
