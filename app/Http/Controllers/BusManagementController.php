@@ -123,4 +123,23 @@ class BusManagementController extends Controller
         // return view('bus_management.all_drivers', ['drivers' => $drivers]);
     }
 
+    
+    public function updateActivity(Request $request)
+    {
+            Driver::where('user_id', $request->driver_id)
+              ->where('school_id', $request->school_id)
+              ->update([
+                'activity' => $request->activity,
+            ]);
+
+        if($request->toJson){
+            return response()->json([
+                'success' => true,
+                'data' => 'Activity updated successfully'
+            ]);
+        }
+
+        // return view('bus_management.all_drivers', ['drivers' => $drivers]);
+    }
+
 }

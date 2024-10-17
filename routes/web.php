@@ -134,6 +134,7 @@ Route::group(['prefix' => 'bus-management'], function () {
     Route::post('/add-driver', [BusManagementController::class, 'addDriver']);
     Route::post('/daily-bus-attendance', [BusManagementController::class, 'dailyBusAttendance']);
     Route::get('/driver-attendance', [BusManagementController::class, 'driverAttendance']);
+    Route::get('/update-activity', [BusManagementController::class, 'updateActivity']);
 })->middleware('auth');
 
 

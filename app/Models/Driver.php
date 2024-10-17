@@ -19,5 +19,6 @@ class Driver extends Model
         'email',
         'user_id',
         'school_id',
+        'activity'
     ];
 }
