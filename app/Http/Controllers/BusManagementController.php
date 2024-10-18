@@ -73,6 +73,7 @@ class BusManagementController extends Controller
 
     public function dailyBusAttendance(Request $request)
     {
+
         $validated = $request->validate([
             'driver_id' => 'required|integer|exists:users,id',
             'student_ids' => 'required|array',
@@ -90,13 +91,15 @@ class BusManagementController extends Controller
             'updated_at' => now(),
         ];
 
-        if (empty($request->driver_activity)) {
+
+
+        if(!$request->has('driver_activity') ) {
             Driver::where('user_id', $request->driver_id)
             ->update([
                 'activity' =>$validated['stage'],
             ]);
         }
-        
+                
         foreach ($validated['student_ids'] as $studentId) {
             StudentInfo::where('registration_no', $studentId)
                 ->update([
@@ -145,10 +148,22 @@ class BusManagementController extends Controller
 
     public function updateActivity(Request $request)
     {
+        $checker =  StudentInfo::where('driver_id',$request->driver_id)
+                                 ->where('school_id', $request->school_id)
+                                 ->where('activity','!=',$request->current_activity)
+                                 ->first();
+
+        if($checker){
+            return response()->json([
+                'success' => false,
+                'message' => 'Take attendace of all students first!'
+            ]);
+        }
+
         Driver::where('user_id', $request->driver_id)
             ->where('school_id', $request->school_id)
             ->update([
-                'activity' => $request->activity,
+                'activity' => $request->next_activity,
             ]);
 
         if ($request->toJson) {
