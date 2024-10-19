@@ -123,35 +123,42 @@ class BusManagementController extends Controller
 
     public function driverAttendance(Request $request)
     {
+        
         $activity = Driver::where('user_id', $request->driver_id)->value('activity');
-
-        $query = StudentInfo::with('SchoolClass')
+    
+        
+        $query = StudentInfo::selectRaw(
+                '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
+            ) 
+            ->with('SchoolClass')
             ->where('school_id', $request->school_id)
-            ->where('driver_id', $request->driver_id);
-
-        if (!empty($activity)) {
-            $query->where('activity', $activity);
-        } else {
-            $query->where(function ($q) {
-                $q->whereNull('activity')
-                    ->orWhere('activity', 'onboarding');
+            ->where('driver_id', $request->driver_id)
+            ->when(empty($activity), function ($q) {
+                $q->whereNull('activity')->orWhere('activity', 'onboarding');
+            }, function ($q) use ($activity) {
+                $q->where('activity', $activity);
             });
-        }
-
+    
+        
         $driver_attendance = $query->paginate(10);
-
-        if ($request->toJson) {
-            return response()->json([
+    
+        
+        $total_students = StudentInfo::where('driver_id', $request->driver_id)
+            ->where('school_id', $request->school_id)
+            ->count();
+    
+        
+        return $request->toJson
+            ? response()->json([
                 'success' => true,
                 'driver_attendance' => $driver_attendance,
-                'activity' => $activity
-            ]);
-        }
-
-        // return view('bus_management.all_drivers', ['drivers' => $drivers]);
+                'activity' => $activity,
+                'total_students' => $total_students
+            ])
+            : null;
     }
-
-
+    
+    
 
     public function updateActivity(Request $request)
     {
@@ -180,7 +187,7 @@ class BusManagementController extends Controller
             ]);
         }
 
-        // return view('bus_management.all_drivers', ['drivers' => $drivers]);
+        
     }
 
 }

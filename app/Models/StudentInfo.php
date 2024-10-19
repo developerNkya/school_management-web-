@@ -12,6 +12,7 @@ class StudentInfo extends Model
 
     protected $fillable = [
         'first_name',
+        'middle_name',
         'last_name',
         'registration_no',
         'date_of_birth',
@@ -55,6 +56,11 @@ class StudentInfo extends Model
     public function attendances()
 {
     return $this->hasMany(AttendenceData::class, 'student_id');
+}
+
+public function getFullNameAttribute()
+{
+    return "{$this->first_name} {$this->middle_name} {$this->last_name}";
 }
 
 }
