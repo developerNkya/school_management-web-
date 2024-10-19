@@ -28,6 +28,8 @@ class StudentInfo extends Model
         'parent_email',
         'user_id',
         'school_id',
+        'activity',
+        'driver_id'
     ];
 
 

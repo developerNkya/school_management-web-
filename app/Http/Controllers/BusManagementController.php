@@ -73,41 +73,48 @@ class BusManagementController extends Controller
 
     public function dailyBusAttendance(Request $request)
     {
-
-        $validated = $request->validate([
+        
+        $rules = [
             'driver_id' => 'required|integer|exists:users,id',
             'student_ids' => 'required|array',
-            'student_ids.*' => 'integer|exists:student_info,registration_no',
+            'student_ids.*' => 'required',
             'attendance_date' => 'required|date',
-            'stage' => 'required|string|in:onboarding,offloadSchool,onboardHome,offloadHome',
-        ]);
-
-        $attendanceData = [
-            'driver_id' => $validated['driver_id'],
-            'student_ids' => json_encode($validated['student_ids']),
-            'attendance_date' => $validated['attendance_date'],
-            'stage' => $validated['stage'],
-            'created_at' => now(),
-            'updated_at' => now(),
+            'stage' => 'required|string|in:onboarding,offloadSchool,onboardHome,offloadHome,endTrip',
         ];
+      
+        $validator = validator::make($request->all(), $rules);
+        $error = $validator->errors()->first();
 
+        if ($validator->fails() && !$request->toJson) {
+            return redirect()->route('user_login')->withErrors(['error' => $error]);
+        }else if($validator->fails() && $request->toJson){
+            return response()->json([
+                'success'=>false,
+                'message'=>$error
+            ]); 
+        }
 
-
+        foreach ($request->student_ids as $studentId) {
+           $updator =  StudentInfo::where('registration_no', $studentId)
+                ->update([
+                    'activity' => $request->stage,
+                    'driver_id' => $request->driver_id,
+                ]);
+            if (!$updator) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Student Not found!..Please Scan Again',
+                ]);
+            }
+        }
+            
         if(!$request->has('driver_activity') ) {
             Driver::where('user_id', $request->driver_id)
             ->update([
-                'activity' =>$validated['stage'],
+                'activity' =>$request->stage,
             ]);
         }
                 
-        foreach ($validated['student_ids'] as $studentId) {
-            StudentInfo::where('registration_no', $studentId)
-                ->update([
-                    'activity' => $validated['stage'],
-                    'driver_id' => $validated['driver_id'],
-                ]);
-        }
-        
         return response()->json([
             'success' => true,
             'message' => 'Attendance Recorded',
