@@ -36,7 +36,8 @@
                                             <td>{{ $driver->phone }}</td>
                                             <td>{{ $driver->email }}</td>
                                             <td>
-                                                <button class="btn btn-primary" type="button" onclick="viewAttendance('{{ $driver->id }}')">
+                                                <button class="btn btn-primary" type="button"
+                                                    onclick="viewAttendance('{{ $driver->id }}')">
                                                     <i class="fa fa-eye" style="font-size:20px;color:white"></i>
                                                 </button>
                                             </td>
@@ -80,12 +81,12 @@
                                         <th>Current Activity</th>
                                         <td id="current-activity"></td>
                                     </tr>
-                                    
-                                    <tr >
+
+                                    <tr>
                                         <th>Taken Attendance</th>
                                         <td id="taken-attendance"></td>
                                     </tr>
-                                    
+
                                     <tr id="total-attendance-row" style="display: none;">
                                         <th>Total Students</th>
                                         <td id="total-attendance"></td>
@@ -98,7 +99,8 @@
                             </table>
 
                             <div>
-                                <button type="button" class="btn btn-light" onclick="disableModal()" style="margin-top:3%">Back</button>
+                                <button type="button" class="btn btn-light" onclick="disableModal()"
+                                    style="margin-top:3%">Back</button>
                             </div>
 
                         </div>
@@ -115,38 +117,41 @@
 @include('school_admin.partial_footers')
 <script>
     function viewAttendance(driverId) {
-        
-    $.ajax({
-        url: '/bus-management/driver-attendance', 
-        method: 'GET',
-        data: { driver_id: driverId,toJson:true }, 
-        success: function(response) {
-            console.log(response);
-            
-            
-            $('#attendance-driver').text(response.driver_name);
-            $('#current-activity').text(response.activity);
-            $('#taken-attendance').text(response.driver_attendance.data.length);
-            $('#total-attendance').text(response.total_students);
-            $('#attendance-date').text(response.date);
 
-             
-             if (response.activity !== 'Onboard Students from Home') {            
-                $('#total-attendance-row').show();
-            } else {           
-                $('#total-attendance-row').hide();
+        $.ajax({
+            url: '/bus-management/driver-attendance',
+            method: 'GET',
+            data: {
+                driver_id: driverId,
+                toJson: true
+            },
+            success: function(response) {
+                console.log(response);
+
+
+                $('#attendance-driver').text(response.driver_name);
+                $('#current-activity').text(response.activity);
+                $('#taken-attendance').text(response.driver_attendance.data.length);
+                $('#total-attendance').text(response.total_students);
+                $('#attendance-date').text(response.date);
+
+
+                if (response.activity !== 'Onboard Students from Home' && response.activity !=='Not started Trip') {
+                    $('#total-attendance-row').show();
+                } else {
+                    $('#total-attendance-row').hide();
+                }
+
+
+                document.getElementById('form-modal').style.display = 'block';
+                document.getElementById('main-panel').style.display = 'none';
+                $('#form-modal').show();
+            },
+            error: function() {
+                alert('Failed to fetch driver attendance data.');
             }
-
-            
-        document.getElementById('form-modal').style.display = 'block';
-        document.getElementById('main-panel').style.display = 'none';
-            $('#form-modal').show();
-        },
-        error: function() {
-            alert('Failed to fetch driver attendance data.');
-        }
-    });
-}
+        });
+    }
 
 
     function showModal() {
@@ -172,17 +177,21 @@
                     const drivers = data[0].data;
 
                     console.log(drivers);
-                    
+
                     drivers.forEach((driver, index) => {
                         const row = `
                         <tr>
                             <td>${index + 1}</td>
-                         <td> ${driver.name}</td>
+                         <td> ${driver.driver_name}</td>
                             <td>${ driver.gender }</td>
                            <td>${ driver.location }</td>
                            <td>${ driver.phone }</td>
                            <td>${ driver.email }</td>
-                            <td>${ driver.email }</td>
+                            <td>
+                               <button class="btn btn-primary" type="button" onclick="viewAttendance('${ driver.driver_id }')">
+                                                    <i class="fa fa-eye" style="font-size:20px;color:white"></i>
+                                 </button>
+                             </td>
                         </tr>
                     `;
                         tableBody.insertAdjacentHTML('beforeend', row);

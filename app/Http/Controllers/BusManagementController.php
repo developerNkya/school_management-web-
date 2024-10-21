@@ -125,66 +125,44 @@ class BusManagementController extends Controller
     {
         
         if (!$request->has('driver_id')) {
-            $drivers = User::where('school_id', Auth::user()->school_id)
-                ->where('role_id', 5)
-                ->paginate(10);
-
-            return view('bus_management.driver_attendance', ['drivers' => $drivers]);
+            return view('bus_management.driver_attendance', [
+                'drivers' => User::where('school_id', Auth::user()->school_id)
+                                ->where('role_id', 5)
+                                ->paginate(10)
+            ]);
         }
-
+    
         
         $activity = Driver::where('user_id', $request->driver_id)->value('activity');
-
-        switch ($activity) {
-            case 'onboard':
-                $activity = "Onboard Students from Home";
-                break;
-            case 'offloadSchool':
-                $activity = "Offload Students at School";
-                break;
-            case 'onboardHome':
-                $activity = "Onboard Students for Home Shift";
-                break;
-            case 'offloadHome':
-                $activity = "Offload Students at Home";
-                break;
-            case 'endTrip':
-                $activity = "Finished Trip";
-                break;
-            
-            case null || '':
-                $activity = "Not started Trip";
-                break;
-
-            default:
-                # code...
-                break;
-        }
-
+        $activity_map = [
+            'onboard' => 'Onboard Students from Home',
+            'offloadSchool' => 'Offload Students at School',
+            'onboardHome' => 'Onboard Students for Home Shift',
+            'offloadHome' => 'Offload Students at Home',
+            'endTrip' => 'Finished Trip',
+            null => 'Not started Trip',
+            '' => 'Not started Trip'
+        ];
+        $activity = $activity_map[$activity] ?? 'Unknown Activity';
+    
         
         $query = StudentInfo::selectRaw(
-            '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
-        )
+                '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
+            )
             ->with('SchoolClass')
             ->where('school_id', $request->school_id)
             ->where('driver_id', $request->driver_id)
-            ->when(empty($activity), function ($q) {
+            ->when($activity === 'Not started Trip', function ($q) {
                 $q->whereNull('activity')->orWhere('activity', 'onboarding');
             }, function ($q) use ($activity) {
                 $q->where('activity', $activity);
             });
-
+    
         $driver_attendance = $query->paginate(10);
-
-        
         $total_students = StudentInfo::where('driver_id', $request->driver_id)
-            ->where('school_id', $request->school_id)
-            ->count();
-
-        
-        $driver_name = User::where('id', $request->driver_id)->value('name');   
-        $date = now()->format('Y-m-d');
-
+                                    ->where('school_id', $request->school_id)
+                                    ->count();
+    
         
         return $request->toJson
             ? response()->json([
@@ -192,11 +170,13 @@ class BusManagementController extends Controller
                 'driver_attendance' => $driver_attendance,
                 'activity' => $activity,
                 'total_students' => $total_students,
-                'driver_name' => $driver_name,   
-                'date' => $date,                 
+                'driver_name' => User::where('id', $request->driver_id)->value('name'),
+                'date' => now()->format('Y-m-d'),
+                'driver_id' => $request->driver_id
             ])
             : null;
     }
+    
 
 
 
