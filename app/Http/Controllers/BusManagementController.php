@@ -73,7 +73,7 @@ class BusManagementController extends Controller
 
     public function dailyBusAttendance(Request $request)
     {
-        
+
         $rules = [
             'driver_id' => 'required|integer|exists:users,id',
             'student_ids' => 'required|array',
@@ -81,21 +81,21 @@ class BusManagementController extends Controller
             'attendance_date' => 'required|date',
             'stage' => 'required|string|in:onboarding,offloadSchool,onboardHome,offloadHome,endTrip',
         ];
-      
+
         $validator = validator::make($request->all(), $rules);
         $error = $validator->errors()->first();
 
         if ($validator->fails() && !$request->toJson) {
             return redirect()->route('user_login')->withErrors(['error' => $error]);
-        }else if($validator->fails() && $request->toJson){
+        } else if ($validator->fails() && $request->toJson) {
             return response()->json([
-                'success'=>false,
-                'message'=>$error
-            ]); 
+                'success' => false,
+                'message' => $error
+            ]);
         }
 
         foreach ($request->student_ids as $studentId) {
-           $updator =  StudentInfo::where('registration_no', $studentId)
+            $updator = StudentInfo::where('registration_no', $studentId)
                 ->update([
                     'activity' => $request->stage,
                     'driver_id' => $request->driver_id,
@@ -107,14 +107,14 @@ class BusManagementController extends Controller
                 ]);
             }
         }
-            
-        if(!$request->has('driver_activity') ) {
+
+        if (!$request->has('driver_activity')) {
             Driver::where('user_id', $request->driver_id)
-            ->update([
-                'activity' =>$request->stage,
-            ]);
+                ->update([
+                    'activity' => $request->stage,
+                ]);
         }
-                
+
         return response()->json([
             'success' => true,
             'message' => 'Attendance Recorded',
@@ -124,12 +124,47 @@ class BusManagementController extends Controller
     public function driverAttendance(Request $request)
     {
         
+        if (!$request->has('driver_id')) {
+            $drivers = User::where('school_id', Auth::user()->school_id)
+                ->where('role_id', 5)
+                ->paginate(10);
+
+            return view('bus_management.driver_attendance', ['drivers' => $drivers]);
+        }
+
+        
         $activity = Driver::where('user_id', $request->driver_id)->value('activity');
-    
+
+        switch ($activity) {
+            case 'onboard':
+                $activity = "Onboard Students from Home";
+                break;
+            case 'offloadSchool':
+                $activity = "Offload Students at School";
+                break;
+            case 'onboardHome':
+                $activity = "Onboard Students for Home Shift";
+                break;
+            case 'offloadHome':
+                $activity = "Offload Students at Home";
+                break;
+            case 'endTrip':
+                $activity = "Finished Trip";
+                break;
+            
+            case null || '':
+                $activity = "Not started Trip";
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
         
         $query = StudentInfo::selectRaw(
-                '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
-            ) 
+            '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
+        )
             ->with('SchoolClass')
             ->where('school_id', $request->school_id)
             ->where('driver_id', $request->driver_id)
@@ -138,36 +173,57 @@ class BusManagementController extends Controller
             }, function ($q) use ($activity) {
                 $q->where('activity', $activity);
             });
-    
-        
+
         $driver_attendance = $query->paginate(10);
-    
+
         
         $total_students = StudentInfo::where('driver_id', $request->driver_id)
             ->where('school_id', $request->school_id)
             ->count();
-    
+
+        
+        $driver_name = User::where('id', $request->driver_id)->value('name');   
+        $date = now()->format('Y-m-d');
+
         
         return $request->toJson
             ? response()->json([
                 'success' => true,
                 'driver_attendance' => $driver_attendance,
                 'activity' => $activity,
-                'total_students' => $total_students
+                'total_students' => $total_students,
+                'driver_name' => $driver_name,   
+                'date' => $date,                 
             ])
             : null;
     }
-    
-    
+
+
+
+    public function filterDrivers($name)
+    {
+
+        $drivers = User::where('school_id', Auth::user()->school_id)
+            ->where('role_id', 5)
+            ->where(function ($query) use ($name) {
+                $query->where('name', 'LIKE', "%{$name}%")
+                    ->orWhere('email', 'LIKE', "%{$name}%")
+                    ->orWhere('phone', 'LIKE', "%{$name}%");
+            })
+            ->paginate(10);
+
+        return response()->json([$drivers]);
+    }
+
 
     public function updateActivity(Request $request)
     {
-        $checker =  StudentInfo::where('driver_id',$request->driver_id)
-                                 ->where('school_id', $request->school_id)
-                                 ->where('activity','!=',$request->current_activity)
-                                 ->first();
+        $checker = StudentInfo::where('driver_id', $request->driver_id)
+            ->where('school_id', $request->school_id)
+            ->where('activity', '!=', $request->current_activity)
+            ->first();
 
-        if($checker){
+        if ($checker) {
             return response()->json([
                 'success' => false,
                 'message' => 'Take attendace of all students first!'
@@ -187,7 +243,7 @@ class BusManagementController extends Controller
             ]);
         }
 
-        
+
     }
 
 

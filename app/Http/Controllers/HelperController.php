@@ -160,47 +160,61 @@ class HelperController extends Controller
         $user = Auth::user()->load('School');
         $school_initial = strtolower($user->school->initial);
         $counter = '';
-        $role_var = '';
-
-        function email_splitter($row)
+        $role_var = null;
+    
+        
+        function email_splitter($row, $role)
         {
-
             if ($row != '') {
-                $split_email = explode("@", $row);
-                $counter = $split_email[0] + 1;
+                
+                $split_email = explode("@", $row)[0];
+    
+                
+                $role_initial = substr($split_email, 0, 1);
+                $numeric_part = substr($split_email, 1);
+    
+                
+                if ($role_initial === $role) {
+                    $counter = (int)$numeric_part + 1; 
+                } else {
+                    $counter = 1; 
+                }
                 return $counter;
             } else {
-                return 1;
+                return 1; 
             }
-
         }
+    
         switch ($user_role) {
-            case 4:
+            case 4: 
                 $row = Teacher::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
-                $counter = email_splitter($row ? $row->email : '');
-                $role_var = 't';
+                $role_var = 't'; 
+                $counter = email_splitter($row ? $row->email : '', $role_var);
                 break;
-            case 3:
+            case 3: 
                 $row = StudentInfo::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
-                $counter = email_splitter($row ? $row->parent_email : '');
+                $counter = email_splitter($row ? $row->parent_email : '', null); 
                 break;
-            case 5:
+            case 5: 
                 $row = Driver::where('school_id', $user->school_id)
                     ->orderBy('created_at', 'desc')->first();
-                $counter = email_splitter($row ? $row->email : '');
-                $role_var = 'd';
+                $role_var = 'd'; 
+                $counter = email_splitter($row ? $row->email : '', $role_var);
                 break;
-
+    
             default:
                 break;
         }
-
+    
+        
         $counter = str_pad($counter, 4, '0', STR_PAD_LEFT);
-        $assigned_email = $user_role !=3 ? "{$role_var}{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
+    
+        
+        $assigned_email = $user_role != 3 ? "{$role_var}{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
         return $assigned_email;
-
     }
+    
 
 }

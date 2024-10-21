@@ -210,6 +210,7 @@
               <div class="collapse" id="bus_tracker">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="{{'/bus-management/all-drivers'}}">All Drivers</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{{'/bus-management/driver-attendance'}}">Track Attendance</a></li>
                 </ul>
               </div>
             </li>
