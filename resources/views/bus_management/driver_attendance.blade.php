@@ -182,7 +182,7 @@
                         const row = `
                         <tr>
                             <td>${index + 1}</td>
-                         <td> ${driver.driver_name}</td>
+                         <td> ${driver.name}</td>
                             <td>${ driver.gender }</td>
                            <td>${ driver.location }</td>
                            <td>${ driver.phone }</td>

@@ -163,6 +163,7 @@ class BusManagementController extends Controller
                                     ->where('school_id', $request->school_id)
                                     ->count();
     
+            
         
         return $request->toJson
             ? response()->json([
