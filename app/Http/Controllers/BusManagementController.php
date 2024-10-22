@@ -133,7 +133,9 @@ class BusManagementController extends Controller
         }
     
         
-        $activity = Driver::where('user_id', $request->driver_id)->value('activity');
+        $driver = Driver::where('user_id',$request->driver_id)->first();
+        $activity = $driver->activity;
+
         $activity_map = [
             'onboard' => 'Onboard Students from Home',
             'offloadSchool' => 'Offload Students at School',
@@ -150,7 +152,7 @@ class BusManagementController extends Controller
                 '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
             )
             ->with('SchoolClass')
-            ->where('school_id', $request->school_id)
+            ->where('school_id', $driver->school_id)
             ->where('driver_id', $request->driver_id)
             ->when($activity === 'Not started Trip', function ($q) {
                 $q->whereNull('activity')->orWhere('activity', 'onboarding');
@@ -160,11 +162,10 @@ class BusManagementController extends Controller
     
         $driver_attendance = $query->paginate(10);
         $total_students = StudentInfo::where('driver_id', $request->driver_id)
-                                    ->where('school_id', $request->school_id)
+                                    ->where('school_id', $driver->school_id)
                                     ->count();
     
             
-        
         return $request->toJson
             ? response()->json([
                 'success' => true,

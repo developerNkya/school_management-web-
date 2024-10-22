@@ -116,8 +116,7 @@
 
 @include('school_admin.partial_footers')
 <script>
-    function viewAttendance(driverId) {
-
+    function viewAttendance(driverId) { 
         $.ajax({
             url: '/bus-management/driver-attendance',
             method: 'GET',
@@ -126,9 +125,6 @@
                 toJson: true
             },
             success: function(response) {
-                console.log(response);
-
-
                 $('#attendance-driver').text(response.driver_name);
                 $('#current-activity').text(response.activity);
                 $('#taken-attendance').text(response.driver_attendance.data.length);
