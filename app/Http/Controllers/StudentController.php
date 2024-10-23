@@ -58,8 +58,13 @@ class StudentController extends Controller
                    ->where('school_id',$request->school_id)
                    ->first();
 
-
-        if ($student->activity !='offloadSchool') {
+        if($student->activity =='' || $student->activity == null){
+            $location = 'At Home';
+            $activity = 'Waiting for Pickup';
+            $supervisor = '';
+            $contacts = '';
+        }
+        else if ($student->activity !='offloadSchool') {
             $driver = Driver::with('user')->where('user_id',$student->driver_id)
             ->where('school_id',$request->school_id)
             ->first();

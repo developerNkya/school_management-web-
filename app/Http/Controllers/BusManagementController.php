@@ -134,7 +134,7 @@ class BusManagementController extends Controller
     
         
         $driver = Driver::where('user_id',$request->driver_id)->first();
-        $activity = HelperController::activityMapper($driver->activity);        
+        $activity = HelperController::activityMapper($driver->activity,'driver');        
         $query = StudentInfo::selectRaw(
                 '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
             )
