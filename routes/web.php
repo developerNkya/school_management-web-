@@ -65,7 +65,7 @@ Route::group(['prefix' => 'school_admin'], function () {
     Route::get('/finance', [FinanceController::class, 'financePage'])->name('finance');
     Route::post('/handle-promotion', [SchoolAdminController::class, 'handlePromotion']);
     Route::get('/view-suggestions', [SchoolAdminController::class, 'viewSuggestions']);
-    Route::post('/add-class', [SchoolAdminController::class, 'addClass']);
+    Route::post('/save-class', [SchoolAdminController::class, 'saveClass']);
     Route::get('/classes', [SchoolAdminController::class, 'classPage'])->name('add_class_page');
     Route::get('/teachers', [SchoolAdminController::class, 'teachersPage'])->name('all_teachers_page');
     Route::get('/students', [SchoolAdminController::class, 'studentsPage'])->name('add_student_page');
@@ -105,6 +105,7 @@ Route::group(['prefix' => 'attendence'], function () {
 Route::group(['prefix' => 'student'], function () {
     Route::get('/home', [StudentController::class, 'index']);
     Route::get('/events', [StudentController::class, 'events']);
+    Route::get('/daily-tracker', [StudentController::class, 'dailyTracker']);
     Route::get('/attendence', [StudentController::class, 'attendence'])->name('student.attendence');
     Route::get('/about_me', [StudentController::class, 'aboutMe']);
     Route::get('/marks', [StudentController::class, 'marks'])->name('student.marks');

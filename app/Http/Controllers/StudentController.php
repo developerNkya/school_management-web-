@@ -6,11 +6,13 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Attendence;
 use App\Models\AttendenceData;
+use App\Models\Driver;
 use App\Models\Event;
 use App\Models\Exam;
 use App\Models\ExamSubject;
 use App\Models\Grade;
 use App\Models\Mark;
+use App\Models\SchoolClass;
 use App\Models\StudentInfo;
 use App\Models\Subject;
 use DB;
@@ -46,7 +48,48 @@ class StudentController extends Controller
                 'events' => $events,
             ],
         ]) : view('student.events', compact('events'));
+    }
 
+
+    public function dailyTracker(Request $request)
+    {
+
+        $student = StudentInfo::where('user_id',$request->user_id)
+                   ->where('school_id',$request->school_id)
+                   ->first();
+
+
+        if ($student->activity !='offloadSchool') {
+            $driver = Driver::with('user')->where('user_id',$student->driver_id)
+            ->where('school_id',$request->school_id)
+            ->first();
+
+            $location = 'In the Bus';
+            $activity = HelperController::activityMapper($student->activity,'student');
+            $supervisor = $driver->user->name;
+            $contacts = $driver->user->phone;
+
+        }else{
+            $class = SchoolClass::where('id',$student->class_id)
+                     ->where('school_id',$student->school_id)
+                     ->first();
+
+            $location = 'Arrived At School';
+            $activity = 'Attending classes';
+            $supervisor = $class->supervisor_name;
+            $contacts = $class->supervisor_phone;
+            
+        }
+   
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'location' => $location,
+                'activity' => $activity,
+                'supervisor' => $supervisor,
+                'contacts' => $contacts,
+            ],
+        ]);
 
     }
 

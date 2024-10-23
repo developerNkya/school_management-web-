@@ -215,6 +215,36 @@ class HelperController extends Controller
         $assigned_email = $user_role != 3 ? "{$role_var}{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
         return $assigned_email;
     }
+
+    public static function activityMapper($activity, $role)
+    {
+        
+        $student_activity_map = [
+            'onboard' => 'On the Way to School',
+            'offloadSchool' => 'Arrived at School',
+            'onboardHome' => 'On the Way Back Home',
+            'offloadHome' => 'Dropped Off at Home',
+            'endTrip' => 'Trip Completed',
+            null => 'Not Started Trip',
+            '' => 'Not Started Trip'
+        ];
+    
+        
+        $default_activity_map = [
+            'onboard' => 'Onboard Students from Home',
+            'offloadSchool' => 'Offload Students at School',
+            'onboardHome' => 'Onboard Students for Home Shift',
+            'offloadHome' => 'Offload Students at Home',
+            'endTrip' => 'Finished Trip',
+            null => 'Not Started Trip',
+            '' => 'Not Started Trip'
+        ];
+    
+        
+        $activity_map = ($role === 'student') ? $student_activity_map : $default_activity_map;    
+        return $activity_map[$activity] ?? 'Unknown Activity';
+    }
+    
     
 
 }

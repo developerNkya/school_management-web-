@@ -21,4 +21,9 @@ class Driver extends Model
         'school_id',
         'activity'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
 }

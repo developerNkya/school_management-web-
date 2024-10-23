@@ -139,27 +139,53 @@ class SchoolAdminController extends Controller
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         return view('school_admin.students_page', ['students' => $student_info, 'classes' => $classes]);
     }
-    public function addClass(Request $request)
+    public function saveClass(Request $request)
     {
-        try {
+        try {         
             $rules = [
                 'class_name' => 'required|string|max:255',
+                'supervisor_name' => 'required|string|max:255',
+                'supervisor_phone' => ['required', 'string', 'regex:/^0\d{9}$/'],
+                'type' => 'required|string|in:add,edit', 
+                'id' => 'nullable|integer', 
             ];
-
-            $validator = \Validator::make($request->all(), $rules);
-
+    
+            $customMessages = [
+                'supervisor_phone.regex' => 'Enter a 10-digit number starting with 0 for the supervisor\'s phone.',
+            ];
+    
+            
+            $validator = \Validator::make($request->all(), $rules, $customMessages);
+    
             if ($validator->fails()) {
                 return redirect()->route('add_class_page')->withErrors($validator)->withInput();
             }
-            $class = new SchoolClass();
+    
+            
+            if ($request->type === 'add') {    
+                $class = new SchoolClass();
+            } elseif ($request->type === 'edit') {
+                
+                $class = SchoolClass::findOrFail($request->id);
+            } else {
+                return redirect()->route('add_class_page')->withErrors(['error' => 'Invalid request type'])->withInput();
+            }
+    
+            
             $class->name = $request->input('class_name');
-            $class->school_id = Auth::user()->school_id;
+            $class->school_id = Auth::user()->school_id; 
+            $class->supervisor_name = $request->input('supervisor_name');
+            $class->supervisor_phone = $request->input('supervisor_phone');    
             $class->save();
-            return redirect()->route('add_class_page')->with('message', 'Class added successfully!');
+    
+            
+            return redirect()->route('add_class_page')->with('message', 'Class ' . ($request->type === 'add' ? 'added' : 'updated') . ' successfully!');
         } catch (\Exception $e) {
+            
             return redirect()->route('add_class_page')->withErrors(['error' => 'An error occurred: ' . $e->getMessage()])->withInput();
         }
     }
+    
     public function addStudent(Request $request)
     {
         $rules = [

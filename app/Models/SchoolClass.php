@@ -18,6 +18,8 @@ class SchoolClass extends Model
     protected $fillable = [
         'name',
         'school_id',
+        'supervisor_name',
+        'supervisor_phone'
     ];
 
     public function exams()

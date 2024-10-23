@@ -134,20 +134,7 @@ class BusManagementController extends Controller
     
         
         $driver = Driver::where('user_id',$request->driver_id)->first();
-        $activity = $driver->activity;
-
-        $activity_map = [
-            'onboard' => 'Onboard Students from Home',
-            'offloadSchool' => 'Offload Students at School',
-            'onboardHome' => 'Onboard Students for Home Shift',
-            'offloadHome' => 'Offload Students at Home',
-            'endTrip' => 'Finished Trip',
-            null => 'Not started Trip',
-            '' => 'Not started Trip'
-        ];
-        $activity = $activity_map[$activity] ?? 'Unknown Activity';
-    
-        
+        $activity = HelperController::activityMapper($driver->activity);        
         $query = StudentInfo::selectRaw(
                 '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
             )
