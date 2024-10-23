@@ -230,14 +230,24 @@ class HelperController extends Controller
         ];
     
         
+        // $default_activity_map = [
+        //     'onboard' => 'Onboard Students from Home',
+        //     'offloadSchool' => 'Offload Students at School',
+        //     'onboardHome' => 'Onboard Students for Home Shift',
+        //     'offloadHome' => 'Offload Students at Home',
+        //     'endTrip' => 'Finished Trip',
+        //     null => 'Not Started Trip',
+        //     '' => 'Not Started Trip'
+        // ];
+
         $default_activity_map = [
-            'onboard' => 'Onboard Students from Home',
-            'offloadSchool' => 'Offload Students at School',
-            'onboardHome' => 'Onboard Students for Home Shift',
-            'offloadHome' => 'Offload Students at Home',
-            'endTrip' => 'Finished Trip',
-            null => 'Not Started Trip',
-            '' => 'Not Started Trip'
+            'onboard' => 'onboarding',
+            'offloadSchool' => 'offloadSchool',
+            'onboardHome' => 'onboardHome',
+            'offloadHome' => 'offloadHome',
+            'endTrip' => 'endTrip',
+            null => null,
+            '' => ''
         ];
     
         
