@@ -134,20 +134,35 @@ class BusManagementController extends Controller
     
         
         $driver = Driver::where('user_id',$request->driver_id)->first();
-        $activity = HelperController::activityMapper($driver->activity,'driver');        
-        $query = StudentInfo::selectRaw(
-                '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
-            )
-            ->with('SchoolClass')
-            ->where('school_id', $driver->school_id)
-            ->where('driver_id', $request->driver_id)
-            ->when($activity === 'Not started Trip', function ($q) {
-                $q->whereNull('activity')->orWhere('activity', 'onboarding');
-            }, function ($q) use ($activity) {
-                $q->where('activity', $activity);
-            });
+        $activity = HelperController::activityMapper($driver->activity,'driver');  
+              
+        // $query = StudentInfo::selectRaw(
+        //         '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
+        //     )
+        //     ->with('SchoolClass')
+        //     ->where('school_id', $driver->school_id)
+        //     ->where('driver_id', $request->driver_id)
+        //     ->when($activity === 'endTrip', function ($q) {
+        //         $q->whereNull('activity')->orWhere('activity', 'onboarding');
+        //         $q->where('activity', 'onboarding');
+        //     }, function ($q) use ($activity) {
+        //         $q->where('activity', $activity);
+        //     });
     
-        $driver_attendance = $query->paginate(10);
+        // $driver_attendance = $query->paginate(10);
+
+
+        $driver_attendance = StudentInfo::selectRaw(
+                    '*, CONCAT(first_name, " ", IFNULL(middle_name, ""), " ", last_name) AS full_name'
+                )
+                             ->with('SchoolClass')
+                             ->where('school_id', $driver->school_id)
+                             ->where('driver_id', $request->driver_id)
+                             ->where('activity',$activity)
+                             ->paginate(10);
+
+
+
         $total_students = StudentInfo::where('driver_id', $request->driver_id)
                                     ->where('school_id', $driver->school_id)
                                     ->count();

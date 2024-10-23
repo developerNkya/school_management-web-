@@ -220,7 +220,7 @@ class HelperController extends Controller
     {
         
         $student_activity_map = [
-            'onboard' => 'On the Way to School',
+            'onboarding' => 'On the Way to School',
             'offloadSchool' => 'Arrived at School',
             'onboardHome' => 'On the Way Back Home',
             'offloadHome' => 'Dropped Off at Home',
@@ -241,7 +241,7 @@ class HelperController extends Controller
         // ];
 
         $default_activity_map = [
-            'onboard' => 'onboarding',
+            'onboarding' => 'onboarding',
             'offloadSchool' => 'offloadSchool',
             'onboardHome' => 'onboardHome',
             'offloadHome' => 'offloadHome',

@@ -69,7 +69,7 @@ class StudentController extends Controller
             ->where('school_id',$request->school_id)
             ->first();
 
-            $location = 'In the Bus';
+            $location = $student->activity == 'offloadHome' ? 'At Home' : 'In the Bus';
             $activity = HelperController::activityMapper($student->activity,'student');
             $supervisor = $driver->user->name;
             $contacts = $driver->user->phone;
