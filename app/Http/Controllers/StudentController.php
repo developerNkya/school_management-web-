@@ -58,6 +58,15 @@ class StudentController extends Controller
                    ->where('school_id',$request->school_id)
                    ->first();
 
+        if($student->driver_id =='' || $student->driver_id == null){
+            return response()->json([
+                'success' => false,
+                'data' => [
+                    'message' => 'No Data Available',
+                ],
+            ]);
+        }
+
         if($student->activity =='' || $student->activity == null){
             $location = 'At Home';
             $activity = 'Waiting for Pickup';
