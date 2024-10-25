@@ -223,7 +223,6 @@ class SchoolAdminController extends Controller
 
      
         $student_email = HelperController::emailAssigner(3);
-
         $newUser = new User();
         $newUser->name = strtolower($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
         $newUser->email = $student_email;

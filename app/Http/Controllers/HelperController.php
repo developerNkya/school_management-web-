@@ -167,17 +167,14 @@ class HelperController extends Controller
         {
             if ($row != '') {
                 
-                $split_email = explode("@", $row)[0];
-    
-                
+                $split_email = explode("@", $row)[0];       
                 $role_initial = substr($split_email, 0, 1);
                 $numeric_part = substr($split_email, 1);
     
-                
-                if ($role_initial === $role) {
+                if($role_initial === $role) {
                     $counter = (int)$numeric_part + 1; 
-                } else {
-                    $counter = 1; 
+                } else {                    
+                    $counter = $split_email+1;                  
                 }
                 return $counter;
             } else {
@@ -208,10 +205,8 @@ class HelperController extends Controller
                 break;
         }
     
-        
+
         $counter = str_pad($counter, 4, '0', STR_PAD_LEFT);
-    
-        
         $assigned_email = $user_role != 3 ? "{$role_var}{$counter}@{$school_initial}" : "{$counter}@{$school_initial}";
         return $assigned_email;
     }
