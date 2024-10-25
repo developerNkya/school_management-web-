@@ -94,12 +94,17 @@ class BusManagementController extends Controller
             ]);
         }
 
+         $drop_off_time = $request->stage =='offloadHome' ? HelperController::currentTime() :  null;
+        
         foreach ($request->student_ids as $studentId) {
             $updator = StudentInfo::where('registration_no', $studentId)
                 ->update([
                     'activity' => $request->stage,
                     'driver_id' => $request->driver_id,
+                    'drop_off_time' =>$drop_off_time
                 ]);
+
+            
             if (!$updator) {
                 return response()->json([
                     'success' => true,

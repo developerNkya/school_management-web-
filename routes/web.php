@@ -23,12 +23,6 @@ use App\Jobs\TestJob;
 
 
 
-
-Route::get('/dispatch-job', function () {
-    TestJob::dispatch();
-    return 'Job dispatched!';
-});
-
 Route::middleware(CheckUserAuth::class)->group(function () {
 Route::get('/', [StarterController::class, 'index']);
 Route::get('/login', [StarterController::class, 'login'])->name('user_login');

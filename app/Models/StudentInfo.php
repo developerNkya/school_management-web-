@@ -30,7 +30,8 @@ class StudentInfo extends Model
         'user_id',
         'school_id',
         'activity',
-        'driver_id'
+        'driver_id',
+        'drop_off_time'
     ];
 
 

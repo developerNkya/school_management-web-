@@ -18,9 +18,11 @@ use App\Models\Subject;
 use App\Models\Suggestion;
 use App\Models\Teacher;
 use App\Models\User;
+use Carbon\Carbon;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class HelperController extends Controller
 {
@@ -250,6 +252,13 @@ class HelperController extends Controller
         return $activity_map[$activity] ?? 'Unknown Activity';
     }
     
-    
 
+    public static function currentTime()
+    {
+        $timezone = new \DateTimeZone('Africa/Dar_es_Salaam');
+        $dateTime = new \DateTime('now', $timezone);
+        $currentTime = $dateTime->format('h:i A');
+        return $currentTime;
+    }
+    
 }

@@ -67,6 +67,7 @@ class StudentController extends Controller
             ]);
         }
 
+        $drop_off_time = null;
         if($student->activity =='' || $student->activity == null){
             $location = 'At Home';
             $activity = 'Waiting for Pickup';
@@ -77,8 +78,9 @@ class StudentController extends Controller
             $driver = Driver::with('user')->where('user_id',$student->driver_id)
             ->where('school_id',$request->school_id)
             ->first();
-
+            
             $location = $student->activity == 'offloadHome' ? 'At Home' : 'In the Bus';
+            $drop_off_time = $student->activity == 'offloadHome' ? $student->drop_off_time : null;
             $activity = HelperController::activityMapper($student->activity,'student');
             $supervisor = $driver->user->name;
             $contacts = $driver->user->phone;
@@ -102,6 +104,7 @@ class StudentController extends Controller
                 'activity' => $activity,
                 'supervisor' => $supervisor,
                 'contacts' => $contacts,
+                 'drop_off_time' => $drop_off_time
             ],
         ]);
 
