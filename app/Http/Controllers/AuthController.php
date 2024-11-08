@@ -112,7 +112,7 @@ class AuthController extends Controller
         $app_version_checker = AppVersion::count();
         if ($app_version_checker <= 0) {
             $app_version = AppVersion::create([
-                'current_version' => '1.0.0'
+                'current_version' => '1'
             ]);
             $insertions['app_version'] = $app_version->current_version;
         }
