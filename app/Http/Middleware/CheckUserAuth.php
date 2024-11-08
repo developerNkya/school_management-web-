@@ -20,6 +20,7 @@ class CheckUserAuth
         $currentPath = $request->path();
         $publicRoutes = [
             '/', 
+            'app-version', 
             'login', 
             'contact-us', 
             'about-us', 

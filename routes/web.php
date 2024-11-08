@@ -25,6 +25,7 @@ use App\Jobs\TestJob;
 
 Route::middleware(CheckUserAuth::class)->group(function () {
 Route::get('/', [StarterController::class, 'index']);
+Route::get('/app-version', [StarterController::class, 'appVersion']);
 Route::get('/login', [StarterController::class, 'login'])->name('user_login');
 Route::get('/contact-us', [StarterController::class, 'contactUs']);
 Route::get('/about-us', [StarterController::class, 'aboutUs']);

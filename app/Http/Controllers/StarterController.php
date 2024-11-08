@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppVersion;
 use App\Models\ContactMail;
 use Illuminate\Http\Request;
 
@@ -11,6 +12,22 @@ class StarterController extends Controller
     {
         return view('starter.home.index');
     }
+
+    public function appVersion(Request $request)
+    {
+        if (AppVersion::where('current_version', '=',$request->current_version)->exists()) {
+            return response()->json([
+                'success'=>true,
+                'message'=>'App is up to date'
+            ]);  
+         }else{
+            return response()->json([
+                'success'=>false,
+                'message'=>'Sorry...app is not up to date'
+            ]);  
+         }
+    }
+
     public function login(Request $request)
     {
         return view('auth.login');
