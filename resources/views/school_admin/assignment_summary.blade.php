@@ -1,7 +1,8 @@
 @include('school_admin.partial_headers')
 
 
-@if($assignments =='')
+
+@if(isset($summaryData))
 <div class="main-panel" id="main-panel">
 
 
@@ -61,7 +62,7 @@
 </div>
 @endif
 
-@if($assignments !='')
+@if(isset($assignments))
 <div class="main-panel" id="form-modal">
     <div class="content-wrapper">
         <div class="row">

@@ -69,7 +69,7 @@ class AssignmentController extends Controller
                 'assignments_by_type' => $assignmentsByType,
             ];
         }
-        return view('school_admin.assignment_summary',['summaryData'=>$summaryData,'assignments'=>'']);
+        return view('school_admin.assignment_summary',['summaryData'=>$summaryData]);
     }
     public function classSummary(Request $request)
     {
@@ -78,10 +78,10 @@ class AssignmentController extends Controller
             session(['class_id' => $request->input('class_id')]);
         } elseif (!$request->session()->has('class_id')) {
             return redirect()->back()->with('error', 'Class not selected.');
-        }
-    
+        }  
 
-        $class_id = session('class_id');    
+
+        $class_id = session('class_id');        
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
         
@@ -93,10 +93,8 @@ class AssignmentController extends Controller
             return $query->where('sender_id', Auth::user()->id);
         });
     
-        $assignments = $assignmentsQuery->paginate(1);
-        $classSummary = '';
-    
-        return view('school_admin.assignment_summary', compact('subjects', 'classes', 'assignments', 'classSummary'));
+        $assignments = $assignmentsQuery->paginate(10); 
+        return view('school_admin.assignment_summary', compact('subjects', 'classes', 'assignments'));
     }
     
     
