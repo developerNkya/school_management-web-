@@ -228,7 +228,11 @@
               </a>
               <div class="collapse" id="events">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/organize_events'}}">Organize Events</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{'/school_admin/organize_events'}}">
+                        {{ $role == 2 ? 'Organize Events' : 'Events' }}
+                    </a>
+                </li>
                 </ul>
               </div>
             </li>
