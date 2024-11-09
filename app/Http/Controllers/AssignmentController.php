@@ -35,7 +35,7 @@ class AssignmentController extends Controller
 
     public function assignmentSummary(Request $request)
     {
-         $schoolId = Auth::user()->school_id;
+        $schoolId = Auth::user()->school_id;
         $assignmentsData = Assignment::where('school_id', $schoolId)
             ->select(
                 'class_id',
@@ -50,27 +50,37 @@ class AssignmentController extends Controller
             ->select('id', 'name')
             ->get()
             ->keyBy('id');
-
+    
         $summaryData = [];
-
+    
         foreach ($classes as $classId => $class) {
             $classAssignments = $assignmentsData->where('class_id', $classId);
+            $assignmentTypes = [
+                'home_work' => ['total_assignments' => 0, 'total_teachers' => 0],
+                'holiday_package' => ['total_assignments' => 0, 'total_teachers' => 0]
+            ];
             $assignmentsByType = $classAssignments->groupBy('assignment_type')
-                ->map(function ($assignments) {
+                ->mapWithKeys(function ($assignments, $type) {
                     return [
-                        'total_assignments' => $assignments->sum('total_assignments'),
-                        'total_teachers' => $assignments->sum('total_teachers'),
+                        $type => [
+                            'total_assignments' => $assignments->sum('total_assignments'),
+                            'total_teachers' => $assignments->sum('total_teachers'),
+                        ]
                     ];
-                });
-
+                })
+                ->toArray();
+            $assignmentsByType = array_merge($assignmentTypes, $assignmentsByType);
+    
             $summaryData[] = [
                 'class_id' => $classId,
                 'class_name' => $class->name,
                 'assignments_by_type' => $assignmentsByType,
             ];
         }
-        return view('school_admin.assignment_summary',['summaryData'=>$summaryData]);
+    
+        return view('school_admin.assignment_summary', ['summaryData' => $summaryData]);
     }
+    
     public function classSummary(Request $request)
     {
 
