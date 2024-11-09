@@ -9,6 +9,7 @@ use App\Models\Subject;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Session;
 use Storage;
 
 class AssignmentController extends Controller
@@ -17,20 +18,91 @@ class AssignmentController extends Controller
     {
         $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
         $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
-    
+
         $assignmentsQuery = Assignment::with('subject', 'class', 'sender', 'school')
             ->where('school_id', Auth::user()->school_id);
+
+        $assignmentsQuery->when(Auth::user()->role_id == 4, function ($query) {
+            return $query->where('sender_id', Auth::user()->id);
+        });
+
+        $assignments = $assignmentsQuery->paginate(10);
+        $totalSize = $assignmentsQuery->sum('file_size');
+
+        return view('school_admin.assignment_page', compact('subjects', 'classes', 'assignments', 'totalSize'));
+    }
+
+
+    public function assignmentSummary(Request $request)
+    {
+         $schoolId = Auth::user()->school_id;
+        $assignmentsData = Assignment::where('school_id', $schoolId)
+            ->select(
+                'class_id',
+                'assignment_type',
+                DB::raw('count(*) as total_assignments'),
+                DB::raw('count(distinct sender_id) as total_teachers')
+            )
+            ->groupBy('class_id', 'assignment_type')
+            ->get();
+
+        $classes = SchoolClass::where('school_id', $schoolId)
+            ->select('id', 'name')
+            ->get()
+            ->keyBy('id');
+
+        $summaryData = [];
+
+        foreach ($classes as $classId => $class) {
+            $classAssignments = $assignmentsData->where('class_id', $classId);
+            $assignmentsByType = $classAssignments->groupBy('assignment_type')
+                ->map(function ($assignments) {
+                    return [
+                        'total_assignments' => $assignments->sum('total_assignments'),
+                        'total_teachers' => $assignments->sum('total_teachers'),
+                    ];
+                });
+
+            $summaryData[] = [
+                'class_id' => $classId,
+                'class_name' => $class->name,
+                'assignments_by_type' => $assignmentsByType,
+            ];
+        }
+        return view('school_admin.assignment_summary',['summaryData'=>$summaryData,'assignments'=>'']);
+    }
+    public function classSummary(Request $request)
+    {
+
+        if ($request->has('class_id')) {
+            session(['class_id' => $request->input('class_id')]);
+        } elseif (!$request->session()->has('class_id')) {
+            return redirect()->back()->with('error', 'Class not selected.');
+        }
     
-        $assignmentsQuery->when(Auth::user()->role_id == 4, function($query) {
+
+        $class_id = session('class_id');    
+        $subjects = Subject::where('school_id', Auth::user()->school_id)->get();
+        $classes = SchoolClass::where('school_id', Auth::user()->school_id)->get();
+        
+        $assignmentsQuery = Assignment::with('subject', 'class', 'sender', 'school')
+            ->where('school_id', Auth::user()->school_id)
+            ->where('class_id', $class_id);
+    
+        $assignmentsQuery->when(Auth::user()->role_id == 4, function ($query) {
             return $query->where('sender_id', Auth::user()->id);
         });
     
-        $assignments = $assignmentsQuery->paginate(10);  
-        $totalSize = $assignmentsQuery->sum('file_size');
+        $assignments = $assignmentsQuery->paginate(1);
+        $classSummary = '';
     
-        return view('school_admin.assignment_page', compact('subjects', 'classes', 'assignments', 'totalSize'));
+        return view('school_admin.assignment_summary', compact('subjects', 'classes', 'assignments', 'classSummary'));
     }
     
+    
+    
+
+
 
     public function saveAssignment(Request $request)
     {
@@ -48,8 +120,8 @@ class AssignmentController extends Controller
                 'assignment_file.mimes' => 'The apploaded file should be in form of PDF!',
             ]
         );
-        
-    
+
+
 
         if ($request->hasFile('assignment_file')) {
             $file = $request->file('assignment_file');

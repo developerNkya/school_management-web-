@@ -184,6 +184,9 @@
               <div class="collapse" id="assignment">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="{{'/assignment/add-assignment'}}">Add Assignment</a></li>
+                  @if($role == 2)  
+                  <li class="nav-item"> <a class="nav-link" href="{{'/assignment/summary'}}">Summary</a></li>
+                  @endif
                 </ul>
               </div>
             </li>

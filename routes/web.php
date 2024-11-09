@@ -119,6 +119,8 @@ Route::group(['prefix' => 'helper'], function () {
 });
 
 Route::group(['prefix' => 'assignment'], function () {
+    Route::get('/summary', [AssignmentController::class, 'assignmentSummary'])->name('assignmentSummary');
+    Route::get('/class-summary', [AssignmentController::class, 'classSummary'])->name('classSummary');
     Route::get('/add-assignment', [AssignmentController::class, 'addAssignment']);
     Route::post('/save-assignment', [AssignmentController::class, 'saveAssignment'])->name('saveAssignment');
     Route::post('/download-assignment', [AssignmentController::class, 'downloadFile'])->name('downloadFile');
