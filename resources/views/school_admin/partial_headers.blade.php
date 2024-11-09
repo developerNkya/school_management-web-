@@ -128,6 +128,7 @@
             </li>
             @endif
 
+            @if($role == 2)  
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#grades" aria-expanded="false" aria-controls="tables">
                 <i class="menu-icon mdi mdi-list-box-outline"></i>
@@ -135,13 +136,12 @@
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="grades">
-                <ul class="nav flex-column sub-menu">
-                  @if($role == 2)  
-                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/set_grades'}}">Set grades</a></li>
-                  @endif
+                <ul class="nav flex-column sub-menu">                
+                  <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/set_grades'}}">Set grades</a></li>            
                 </ul>
               </div>
             </li>
+            @endif
 
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
@@ -156,7 +156,9 @@
                   @endif
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/marks'}}">Add Marks</a></li>
                   <li class="nav-item"> <a class="nav-link" href="{{'/school_admin/tabulation'}}">Tabulations</a></li>
+                  @if($role == 2) 
                   <li class="nav-item"> <a class="nav-link" href="{{'/results/sent-results'}}">Send Results</a></li>
+                  @endif
                 </ul>
               </div>
             </li>
