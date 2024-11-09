@@ -6,6 +6,7 @@ use App\Models\Assignment;
 use App\Models\School;
 use App\Models\SchoolClass;
 use App\Models\Subject;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -157,6 +158,7 @@ class AssignmentController extends Controller
                 $assignment->submission_date = $request->submission_date;
                 $assignment->file_path = $filePath;
                 $assignment->file_size = $fileSize;
+                $assignment->created_at = Carbon::now();
                 $assignment->save();
 
                 return redirect()->back()->with('message', 'Assignment saved successfully!');

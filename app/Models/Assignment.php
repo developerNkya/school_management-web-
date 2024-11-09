@@ -19,7 +19,8 @@ class Assignment extends Model
         'submission_date',
         'file_path',
         'school_id',
-        'assignment_type'
+        'assignment_type',
+        'created_at'
     ];
 
     // Relationships

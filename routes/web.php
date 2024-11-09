@@ -22,7 +22,6 @@ use App\Jobs\TestJob;
 
 
 
-
 Route::middleware(CheckUserAuth::class)->group(function () {
 Route::get('/', [StarterController::class, 'index']);
 Route::get('/app-version', [StarterController::class, 'appVersion']);
