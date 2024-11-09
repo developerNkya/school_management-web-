@@ -52,7 +52,7 @@
                                         @foreach ($students as $index => $student)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $student->first_name }}</td>
+                                                <td>{{ $student->full_name }}</td>
                                                 <td>{{ $student->registration_no }}</td>
                                                 @foreach ($subjects as $subject)
                                                     @php

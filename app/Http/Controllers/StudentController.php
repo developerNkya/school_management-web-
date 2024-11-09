@@ -124,7 +124,9 @@ class StudentController extends Controller
         $user_id = $request->toJson ? $request->user_id : Auth::user()->id;
         $school_id = $request->toJson ? $request->school_id : Auth::user()->school_id;
     
-        $student = StudentInfo::where('user_id', $user_id)->first();
+        $student = StudentInfo::where('user_id', $user_id)
+        ->select('student_info.*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) as full_name"))
+        ->first();
         if (!$student && !$request->toJson) {
             return redirect()->back()->with('error', 'Student not found');
         } else if (!$student && $request->toJson) {
