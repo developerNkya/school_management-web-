@@ -119,28 +119,6 @@
                                                         No</label>
                                                     <i class="bar"></i>
                                                 </div>
-
-                                                <div class="form-group">
-                                                    <input type="email" required="required" name="owner_email"
-                                                        id="owner_email" />
-                                                    <label for="owner_email" class="control-label">Owner Email</label>
-                                                    <i class="bar"></i>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input type="password" required="required" name="new_password"
-                                                        id="new_password" />
-                                                    <label for="new_password" class="control-label">New Password</label>
-                                                    <i class="bar"></i>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input type="password" required="required" name="repeat_password"
-                                                        id="repeat_password" />
-                                                    <label for="repeat_password" class="control-label">Repeat
-                                                        Password</label>
-                                                    <i class="bar"></i>
-                                                </div>
                                                 <div class="submit-container" style="margin-top: 3%">
                                                     <button type="submit" class="button btn-primary me-2">Submit</button>
                                                     <button type="button" class="button btn btn-light" onclick="disableModal()">Cancel</button>

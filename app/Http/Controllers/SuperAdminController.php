@@ -23,9 +23,6 @@ class SuperAdminController extends Controller
             'school_location' => 'required',
             'owner_name' => 'required',
             'owner_phone_no' =>['required', 'string', 'regex:/^0\d{9}$/'],
-            'owner_email' => 'required',
-            'new_password' => 'required',
-            'repeat_password' => 'required',
         ];
 
         $customMessages = [
@@ -38,18 +35,15 @@ class SuperAdminController extends Controller
             return redirect()->route('add_school_page')->withErrors(['error' => $error]);
         }
 
-        if ($request->new_password != $request->repeat_password) {
-            return redirect()->route('add_school_page')->withErrors(['error' => 'Passwords should be same']);
-        }
-
         try {
             $user = new User();
             $user->name = strtolower($request->owner_name);
-            $user->email = $request->owner_email;
+            $user->email = 'owner@'.$request->school_initial;
             $user->phone = $request->owner_phone_no;
             $user->location = $request->school_location;
-            $user->password = bcrypt($request->new_password);
+            $user->password = bcrypt( 'owner@'.$request->school_initial);
             $user->role_id = 2;
+            $user->isActive = 1;
             $user->save();
 
             $owner_id = $user->id;
