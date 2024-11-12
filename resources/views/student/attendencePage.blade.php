@@ -46,7 +46,7 @@
                                             <th>To (Date)</th>
                                             <th>No. Present</th>
                                             <th>%</th>
-                                            <th>Total Classes</th>
+                                            <th>Total Days</th>
                                         </tr>
                                     </thead>
                                     <tbody>
