@@ -12,7 +12,8 @@ $role = request()->session()->get('role_id', '');
                         <h4 class="card-title">All Events</h4>
                         @include('helpers.message_handler')
                         @if($role == 2)  
-                        <button type="button" class="btn btn-dark" onclick="showModal()">Add Event +</button>
+                        <button type="button" class="btn btn-dark" onclick="showModal({{$total_events}})">Add Event +</button>
+                        <p class="statistics-title" style="margin-top:3%">Total Events:<b>{{ $total_events }} of 20 events</b>
                         @endif
                         <div class="table-responsive pt-3">
                             <div style="overflow-x: auto;">
@@ -74,7 +75,7 @@ $role = request()->session()->get('role_id', '');
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Add Event</h4>
-
+                        @include('helpers.message_handler')
                         <form class="forms-sample" method="POST" action="{{ route('events.store') }}">
                             @csrf
                             <div class="form-group">
@@ -106,9 +107,13 @@ $role = request()->session()->get('role_id', '');
 @include('school_admin.partial_footers')
 
 <script>
-    function showModal() {
-        document.getElementById('form-modal').style.display = 'block';
-        document.getElementById('main-panel').style.display = 'none';
+    function showModal(size) {
+        if (size>=20) {
+            window.alert("Event Space is full, kindly delete some events to proceed");
+        }else{
+         document.getElementById('form-modal').style.display = 'block';
+         document.getElementById('main-panel').style.display = 'none';
+        }
     }
 
     function disableModal() {
