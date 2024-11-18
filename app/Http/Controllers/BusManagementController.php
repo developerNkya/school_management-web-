@@ -40,7 +40,7 @@ class BusManagementController extends Controller
         $validator = Validator::make($request->all(), $rules, $customMessages);
 
         if ($validator->fails()) {
-            return redirect()->route('all_drivers_page')->withErrors($validator)->withInput();
+            return redirect()->route('allDriversPage')->withErrors($validator)->withInput();
         }
 
         $user_email = HelperController::emailAssigner(5);
