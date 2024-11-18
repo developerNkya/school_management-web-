@@ -99,15 +99,20 @@ class AuthController extends Controller
         $insertions = [];
         $role_length = Role::count();
     
-        if ($role_length <= 0) {
+        if ($role_length < 5) {
             $keys = ["SUPER_ADMIN", "SCHOOL_ADMIN", "STUDENT", "TEACHER", "DRIVER"];
             $counter = 1;
+            $insertions['roles'] = [];   
             foreach ($keys as $key) {
-                Role::create(['id' => $counter, 'name' => $key]);
+                $role = Role::where('name', $key)->first();
+                if (!$role) {
+                    Role::create(['id' => $counter, 'name' => $key]);
+                    $insertions['roles'][] = $key;
+                }
                 $counter++;
             }
-            $insertions['roles'] = $keys;
         }
+        
     
         $app_version_checker = AppVersion::count();
         if ($app_version_checker <= 0) {
